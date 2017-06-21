@@ -2,6 +2,7 @@
 import React from 'react'
 import {Router, Route, Link, IndexRedirect, browserHistory} from 'react-router'
 import {render} from 'react-dom'
+import { Provider } from 'react-redux'
 import store from './store'
 import WhoAmI from './components/WhoAmI'
 import Landing from './components/Landing'
@@ -80,7 +81,7 @@ const App = ({children}) =>
 render(
  <Provider store={store}>
    <Router history={browserHistory}>
-     <Route path="/" component={Landing}>
+     <Route path="/" component={App}>
        <IndexRedirect to="/landing" />
        <Route path='/landing' component={Landing} />
        <Route path='/demos'>

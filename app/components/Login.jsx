@@ -1,5 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
+import firebase from 'firebase'
+// import { firebase } from '../../fire/index.js'
 
 //     <input name="username" />
 
