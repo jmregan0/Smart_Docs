@@ -1,7 +1,9 @@
 const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
+
 const config = require('../secrets.js')
+
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 // Initialize the app, but make sure to do it only once.
