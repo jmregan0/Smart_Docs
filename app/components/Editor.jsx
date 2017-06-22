@@ -9,6 +9,7 @@ export default class MyEditor extends React.Component {
     this.onChange = editorState=>this.setState({editorState});
   }
 
+  /*
   componentDidMount(){
     this.listenTo(this.props.fireRef)
   }
@@ -38,17 +39,17 @@ export default class MyEditor extends React.Component {
 
   write = event => this.props.fireRef &&
     this.props.fireRef.set(this.state.editorState.getCurrentContent().getPlainText())
-
+  */
 
   render(){
 
     return (
       <div>
-        <h1 onClick={(()=>{console.log(this.props.fireRef)})}>EDITOR!!</h1>
+        <h1>EDITOR</h1>
         <Editor
           editorState={this.state.editorState}
-          onChange={this.onChange} />
-
+          onChange={this.onChange}
+          />
       </div>
     )
   }
