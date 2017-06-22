@@ -11,5 +11,11 @@ public/bundle.js.map
 # NPM errors
 npm-debug.log
 
-
+# firebase secrets
 secrets.js
+
+#firebase logs
+firebase-debug.log
+
+#vim swap files
+*.swp
