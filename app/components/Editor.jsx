@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState} from 'draft-js';
+import {Editor, EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 
 export default class MyEditor extends React.Component {
   constructor(){
@@ -13,33 +13,32 @@ export default class MyEditor extends React.Component {
   }
  
   componentDidMount(){
-    console.log('initial editorState:',this.state.editorState);
-    //this.listenTo(this.props.fireRef)
     if(this.unsubscribe) this.unsubscribe();
 
     const listener = this.props.fireRef.child('editorState').on('value',
       snapshot=>{
-        console.log('database update:',JSON.parse(snapshot.val()));
-        //this.setState({editorState: JSON.parse(snapshot.val())})
+        let a = snapshot.val();
+        a = JSON.parse(a);
+        console.log('database write detected',a);
+        let b = convertFromRaw(a);
+        console.log('convert?',b);
+        let c = EditorState.createWithContent(b);
+        console.log('editorState?',c);
+        this.setState({editorState: c});
       });
 
     this.unsubscribe = this.props.fireRef.off('value',listener);
   }
 
   handleChange(editorState){
-    //console.log('content?',editorState.getCurrentContent());
-    let temp = JSON.stringify(editorState);
-    let temp2 = editorState.getCurrentContent().getPlainText();
-    console.log("handleChange2: ",temp);
     if(this.props.fireRef) {
-      console.log('writing to firebase!');
+      let temp = convertToRaw(editorState.getCurrentContent());
+      temp = JSON.stringify(temp);
+      let temp2 = editorState.getCurrentContent().getPlainText();
+      console.log('writing to firebase!',temp);
       this.props.fireRef.child('editorState').set(temp);
       this.props.fireRef.child('text').set(temp2);
     }
-    /*
-    this.setState({editorState},
-      ()=>console.log('state updated:',this.state.editorState.getCurrentContent().getPlainText()));
-    */
   }
 
   componentWillUnmount() {
@@ -47,38 +46,7 @@ export default class MyEditor extends React.Component {
     this.unsubscribe()
   }
 
-  /*
-  componentWillReceiveProps(incoming, outgoing) {
-    // When the props sent to us by our parent component change,
-    // start listening to the new firebase reference.
-
-    //this.listenTo(incoming.fireRef)
-
-    console.log("incoming:",incoming);
-  }
-
-  listenTo(fireRef) {
-    // If we're already listening to a ref, stop listening there.
-    if (this.unsubscribe) this.unsubscribe()
-
-    // Whenever our ref's value changes, set {value} on our state.
-    const listener = fireRef.on('value', snapshot => {
-      console.log('database update:',snapshot,snapshot.val());
-      this.setState({editorState: snapshot.val()})
-    });
-
-    // Set unsubscribe to be a function that detaches the listener.
-    this.unsubscribe = () => fireRef.off('value', listener)
-  }
-
-  write = event => {
-    let alias = this.state.editorState.getCurrentContent().getPlainText();
-    this.props.fireRef && this.props.fireRef.set(alias)
-  }
-  */
-
   render(){
-    console.log('Editor component:',this.props);
 
     return (
       <div>
