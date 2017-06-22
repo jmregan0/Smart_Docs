@@ -8,6 +8,7 @@ import WhoAmI from './components/WhoAmI'
 import Landing from './components/Landing'
 import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
+import EditorContainer from './containers/EditorContainer'
 
 import Demos from 'APP/demos'
 
@@ -42,7 +43,7 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({children}) =>
  <div>
-   <nav className="navbar navbar-custom navbar-fixed-top" role="navigation">
+   <nav className="navbar navbar-custom navbar-static-top" role="navigation">
        <div className="container">
          <div className="navbar-header">
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
@@ -80,6 +81,7 @@ render(
      <Route path="/" component={App}>
        <IndexRedirect to="/landing" />
        <Route path="/landing" component={Landing}/>
+       <Route path="/demos/draft/:room" component={EditorContainer}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
      <Route path='*' component={NotFound}/>

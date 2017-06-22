@@ -24,11 +24,17 @@ const Index = ({children}) => <div>
     The whiteboard demonstrates the <i>journal</i> pattern, a way to use Firebase
     to synchronize the state of Redux stores on all collaborators machines.
   </p>
+
+
+  <h2><Link to='demos/draft/welcome'>Draft</Link></h2>
+  <p>
+  Draft.js implementation
+  </p>
 </div>
 
 export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
   <Route path='scratchpad/:title' component={Scratchpad}/>
   <Route path='whiteboard/:title' component={Whiteboard}/>
-  <Route path='chat/:room' component={Chat}/>
+  <Route path='chat/:room' component={Chat}/> 
 </Route>
