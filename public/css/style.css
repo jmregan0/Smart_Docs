@@ -18,3 +18,8 @@ textarea::selection{
 
 }
 
+
+
+.DraftEditor-editorContainer, .DraftEditor-root, .public-DraftEditor-content{
+	height:400px;
+}
