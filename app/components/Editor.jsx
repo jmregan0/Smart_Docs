@@ -5,29 +5,47 @@ import {Editor, EditorState} from 'draft-js';
 export default class MyEditor extends React.Component {
   constructor(){
     super();
-    this.state = {editorState: EditorState.createEmpty()};
+    this.state = {
+      editorState: EditorState.createEmpty(),
+      text: "",
+    };
     this.handleChange = this.handleChange.bind(this);
   }
  
   componentDidMount(){
+    console.log('initial editorState:',this.state.editorState);
     //this.listenTo(this.props.fireRef)
-    console.log('props:',this.props);
+    if(this.unsubscribe) this.unsubscribe();
+
+    const listener = this.props.fireRef.child('editorState').on('value',
+      snapshot=>{
+        console.log('database update:',JSON.parse(snapshot.val()));
+        //this.setState({editorState: JSON.parse(snapshot.val())})
+      });
+
+    this.unsubscribe = this.props.fireRef.off('value',listener);
   }
 
   handleChange(editorState){
+    //console.log('content?',editorState.getCurrentContent());
     let temp = JSON.stringify(editorState);
-    console.log("handleChange:",temp);
-    this.props.fireRef.set(temp);
+    let temp2 = editorState.getCurrentContent().getPlainText();
+    console.log("handleChange2: ",temp);
+    if(this.props.fireRef) {
+      console.log('writing to firebase!');
+      this.props.fireRef.child('editorState').set(temp);
+      this.props.fireRef.child('text').set(temp2);
+    }
+    /*
     this.setState({editorState},
       ()=>console.log('state updated:',this.state.editorState.getCurrentContent().getPlainText()));
+    */
   }
 
-  /*
   componentWillUnmount() {
     // When we unmount, stop listening.
     this.unsubscribe()
   }
-  */
 
   /*
   componentWillReceiveProps(incoming, outgoing) {
@@ -60,6 +78,7 @@ export default class MyEditor extends React.Component {
   */
 
   render(){
+    console.log('Editor component:',this.props);
 
     return (
       <div>
