@@ -48,9 +48,11 @@ const App = ({children}) =>
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                Menu <i className="fa fa-bars"></i>
            </button>
-           <a className="navbar-brand page-scroll" href="#page-top">
+           <Link to='/demos' className="navbar-brand page-scroll">
                <i className="fa fa-play-circle"></i> <span className="light">Start</span> SmartDocs
-           </a>
+           </Link>
+           <Link to='/about' className="navbar-custom page-scroll">About</Link>
+           <Link to='/contact' className="navbar-custom page-scroll">Contact</Link>
          </div>
 
          <div className="collapse navbar-collapse navbar-right navbar-main-collapse">
@@ -59,17 +61,11 @@ const App = ({children}) =>
                  <a href="#page-top"></a>
              </li>
              <li>
-                 <Link to='/about' className="page-scroll">About</Link>
-             </li>
-             <li>
                {/* WhoAmI takes a firebase auth API and renders either a
                    greeting and a logout button, or sign in buttons, depending
                    on if anyone's logged in */}
                <WhoAmI auth={auth}/>
              </li>
-             <li>
-                   <Link to='/contact' className="page-scroll">Contact</Link>
-               </li>
            </ul>
          </div>
        </div>
@@ -83,11 +79,9 @@ render(
    <Router history={browserHistory}>
      <Route path="/" component={App}>
        <IndexRedirect to="/landing" />
-       <Route path='/landing' component={Landing} />
-       <Route path='/demos'>
+       <Route path="/landing" component={Landing}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
-     </Route>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,

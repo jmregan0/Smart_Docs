@@ -1,0 +1,28 @@
+[debug] [2017-06-21T22:01:23.190Z] ----------------------------------------------------------------------
+[debug] [2017-06-21T22:01:23.193Z] Command:      /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2017-06-21T22:01:23.193Z] CLI Version:  3.9.1
+[debug] [2017-06-21T22:01:23.193Z] Platform:     darwin
+[debug] [2017-06-21T22:01:23.193Z] Node Version: v7.10.0
+[debug] [2017-06-21T22:01:23.194Z] Time:         Wed Jun 21 2017 17:01:23 GMT-0500 (CDT)
+[debug] [2017-06-21T22:01:23.194Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-06-21T22:01:23.206Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-06-21T22:01:23.207Z] > authorizing via signed-in user
+[debug] [2017-06-21T22:01:23.209Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/smartdocs-ac9cb  
+ Wed Jun 21 2017 17:01:23 GMT-0500 (CDT)
+[debug] [2017-06-21T22:01:23.721Z] <<< HTTP RESPONSE 200
+[debug] [2017-06-21T22:01:23.722Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/smartdocs-ac9cb/tokens  
+ Wed Jun 21 2017 17:01:23 GMT-0500 (CDT)
+[debug] [2017-06-21T22:01:23.918Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/tongs/Documents/fullstack/projects/Smart_Docs'...
+[info] 
+[debug] [2017-06-21T22:01:23.921Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/smartdocs-ac9cb  
+ Wed Jun 21 2017 17:01:23 GMT-0500 (CDT)
+[debug] [2017-06-21T22:01:24.045Z] <<< HTTP RESPONSE 200
+[debug] [2017-06-21T22:01:24.045Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/663428927404/clients/_:getWebAppConfig  
+ Wed Jun 21 2017 17:01:24 GMT-0500 (CDT)
+[debug] [2017-06-21T22:01:24.319Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+
