@@ -13,6 +13,7 @@ export default class MyEditor extends React.Component {
   }
  
   componentDidMount(){
+    console.log(this.state.editorState);
     if(this.unsubscribe) this.unsubscribe();
 
     const listener = this.props.fireRef.child('editorState').on('value',
@@ -32,12 +33,18 @@ export default class MyEditor extends React.Component {
 
   handleChange(editorState){
     if(this.props.fireRef) {
+      console.log('handleState before:',editorState.getCurrentContent());
+      let currentContent = editorState.getCurrentContent();
+      let a = EditorState.push(this.state.editorState,currentContent,'unstyled');
+      console.log('handleState after:',a.getCurrentContent());
+      /*
       let temp = convertToRaw(editorState.getCurrentContent());
       temp = JSON.stringify(temp);
       let temp2 = editorState.getCurrentContent().getPlainText();
       console.log('writing to firebase!',temp);
       this.props.fireRef.child('editorState').set(temp);
       this.props.fireRef.child('text').set(temp2);
+      */
     }
   }
 
