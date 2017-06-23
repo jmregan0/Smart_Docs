@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Editor, EditorState} from 'draft-js';
 import axios from 'axios'
 import { rosetteApi } from 'APP/secrets.js'
+import firebase from 'APP/fire/index.js'
 
 
 export default class MyEditor extends React.Component {
@@ -11,6 +12,9 @@ export default class MyEditor extends React.Component {
     this.state = {editorState: EditorState.createEmpty()};
     this.onChange = editorState=>this.setState({editorState});
     this.findResources = this.findResources.bind(this);
+
+    this.writeUserData = this.writeUserData.bind(this);
+    this.db = firebase.database();
   }
 
   findResources(text){
@@ -25,6 +29,8 @@ export default class MyEditor extends React.Component {
       console.log('sent our text to nlp and back again!', result.data.entities)
     })
   }
+
+
 
   render(){
 
