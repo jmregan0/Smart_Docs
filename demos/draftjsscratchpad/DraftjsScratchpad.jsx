@@ -19,7 +19,8 @@ export default class extends React.Component {
     this.restartSyncInterval()
   }
   syncWithFirebase = () => {
-    this.writeToFirebase().then(this.loadFromFirebase)
+    //this.writeToFirebase().then(this.loadFromFirebase)
+    this.writeToFirebase()
   }
 
   startSyncInterval() {
@@ -41,6 +42,27 @@ export default class extends React.Component {
     /* this.listenTo(this.props.fireRef)*/
     this.loadFromFirebase()
     this.startSyncInterval()
+
+    this.props.fireRef.on('value',snapshot => {
+      this.setState({loadingFromFirebase: true},() => {
+        const rawContentState = snapshot.val();
+        rawContentState.entityMap = {};
+        
+        const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
+        let newEditorState = EditorState.push(
+          this.state.editorState,
+          contentStateConvertedFromRaw
+        );
+
+        newEditorState = EditorState.forceSelection(newEditorState,
+          this.state.editorState.getSelection()
+        );
+
+        this.setState({editorState: newEditorState},()=>{
+          this.setState({loadingFromFirebase: false});
+        });
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -48,13 +70,7 @@ export default class extends React.Component {
     this.unsubscribe()
     this.clearLoadInterval()
   }
-
-  componentWillReceiveProps(incoming, outgoing) {
-    // When the props sent to us by our parent component change,
-    // start listening to the new firebase reference.
-    /* this.listenTo(incoming.fireRef)*/
-  }
-
+  
   loadFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
@@ -82,7 +98,7 @@ export default class extends React.Component {
     })
   }
   writeToFirebase = () => {
-    console.log('before loading selection state: ', this.state.editorState.getSelection())
+    //console.log('before loading selection state: ', this.state.editorState.getSelection())
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
     return this.props.fireRef.set(rawState)
