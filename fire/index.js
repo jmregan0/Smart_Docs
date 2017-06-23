@@ -1,8 +1,8 @@
 const firebase = require('firebase')
-
+const secrets = require('../secrets.js')
 // -- // -- // -- // Firebase Config // -- // -- // -- //
 
-const config = require('../secrets.js')
+const config = secrets.config
 
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 

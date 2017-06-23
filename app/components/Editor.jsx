@@ -1,67 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState, convertFromRaw, convertToRaw} from 'draft-js';
+import {Editor, EditorState} from 'draft-js';
+import axios from 'axios'
+import { rosetteApi } from 'APP/secrets.js'
+
 
 export default class MyEditor extends React.Component {
   constructor(){
     super();
-    this.state = {
-      editorState: EditorState.createEmpty(),
-      text: "",
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
- 
-  componentDidMount(){
-    console.log(this.state.editorState);
-    if(this.unsubscribe) this.unsubscribe();
-
-    const listener = this.props.fireRef.child('editorState').on('value',
-      snapshot=>{
-        let a = snapshot.val();
-        a = JSON.parse(a);
-        console.log('database write detected',a);
-        let b = convertFromRaw(a);
-        console.log('convert?',b);
-        let c = EditorState.createWithContent(b);
-        console.log('editorState?',c);
-        this.setState({editorState: c});
-      });
-
-    this.unsubscribe = this.props.fireRef.off('value',listener);
+    this.state = {editorState: EditorState.createEmpty()};
+    this.onChange = editorState=>this.setState({editorState});
+    this.findResources = this.findResources.bind(this);
   }
 
-  handleChange(editorState){
-    if(this.props.fireRef) {
-      console.log('handleState before:',editorState.getCurrentContent());
-      let currentContent = editorState.getCurrentContent();
-      let a = EditorState.push(this.state.editorState,currentContent,'unstyled');
-      console.log('handleState after:',a.getCurrentContent());
-      /*
-      let temp = convertToRaw(editorState.getCurrentContent());
-      temp = JSON.stringify(temp);
-      let temp2 = editorState.getCurrentContent().getPlainText();
-      console.log('writing to firebase!',temp);
-      this.props.fireRef.child('editorState').set(temp);
-      this.props.fireRef.child('text').set(temp2);
-      */
-    }
-  }
+  findResources(text){
 
-  componentWillUnmount() {
-    // When we unmount, stop listening.
-    this.unsubscribe()
+    var instance = axios.create({
+      headers: {
+        'X-RosetteAPI-Key': rosetteApi,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache',
+        'Access-Control-Allow-Origin': 'http://localhost:5000'
+      }
+    });
+
+    instance.post('https://api.rosette.com/rest/v1/entities',{
+      content: text,
+      options: {
+      discoveryMode: true,
+      },
+    })
+    .then(data=>{
+      console.log('response:',data.data);
+    })
+    .catch(error=>console.error('error:',error));
   }
 
   render(){
 
     return (
       <div>
-        <h1>EDITOR</h1>
+        <h1>EDITOR!!</h1>
         <Editor
           editorState={this.state.editorState}
-          onChange={this.handleChange}
-          />
+          onChange={this.onChange} />
+          <button onClick={() => this.findResources(this.state.editorState.getCurrentContent().getPlainText())}>ANALYZE</button>
       </div>
     )
   }
