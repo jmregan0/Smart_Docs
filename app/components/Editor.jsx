@@ -18,10 +18,9 @@ export default class MyEditor extends React.Component {
 
   }
 
-writeUserData(name, email) {
-  this.db.ref('users/email').set({
-    username: name,
-    email: email
+writeUserData(text) {
+  this.db.ref('users/jake/notes').update({
+    text: text
   });
 }
   // eventually going to abstract below function to firebase cloud func
@@ -57,7 +56,7 @@ writeUserData(name, email) {
         <Editor
           editorState={this.state.editorState}
           onChange={this.onChange} />
-          <button onClick={() => this.writeUserData('bekah', 'bekah@jake.jake')}>ANALYZE</button>
+          <button onClick={() => this.writeUserData(this.state.editorState.getCurrentContent().getPlainText())}>ANALYZE</button>
       </div>
     )
   }
