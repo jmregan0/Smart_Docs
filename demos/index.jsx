@@ -2,12 +2,18 @@
 import React from 'react'
 import {Route, IndexRedirect, IndexRoute, Link} from 'react-router'
 
+import DraftjsScratchpad from './draftjsscratchpad'
 import Scratchpad from './scratchpad'
 import Whiteboard from './whiteboard'
 import Chat from './chat'
 
 const Index = ({children}) => <div>
   <h1>Demos!</h1>
+  <h2><Link to='demos/draftjsscratchpad/welcome'>{'Ben\'s DraftJS'}</Link></h2>
+  <p>
+    DraftJS with Firebase
+  </p>
+
   <h2><Link to='demos/scratchpad/welcome'>Scratchpad</Link></h2>
   <p>
     The scratchpad is the very simplest React/Firebase demo—a text area
@@ -34,6 +40,7 @@ const Index = ({children}) => <div>
 
 export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
+  <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}/>
   <Route path='scratchpad/:title' component={Scratchpad}/>
   <Route path='whiteboard/:title' component={Whiteboard}/>
   <Route path='chat/:room' component={Chat}/> 
