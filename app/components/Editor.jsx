@@ -14,27 +14,16 @@ export default class MyEditor extends React.Component {
   }
 
   findResources(text){
-
-    var instance = axios.create({
-      headers: {
-        'X-RosetteAPI-Key': rosetteApi,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Access-Control-Allow-Origin': 'http://localhost:5000'
+    return axios({
+      method: 'post',
+      url: 'http://localhost:3000/api/analyze/entity',
+      data:{
+        text: text
       }
-    });
-
-    instance.post('https://api.rosette.com/rest/v1/entities',{
-      content: text,
-      options: {
-      discoveryMode: true,
-      },
     })
-    .then(data=>{
-      console.log('response:',data.data);
+    .then(result => {
+      console.log('sent our text to nlp and back again!', result.data.entities)
     })
-    .catch(error=>console.error('error:',error));
   }
 
   render(){
