@@ -12,8 +12,6 @@ export default class MyEditor extends React.Component {
     this.state = {editorState: EditorState.createEmpty()};
     this.onChange = editorState=>this.setState({editorState});
     this.findResources = this.findResources.bind(this);
-
-    this.writeUserData = this.writeUserData.bind(this);
     this.db = firebase.database();
   }
 
