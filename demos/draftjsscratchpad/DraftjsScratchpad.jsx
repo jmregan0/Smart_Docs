@@ -35,42 +35,6 @@ export default class extends React.Component {
     this.writeToFirebase()
   }
 
-  _onBoldClick() {
-    console.log(this)
-    this.onChange(
-      // console.log("in onchange");
-      RichUtils.toggleInlineStyle(this.state.editorState,"CODE")
-      );
-  }
-  _onItalicClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,"ITALIC"
-    ));
-  }
-  _onCodeClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,"CODE"
-    ));
-  }
-  _onStrikethroughClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-    this.state.editorState,"STRIKETHROUGH"
-    ));
-  }
-  _onUnderlineClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,"UNDERLINE"
-    ));
-  }
-  _onH2Click() {
-       this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState, "unordered-list-item"
-    ) )
-    // this.onChange(
-
-    // )
-  }  
-
 
 
   startSyncInterval() {
