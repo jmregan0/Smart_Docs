@@ -11,8 +11,6 @@ import {
 export default class extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = { editorState: EditorState.createEmpty(),
-    //                loadingFromFirebase: false };
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
@@ -155,7 +153,6 @@ export default class extends React.Component {
             }
         }
         
-
     return (
       <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
         <button onClick={this.writeToFirebase}>write to firebase</button>
