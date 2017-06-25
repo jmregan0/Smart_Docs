@@ -1,18 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { EditorState} from 'draft-js';
+import { Editor, EditorState} from 'draft-js';
 import axios from 'axios'
 import { rosetteApi } from 'APP/secrets.js'
 import firebase from 'APP/fire/index.js'
-import createEmojiPlugin from 'draft-js-emoji-plugin';
-import Editor from 'draft-js-plugins-editor';
-require('draft-js-emoji-plugin/lib/plugin.css');
 
-const emojiPlugin = createEmojiPlugin();
-
-const plugins = [
-emojiPlugin
-]
 
 export default class MyEditor extends React.Component {
   constructor(){
@@ -46,7 +38,6 @@ export default class MyEditor extends React.Component {
         <Editor
           editorState={this.state.editorState}
           onChange={this.onChange} 
-          plugins={plugins}
           />
           <button onClick={() => this.findResources(this.state.editorState.getCurrentContent().getPlainText())}>ANALYZE</button>
       </div>

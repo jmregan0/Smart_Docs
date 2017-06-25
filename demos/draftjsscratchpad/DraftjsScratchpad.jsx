@@ -4,7 +4,6 @@ import {
   Editor,
   EditorState,
   RichUtils,
-  RichTextEditorUtils,
   convertFromRaw,
   convertToRaw,
 } from 'draft-js'
@@ -29,13 +28,10 @@ export default class extends React.Component {
     this.restartSyncInterval()
   }
 
-
   syncWithFirebase = () => {
     //this.writeToFirebase().then(this.loadFromFirebase)
     this.writeToFirebase()
   }
-
-
 
   startSyncInterval() {
     this.syncInterval = setInterval(this.syncWithFirebase, 3000)
@@ -111,6 +107,7 @@ export default class extends React.Component {
       return resp
     })
   }
+
   writeToFirebase = () => {
     //console.log('before loading selection state: ', this.state.editorState.getSelection())
     const currentContent = this.state.editorState.getCurrentContent()
@@ -145,8 +142,6 @@ export default class extends React.Component {
       );
   }
 
-
-
   render() {
         const { editorState } = this.state;
 
@@ -159,8 +154,6 @@ export default class extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-
-
 
     return (
       <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
