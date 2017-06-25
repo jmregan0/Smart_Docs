@@ -2,12 +2,39 @@
   padding: 0;
 }
 
+.CodeMirror {
+  overflow: visible;
+}
+
+pre.firepad-li-29 {
+    padding-left: 0px !important;
+}
+
+.firepad {
+  width: 98%;
+  height: 450px;
+  background-color: #c3cbcd;
+  margin: 0 auto;
+}
+
+.firepad-toolbar-wrapper {
+  padding-left: 10px;
+}
+
+.firepad-toolbar {
+  padding-left: 0px;
+}
+
+a.firepad-btn, a.firepad-btn:visited, a.firepad-btn:active {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
 textarea {
   color: #454545
 }
 
 textarea::selection{
-	background: #ffb7b7; 
+	background: #ffb7b7;
 }
 
 .DraftEditor-editorContainer {
