@@ -3,6 +3,7 @@ import React from 'react'
 import {Route, IndexRoute, Link} from 'react-router'
 
 import Firepad from './firepad'
+import FirepadJS from './firepadjs'
 import DraftjsScratchpad from './draftjsscratchpad'
 import Scratchpad from './scratchpad'
 import Whiteboard from './whiteboard'
@@ -10,9 +11,14 @@ import Chat from './chat'
 
 const Index = ({children}) => <div>
   <h1>Demos!</h1>
-  <h2><Link to='demos/firepad/welcome'>{'Firepad'}</Link></h2>
+  <h2><Link to='demos/firepad/welcome'>{'Smartpad'}</Link></h2>
   <p>
-    Firepad
+    Smartpad - text editing
+  </p>
+
+  <h2><Link to='demos/firepadjs/welcome'>{'Smartpad.JS'}</Link></h2>
+  <p>
+    Smartpad.JS - <span style={{fontFamily: 'Courier'}}>code</span> editing
   </p>
 
   <h2><Link to='demos/draftjsscratchpad/welcome'>{'Ben\'s DraftJS'}</Link></h2>
@@ -46,6 +52,7 @@ const Index = ({children}) => <div>
 
 export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
+  <Route path='firepadjs/:title' component={FirepadJS}/>
   <Route path='firepad/:title' component={Firepad}/>
   <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}/>
   <Route path='scratchpad/:title' component={Scratchpad}/>
