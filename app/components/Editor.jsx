@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState} from 'draft-js';
+import { Editor, EditorState} from 'draft-js';
 import axios from 'axios'
 import { rosetteApi } from 'APP/secrets.js'
 import firebase from 'APP/fire/index.js'
@@ -12,8 +12,6 @@ export default class MyEditor extends React.Component {
     this.state = {editorState: EditorState.createEmpty()};
     this.onChange = editorState=>this.setState({editorState});
     this.findResources = this.findResources.bind(this);
-
-    this.writeUserData = this.writeUserData.bind(this);
     this.db = firebase.database();
   }
 
@@ -39,7 +37,8 @@ export default class MyEditor extends React.Component {
         <h1>EDITOR!!</h1>
         <Editor
           editorState={this.state.editorState}
-          onChange={this.onChange} />
+          onChange={this.onChange} 
+          />
           <button onClick={() => this.findResources(this.state.editorState.getCurrentContent().getPlainText())}>ANALYZE</button>
       </div>
     )
