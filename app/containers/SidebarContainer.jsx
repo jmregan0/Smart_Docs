@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar'
 
 const mapState = (state) => {
 	return {
-		subjects: state.subjects
+		// nlp results
 	}
 }
 
