@@ -139,6 +139,20 @@ export default class MyEditor extends React.Component {
       })
     }
 
+  findResearchOnInput(tags){
+    return axios({
+      method: 'post',
+      url: 'http://localhost:3000/api/research',
+      data: {
+        tags: tags
+      }
+    })
+    .then(result => result)
+    .then(result => {
+      console.log('found some research for you', result.data.message.items)
+    })
+  }
+
   render(){
 
     return (
@@ -155,6 +169,8 @@ export default class MyEditor extends React.Component {
           <br/>
           <button onClick={() => this.findRelationships(this.state.editorState.getCurrentContent().getPlainText())}>Parse for Relationships</button>
           <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
+          <br/>
+          <button onClick={() => this.findResearchOnInput(['arcade fire', 'devo']) }>Find me some Research</button>
       </div>
     )
   }
