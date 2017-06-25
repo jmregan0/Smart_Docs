@@ -1,5 +1,4 @@
 import React from 'react'
-import {Route} from 'react-router'
 import firebase from 'APP/fire'
 const db = firebase.database()
 

@@ -1,6 +1,6 @@
 'use strict'
 import React from 'react'
-import {Route, IndexRedirect, IndexRoute, Link} from 'react-router'
+import {Route, IndexRoute, Link} from 'react-router'
 
 import Firepad from './firepad'
 import DraftjsScratchpad from './draftjsscratchpad'

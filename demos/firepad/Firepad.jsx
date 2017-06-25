@@ -1,9 +1,3 @@
-// var firepadDiv = document.getElementById('firepad');
-// var firepadRef = firebase.database().ref();
-// var codeMirror = CodeMirror(firepadDiv, { lineWrapping: true });
-// var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
-//     { richTextShortcuts: true, richTextToolbar: true });
-
 "use strict"
 
 var React = require('react')
