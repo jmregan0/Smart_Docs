@@ -11,8 +11,8 @@ import {
 export default class extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: EditorState.createEmpty(),
-                   loadingFromFirebase: false };
+    // this.state = { editorState: EditorState.createEmpty(),
+    //                loadingFromFirebase: false };
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
@@ -154,17 +154,21 @@ export default class extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
+        
 
     return (
       <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
         <button onClick={this.writeToFirebase}>write to firebase</button>
         <button onClick={this.loadFromFirebase}>load from firebase</button>
-          < BlockStyleControls editorState = { editorState }
-            onToggle = { this.toggleBlockType }
-            /> < InlineStyleControls editorState = { editorState }
-            onToggle = { this.toggleInlineStyle }
-            /> 
-
+          {this.state.loadingFromFirebase?
+            null:<div>
+              < BlockStyleControls editorState = { this.state.editorState }
+              onToggle = { this.toggleBlockType }
+              /> < InlineStyleControls editorState = { this.state.editorState }
+              onToggle = { this.toggleInlineStyle }
+              /> 
+            </div>
+          }
         <Editor
           editorState={this.state.editorState}
           handleKeyCommand={this.handleKeyCommand}
@@ -188,10 +192,15 @@ function myBlockStyleFn(contentBlock) {
 const BlockStyleControls = (props) => {
     const { editorState } = props;
     const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
+
+        const blockType=""
+    if(editorState.getCurrentContent().getBlockForKey(selection.getStartKey())){
+        const blockType = editorState
+            .getCurrentContent()
+            .getBlockForKey(selection.getStartKey())
+            .getType();
+
+    }
 
     return ( < div className = "RichEditor-controls" > {
         BLOCK_TYPES.map((type) =>
@@ -206,6 +215,7 @@ const BlockStyleControls = (props) => {
 };
 
 const InlineStyleControls = (props) => {
+
     var currentStyle = props.editorState.getCurrentInlineStyle();
     return ( < div className = "RichEditor-controls" > {
         INLINE_STYLES.map(type =>
