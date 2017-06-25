@@ -22,6 +22,39 @@ export default class MyEditor extends React.Component {
     this.db = firebase.database();
   }
 
+  executeRelationshipAnalysis(){
+    // Will contain non-repetetive data
+    let rawFilteredData = {};
+
+    // filters data repetitions
+    // saves unique instance as key in obj.
+    // performs hasOwnProperty lookup in obj to avoid data repetition.
+    this.state.nlpRelationships.forEach(item => {
+      let connection = 'unknown'
+      if(item.predicateId.substring(0, 3) === 'EDU'){
+        connection = 'Educational Affiliation'
+      } else if(item.predicateId === 'PER-EMPLOYEE-MEMBER-OF'){
+        connection = 'Employee / Member of'
+      } else if(item.predicateId === 'ORG-TOP-EMPLOYEES'){
+        connection = 'Top Employee of Organization'
+      } else if(item.predicateId === 'PER-RESIDENCE'){
+        connection = 'Resedential'
+      } else if(item.predicateId === 'PER-PARENTS'){
+        connection = 'Parental'
+      }
+
+      if(!rawFilteredData.hasOwnProperty(item.arg1)){
+        rawFilteredData[item.arg1] = {
+          relatedTo: item.arg2,
+          connection: connection,
+          likelihood: Math.floor(item.confidence * 100) + '%'
+        }
+      }
+    })
+
+    console.log('rawFilteredData', rawFilteredData)
+  }
+
   executeEntityAnalysis(){
     let mainEntities = [];
     this.state.nlpEntity.forEach(entity => {
@@ -101,7 +134,8 @@ export default class MyEditor extends React.Component {
       })
       .then(result => result)
       .then(result => {
-        console.log('sent our text to nlp and back again!', result.data)
+        console.log('sent our relationship text to nlp and back again!', result.data)
+        this.setState({nlpRelationships: result.data.relationships})
       })
     }
 
@@ -119,8 +153,8 @@ export default class MyEditor extends React.Component {
           <button onClick={() => this.findEntity(this.state.editorState.getCurrentContent().getPlainText())}>Parse for Entity</button>
           <button onClick={() => this.executeEntityAnalysis()}>Show me Entity Analysis</button>
           <br/>
-          <button>button</button>
-          <button>button</button>
+          <button onClick={() => this.findRelationships(this.state.editorState.getCurrentContent().getPlainText())}>Parse for Relationships</button>
+          <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
       </div>
     )
   }
