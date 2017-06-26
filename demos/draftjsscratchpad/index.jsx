@@ -5,7 +5,7 @@ const db = firebase.database()
 
 import DraftjsScratchpad from './DraftjsScratchpad'
 import SidebarContainer from '../../app/containers/SidebarContainer'
-import CarouselContainer from '../../app/containers/CarouselContainer'
+import ResearchContainer from '../../app/containers/ResearchContainer'
 // This component is a little piece of glue between React router
 // and our Scratchpad component. It takes in props.params.title, and
 // shows the Scratchpad along with that title.
@@ -21,9 +21,9 @@ export default ({params: {title}}) =>
       <div className="col-sm-12">
         <DraftjsScratchpad fireRef={db.ref('draftscratchpads').child(title)}/>
       </div>
-      <div className="col-sm-12">
-        <CarouselContainer/>
-      </div>
+      {/*<div className="col-sm-12">
+        <ResearchContainer/>
+      </div>*/}
     </div>
     <div className="col-sm-3">
       <SidebarContainer/>

@@ -9,6 +9,7 @@ import Landing from './components/Landing'
 import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import EditorContainer from './containers/EditorContainer'
+import ResearchContainer from './containers/ResearchContainer'
 
 import Demos from 'APP/demos'
 
@@ -84,6 +85,7 @@ render(
        <Route path="/demos/draft/:room" component={EditorContainer}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
+       <Route path="/research" component={ResearchContainer} />
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,
