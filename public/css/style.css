@@ -149,3 +149,14 @@ button{
   font-style: italic;
   text-align: center;
 }
+
+::selection {
+  background: #ffb7b7; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #ffb7b7; /* Gecko Browsers */
+}
+
+.public-DraftEditor-content{
+  overflow:auto;
+}
