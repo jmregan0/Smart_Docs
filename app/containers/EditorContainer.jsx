@@ -5,7 +5,7 @@ import Editor from '../components/Editor'
 
 const mapState = (state) => {
 	return{
-    updateEditor:
+
   }
 }
 

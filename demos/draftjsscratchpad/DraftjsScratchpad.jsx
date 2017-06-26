@@ -48,7 +48,7 @@ export default class extends React.Component {
     // When the component mounts, start listening to the fireRef
     // we were given.
     /* this.listenTo(this.props.fireRef)*/
-  
+
     this.loadFromFirebase()
     // this.startSyncInterval()
 
@@ -56,7 +56,7 @@ export default class extends React.Component {
       this.setState({loadingFromFirebase: true},() => {
         const rawContentState = snapshot.val();
         rawContentState.entityMap = {};
-        
+
         const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
         let newEditorState = EditorState.push(
           this.state.editorState,
@@ -80,7 +80,7 @@ export default class extends React.Component {
     this.unsubscribe()
     this.clearLoadInterval()
   }
-  
+
   loadFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
@@ -154,7 +154,7 @@ export default class extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        
+
     return (
       <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
         <button onClick={this.writeToFirebase}>write to firebase</button>
@@ -165,7 +165,7 @@ export default class extends React.Component {
               onToggle = { this.toggleBlockType }
               /> < InlineStyleControls editorState = { this.state.editorState }
               onToggle = { this.toggleInlineStyle }
-              /> 
+              />
             </div>
           }
         <Editor
@@ -263,7 +263,7 @@ class StyleButton extends React.Component {
         if (this.props.active) {
             className += ' RichEditor-activeButton';
         }
-
+        console.log('in DRAFTJSSCRATCHPAD')
         return ( < span className = { className }
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
