@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Carousel from '../components/Carousel'
+import Bookmarks from '../components/Carousel'
 
 
 const mapState = (state) => {
@@ -15,4 +15,4 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Carousel)
+export default connect(mapState, mapDispatch)(Bookmarks)

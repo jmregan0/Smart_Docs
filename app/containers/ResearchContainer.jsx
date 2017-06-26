@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Editor from '../components/Editor'
+import Research from '../components/Research'
 
 
 const mapState = (state) => {
-	return{
-    updateEditor:
-  }
+	return {
+		// links:this.state.links
+	}
 }
 
 const mapDispatch = (dispatch) => {
@@ -15,4 +15,4 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Editor)
+export default connect(mapState, mapDispatch)(Research)
