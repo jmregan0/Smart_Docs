@@ -1,6 +1,10 @@
 import React from 'react'
 import SidebarContainer from '../../app/containers/SidebarContainer'
+import Sentimentometer from '../../app/components/Sentimentometer'
 
+// This component is a little piece of glue between React router
+// and our Scratchpad component. It takes in props.params.title, and
+// shows the Scratchpad along with that title.
 export default ({children, params: {title}}) =>
   <div>
     <h1>{title}</h1>
@@ -15,6 +19,8 @@ export default ({children, params: {title}}) =>
       </div>
     </div>
     <div className="col-sm-3">
+      {/*sentiment bar is passed level 0-100*/}
+      <Sentimentometer level="75"/>
       <SidebarContainer/>
     </div>
   </div>

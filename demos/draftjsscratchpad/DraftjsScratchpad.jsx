@@ -8,12 +8,14 @@ import {
   convertToRaw,
 } from 'draft-js'
 
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
   }
 
   state = {
@@ -74,13 +76,14 @@ export default class extends React.Component {
     });
   }
 
-  componentWillUnmount() {
-    // When we unmount, stop listening.
-
-    this.unsubscribe()
-    this.clearLoadInterval()
-  }
-
+  // componentWillUnmount() {
+  //   // When we unmount, stop listening.
+  //   if(this.unsubscribe){
+  //     this.unsubscribe()
+  //     this.clearLoadInterval()
+  //   }
+  // }
+  
   loadFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
