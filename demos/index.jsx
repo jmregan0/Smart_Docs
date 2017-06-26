@@ -7,6 +7,8 @@ import FirepadJS from './firepadjs'
 import DraftjsScratchpad from './draftjsscratchpad'
 import Scratchpad from './scratchpad'
 import Whiteboard from './whiteboard'
+import ResearchContainer from '../containers/ResearchContainer'
+import BookmarksContainer from '../containers/BookmarksContainer'
 import Chat from './chat'
 
 const Index = ({children}) => <div>
@@ -54,7 +56,11 @@ export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
   <Route path='firepadjs/:title' component={FirepadJS}/>
   <Route path='firepad/:title' component={Firepad}/>
-  <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}/>
+  <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}>
+    <Route path='editor/:title' component={DraftjsScratchpad}/>
+    <Route path='research/:title' component={ResearchContainer}/>
+    <Route path='bookmarks/:title' component={BookmarksContainer}/>
+  </Route>
   <Route path='scratchpad/:title' component={Scratchpad}/>
   <Route path='whiteboard/:title' component={Whiteboard}/>
   <Route path='chat/:room' component={Chat}/>
