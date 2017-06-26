@@ -9,6 +9,7 @@ import Landing from './components/Landing'
 import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import EditorContainer from './containers/EditorContainer'
+import ResearchContainer from './containers/ResearchContainer'
 
 import Demos from 'APP/demos'
 
@@ -43,7 +44,7 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({children}) =>
  <div>
-   <nav className="navbar navbar-custom navbar-static-top" role="navigation">
+   <nav className="navbar navbar-custom navbar-static-top" role="navigation"><<<<<<< research-component-and-redux-work
        <div className="container">
          <div className="navbar-header">
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
@@ -83,7 +84,8 @@ render(
        <Route path="/landing" component={Landing}/>
        <Route path="/demos/draft/:room" component={EditorContainer}/>
          {Demos /* Put all the demos and a description page at /demos */}
-      </Route>
+       </Route>
+       <Route path="/research" component={ResearchContainer} />
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,

@@ -3,11 +3,12 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import users from './reducers/users'
 import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
+import rootReducer from './reducers/rootReducer'
 
 // import {whoami} from './reducers/auth'
 
 const store = createStore(
-  users,
+  rootReducer,
   composeWithDevTools(
     applyMiddleware(
       createLogger({collapsed: true}),
