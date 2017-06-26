@@ -83,7 +83,7 @@ render(
        <Route path="/landing" component={Landing}/>
        <Route path="/demos/draft/:room" component={EditorContainer}/>
          {Demos /* Put all the demos and a description page at /demos */}
-       </Route>
+      </Route>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,

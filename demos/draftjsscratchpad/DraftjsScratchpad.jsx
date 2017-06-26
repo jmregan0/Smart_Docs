@@ -8,12 +8,14 @@ import {
   convertToRaw,
 } from 'draft-js'
 
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
   }
 
   state = {
@@ -23,39 +25,40 @@ export default class extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.restartSyncInterval()
+    // this.restartSyncInterval()
   }
 
-  syncWithFirebase = () => {
-    //this.writeToFirebase().then(this.loadFromFirebase)
-    this.writeToFirebase()
-  }
+  // syncWithFirebase = () => {
+  //   //this.writeToFirebase().then(this.loadFromFirebase)
+  //   this.writeToFirebase()
+  // }
 
-  startSyncInterval() {
-    this.syncInterval = setInterval(this.syncWithFirebase, 3000)
-  }
+  // startSyncInterval() {
+  //   this.syncInterval = setInterval(this.syncWithFirebase, 3000)
+  // }
 
-  clearSyncInterval() {
-    clearInterval(this.syncInterval)
-  }
+  // clearSyncInterval() {
+  //   clearInterval(this.syncInterval)
+  // }
 
-  restartSyncInterval() {
-    if (this.syncInterval) this.clearSyncInterval()
-    this.startSyncInterval()
-  }
+  // restartSyncInterval() {
+  //   if (this.syncInterval) this.clearSyncInterval()
+  //   this.startSyncInterval()
+  // }
 
   componentDidMount() {
     // When the component mounts, start listening to the fireRef
     // we were given.
     /* this.listenTo(this.props.fireRef)*/
+
     this.loadFromFirebase()
-    this.startSyncInterval()
+    // this.startSyncInterval()
 
     this.props.fireRef.on('value',snapshot => {
       this.setState({loadingFromFirebase: true},() => {
         const rawContentState = snapshot.val();
         rawContentState.entityMap = {};
-        
+
         const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
         let newEditorState = EditorState.push(
           this.state.editorState,
@@ -73,11 +76,13 @@ export default class extends React.Component {
     });
   }
 
-  componentWillUnmount() {
-    // When we unmount, stop listening.
-    this.unsubscribe()
-    this.clearLoadInterval()
-  }
+  // componentWillUnmount() {
+  //   // When we unmount, stop listening.
+  //   if(this.unsubscribe){
+  //     this.unsubscribe()
+  //     this.clearLoadInterval()
+  //   }
+  // }
   
   loadFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
@@ -152,7 +157,7 @@ export default class extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        
+
     return (
       <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
         <button onClick={this.writeToFirebase}>write to firebase</button>
@@ -163,7 +168,7 @@ export default class extends React.Component {
               onToggle = { this.toggleBlockType }
               /> < InlineStyleControls editorState = { this.state.editorState }
               onToggle = { this.toggleInlineStyle }
-              /> 
+              />
             </div>
           }
         <Editor
@@ -261,7 +266,7 @@ class StyleButton extends React.Component {
         if (this.props.active) {
             className += ' RichEditor-activeButton';
         }
-
+        console.log('in DRAFTJSSCRATCHPAD')
         return ( < span className = { className }
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
