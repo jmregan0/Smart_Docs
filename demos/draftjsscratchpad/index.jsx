@@ -5,6 +5,7 @@ const db = firebase.database()
 
 import DraftjsScratchpad from './DraftjsScratchpad'
 import SidebarContainer from '../../app/containers/SidebarContainer'
+import CarouselContainer from '../../app/containers/CarouselContainer'
 // This component is a little piece of glue between React router
 // and our Scratchpad component. It takes in props.params.title, and
 // shows the Scratchpad along with that title.
@@ -22,4 +23,7 @@ export default ({params: {title}}) =>
     <div className="col-sm-3">
     	<SidebarContainer/>
     </div>
+    <div className="col-sm-12">
+  		<CarouselContainer/>
+  	</div>
   </div>
