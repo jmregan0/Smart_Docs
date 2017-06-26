@@ -18,12 +18,16 @@ export default ({params: {title}}) =>
         component will listen to, but it could be the root of a more complex
         data structure if we wanted. */}
     <div className="col-sm-9">
-    	<DraftjsScratchpad fireRef={db.ref('draftscratchpads').child(title)}/>
-	</div>
-    <div className="col-sm-3">
-    	<SidebarContainer/>
+      <div className="col-sm-12">
+        <DraftjsScratchpad fireRef={db.ref('draftscratchpads').child(title)}/>
+      </div>
+      <div className="col-sm-12">
+        <CarouselContainer/>
+      </div>
     </div>
-    <div className="col-sm-12">
-  		<CarouselContainer/>
-  	</div>
+    <div className="col-sm-3">
+      <SidebarContainer/>
+    </div>
   </div>
+
+

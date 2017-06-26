@@ -19,7 +19,7 @@ export default class Carousel extends React.Component {
 
 //iframe will be passed in linked to site
     return(
-          <div className="col-sm-9">
+          <div className="col-sm-12">
             <div className="col-sm-12">
               <button className="col-sm-1">Left</button>
               <a href={this.state.links.selected} id="iframeLink" className="col-sm-10">Go to {this.state.links.selected}</a>
