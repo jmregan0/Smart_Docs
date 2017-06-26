@@ -63,7 +63,9 @@ textarea::selection{
 
 }
 
-
+button{
+  color:black;
+}
 
 .DraftEditor-editorContainer, .DraftEditor-root, .public-DraftEditor-content{
 	height:400px;
