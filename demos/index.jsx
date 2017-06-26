@@ -13,7 +13,8 @@ import Chat from './chat'
 
 const Index = ({children}) => <div>
   <h1>Demos!</h1>
-  <h2><Link to='demos/firepad/welcome'>{'Smartpad'}</Link></h2>
+  {/*<h2><Link to='demos/firepad/welcome'>{'Smartpad'}</Link></h2>
+  
   <p>
     Smartpad - text editing
   </p>
@@ -21,13 +22,13 @@ const Index = ({children}) => <div>
   <h2><Link to='demos/firepadjs/welcome'>{'Smartpad.JS'}</Link></h2>
   <p>
     Smartpad.JS - <span style={{fontFamily: 'Courier'}}>code</span>
-  </p>
+  </p>*/}
 
   <h2><Link to='demos/draftjsscratchpad/welcome'>{'Ben\'s DraftJS'}</Link></h2>
   <p>
     DraftJS with Firebase
   </p>
-
+{/*
   <h2><Link to='demos/scratchpad/welcome'>Scratchpad</Link></h2>
   <p>
     The scratchpad is the very simplest React/Firebase demo—a text area
@@ -44,7 +45,7 @@ const Index = ({children}) => <div>
     The whiteboard demonstrates the <i>journal</i> pattern, a way to use Firebase
     to synchronize the state of Redux stores on all collaborators machines.
   </p>
-
+*/}
 
   <h2><Link to='demos/draft/welcome'>Draft</Link></h2>
   <p>

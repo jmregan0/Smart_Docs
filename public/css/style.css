@@ -63,7 +63,9 @@ textarea::selection{
 
 }
 
-
+button{
+  color:black;
+}
 
 .DraftEditor-editorContainer, .DraftEditor-root, .public-DraftEditor-content{
 	height:400px;
@@ -141,3 +143,9 @@ textarea::selection{
   color: #5890ff;
 }
 
+.superFancyBlockquote {
+  color: #999;
+  font-family: 'Hoefler Text', Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
