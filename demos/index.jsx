@@ -56,9 +56,9 @@ const Index = ({children}) => <div>
 
 export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
-  <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}>
+  <Route path='draftjsscratchpad/:room' component={DraftjsScratchpad}>
     <IndexRoute component={EditorContainer}/>
-    <Route path='editor' component={EditorContainer}/>
+    <Route path='editor' component={EditorContainer} />
     <Route path='research' component={ResearchContainer}/>
     <Route path='bookmarks' component={BookmarksContainer}/>
   </Route>
