@@ -74,12 +74,14 @@ export default class extends React.Component {
     });
   }
 
-  componentWillUnmount() {
-    // When we unmount, stop listening.
+  // componentWillUnmount() {
+  //   // When we unmount, stop listening.
+  //   if(this.unsubscribe){
 
-    this.unsubscribe()
-    this.clearLoadInterval()
-  }
+  //     this.unsubscribe()
+  //     this.clearLoadInterval()
+  //   }
+  // }
   
   loadFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
