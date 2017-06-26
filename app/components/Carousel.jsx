@@ -28,7 +28,7 @@ export default class Carousel extends React.Component {
 
             <div className="col-sm-12">
               <div className="col-sm-8">
-                <div class="box"><iframe src={this.state.links.selected} width = "100%" height = "500px"></iframe></div>
+                <div className="box"><iframe src={this.state.links.selected} width = "100%" height = "500px"></iframe></div>
               </div>
               <div className="col-sm-4">
                 <img src="https://i-msdn.sec.s-msft.com/dynimg/IC443904.jpeg" width = "100%" alt="Paris"></img>
