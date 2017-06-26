@@ -18,7 +18,7 @@ const Index = ({children}) => <div>
 
   <h2><Link to='demos/firepadjs/welcome'>{'Smartpad.JS'}</Link></h2>
   <p>
-    Smartpad.JS - <span style={{fontFamily: 'Courier'}}>code</span> editing
+    Smartpad.JS - <span style={{fontFamily: 'Courier'}}>code</span>
   </p>
 
   <h2><Link to='demos/draftjsscratchpad/welcome'>{'Ben\'s DraftJS'}</Link></h2>

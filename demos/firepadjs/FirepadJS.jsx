@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var React = require('react')
   , Firebase = require('firebase')
@@ -17,6 +17,11 @@ export default class extends React.Component {
         defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
       });
   }
+
+  componentWillMount() {
+
+  }
+
   render() {
     return (
       <div>

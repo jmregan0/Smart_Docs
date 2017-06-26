@@ -5,18 +5,18 @@ const db = firebase.database()
 import FirepadJS from './FirepadJS'
 
 function getWelcomeRef() {
-      var ref = db.ref('firepadsJS');
-      var hash = window.location.hash.replace(/#/g, '');
+      var ref = db.ref('firepadsJS')
+      var hash = window.location.hash.replace(/#/g, '')
       if (hash) {
-        ref = ref.child(hash);
+        ref = ref.child(hash)
       } else {
-        ref = ref.push(); // generate unique location.
-        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+        ref = ref.push() // generate unique location.
+        window.location = window.location + '#' + ref.key // add it as a hash to the URL.
       }
       if (typeof console !== 'undefined') {
-        console.log('Firebase data: ', ref.toString());
+        console.log('Firebase data: ', ref.toString())
       }
-      return ref;
+      return ref
     }
 
 // This component is a little piece of glue between React router

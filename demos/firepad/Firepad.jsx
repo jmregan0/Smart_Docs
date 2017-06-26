@@ -5,6 +5,14 @@ var React = require('react')
   // , CodeMirror = require('codemirror')
   , Firepad = require('firepad')
   // , firepadRef = new Firebase(this.props.fireRef + 'session/')
+  , userId = Math.floor(Math.random() * 9999999999).toString()
+  , firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'),
+          document.getElementById('userlist'), userId)
+  , Firepad.on('ready', function() {
+        if (firepad.isHistoryEmpty()) {
+          firepad.setText('Check out the user list to the left!');
+        }
+      });
 
 export default class extends React.Component {
   componentDidMount() {
@@ -13,12 +21,14 @@ export default class extends React.Component {
     let firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
         richTextShortcuts: true,
         richTextToolbar: true,
-        defaultText: 'Hello, World!'
+        defaultText: 'Hello, World!',
+        userId: userId
       });
   }
   render() {
     return (
       <div>
+        <div id="userlist"></div>
         <div id="firepad"></div>
       </div>
     )
