@@ -5,16 +5,17 @@ import {Route, IndexRoute, Link} from 'react-router'
 import Firepad from './firepad'
 import FirepadJS from './firepadjs'
 import DraftjsScratchpad from './draftjsscratchpad'
+import EditorContainer from './draftjsscratchpad/DraftjsScratchpad'
 import Scratchpad from './scratchpad'
 import Whiteboard from './whiteboard'
-import ResearchContainer from '../containers/ResearchContainer'
-import BookmarksContainer from '../containers/BookmarksContainer'
+import ResearchContainer from '../app/containers/ResearchContainer'
+import BookmarksContainer from '../app/containers/BookmarksContainer'
 import Chat from './chat'
 
 const Index = ({children}) => <div>
   <h1>Demos!</h1>
   {/*<h2><Link to='demos/firepad/welcome'>{'Smartpad'}</Link></h2>
-  
+
   <p>
     Smartpad - text editing
   </p>
@@ -55,14 +56,10 @@ const Index = ({children}) => <div>
 
 export default <Route path="/demos" component={({children}) => children}>
   <IndexRoute component={Index}/>
-  <Route path='firepadjs/:title' component={FirepadJS}/>
-  <Route path='firepad/:title' component={Firepad}/>
   <Route path='draftjsscratchpad/:title' component={DraftjsScratchpad}>
-    <Route path='editor/:title' component={DraftjsScratchpad}/>
-    <Route path='research/:title' component={ResearchContainer}/>
-    <Route path='bookmarks/:title' component={BookmarksContainer}/>
+    <IndexRoute component={EditorContainer}/>
+    <Route path='editor' component={EditorContainer}/>
+    <Route path='research' component={ResearchContainer}/>
+    <Route path='bookmarks' component={BookmarksContainer}/>
   </Route>
-  <Route path='scratchpad/:title' component={Scratchpad}/>
-  <Route path='whiteboard/:title' component={Whiteboard}/>
-  <Route path='chat/:room' component={Chat}/>
 </Route>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Bookmarks from '../components/Carousel'
+import Bookmarks from '../components/Bookmarks'
 
 
 const mapState = (state) => {

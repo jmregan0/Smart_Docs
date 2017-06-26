@@ -1,11 +1,5 @@
 import React from 'react'
-import {Route} from 'react-router'
-import firebase from 'APP/fire'
-const db = firebase.database()
-
-import DraftjsScratchpad from './DraftjsScratchpad'
 import SidebarContainer from '../../app/containers/SidebarContainer'
-import CarouselContainer from '../../app/containers/CarouselContainer'
 import Sentimentometer from '../../app/components/Sentimentometer'
 
 // This component is a little piece of glue between React router
