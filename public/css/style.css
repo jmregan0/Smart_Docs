@@ -141,3 +141,9 @@ textarea::selection{
   color: #5890ff;
 }
 
+.superFancyBlockquote {
+  color: #999;
+  font-family: 'Hoefler Text', Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}

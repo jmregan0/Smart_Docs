@@ -23,33 +23,34 @@ export default class extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.restartSyncInterval()
+    // this.restartSyncInterval()
   }
 
-  syncWithFirebase = () => {
-    //this.writeToFirebase().then(this.loadFromFirebase)
-    this.writeToFirebase()
-  }
+  // syncWithFirebase = () => {
+  //   //this.writeToFirebase().then(this.loadFromFirebase)
+  //   this.writeToFirebase()
+  // }
 
-  startSyncInterval() {
-    this.syncInterval = setInterval(this.syncWithFirebase, 3000)
-  }
+  // startSyncInterval() {
+  //   this.syncInterval = setInterval(this.syncWithFirebase, 3000)
+  // }
 
-  clearSyncInterval() {
-    clearInterval(this.syncInterval)
-  }
+  // clearSyncInterval() {
+  //   clearInterval(this.syncInterval)
+  // }
 
-  restartSyncInterval() {
-    if (this.syncInterval) this.clearSyncInterval()
-    this.startSyncInterval()
-  }
+  // restartSyncInterval() {
+  //   if (this.syncInterval) this.clearSyncInterval()
+  //   this.startSyncInterval()
+  // }
 
   componentDidMount() {
     // When the component mounts, start listening to the fireRef
     // we were given.
     /* this.listenTo(this.props.fireRef)*/
+  
     this.loadFromFirebase()
-    this.startSyncInterval()
+    // this.startSyncInterval()
 
     this.props.fireRef.on('value',snapshot => {
       this.setState({loadingFromFirebase: true},() => {
@@ -75,6 +76,7 @@ export default class extends React.Component {
 
   componentWillUnmount() {
     // When we unmount, stop listening.
+
     this.unsubscribe()
     this.clearLoadInterval()
   }
