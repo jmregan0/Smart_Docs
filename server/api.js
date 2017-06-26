@@ -5,6 +5,7 @@ const api = module.exports = require('express').Router()
 api
   .get('/heartbeat', (req, res) => res.send({ok: true}))
   .use('/analyze', require('./analyze'))
+  .use('/research', require('./research'))
 
 
 api.use(morgan('dev'))
