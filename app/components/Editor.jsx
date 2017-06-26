@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState} from 'draft-js';
+import { Editor, EditorState} from 'draft-js';
 import axios from 'axios'
 import { rosetteApi } from 'APP/secrets.js'
 import firebase from 'APP/fire/index.js'
@@ -19,6 +19,7 @@ export default class MyEditor extends React.Component {
     this.findEntity = this.findEntity.bind(this);
     this.findSentiment = this.findSentiment.bind(this);
     this.findRelationships = this.findRelationships.bind(this);
+    this.findResources = this.findResources.bind(this);
     this.db = firebase.database();
   }
 
@@ -171,6 +172,7 @@ export default class MyEditor extends React.Component {
           <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
           <br/>
           <button onClick={() => this.findResearchOnInput(['arcade fire', 'devo']) }>Find me some Research</button>
+          onChange={this.onChange} 
       </div>
     )
   }
