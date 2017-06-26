@@ -1,13 +1,6 @@
 import React from 'react'
-import {Route} from 'react-router'
-import firebase from 'APP/fire'
-const db = firebase.database()
-
-import DraftjsScratchpad from './DraftjsScratchpad'
 import SidebarContainer from '../../app/containers/SidebarContainer'
-// This component is a little piece of glue between React router
-// and our Scratchpad component. It takes in props.params.title, and
-// shows the Scratchpad along with that title.
+
 export default ({children, params: {title}}) =>
   <div>
     <h1>{title}</h1>
