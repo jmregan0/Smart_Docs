@@ -8,12 +8,14 @@ import {
   convertToRaw,
 } from 'draft-js'
 
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
   }
 
   state = {

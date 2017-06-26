@@ -5,6 +5,7 @@ const db = firebase.database()
 import MyEditor from '../components/Editor'
 import SidebarContainer from './SidebarContainer'
 import CarouselContainer from './CarouselContainer'
+import Sentimentometer from '../components/Sentimentometer'
 // This component is a little piece of glue between React router
 // and our Scratchpad component. It takes in props.params.title, and
 // shows the Scratchpad along with that title.
