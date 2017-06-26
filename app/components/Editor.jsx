@@ -28,8 +28,6 @@ export default class MyEditor extends React.Component {
     })
   }
 
-
-
   render(){
 
     return (

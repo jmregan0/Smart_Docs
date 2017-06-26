@@ -10,6 +10,10 @@ textarea::selection{
 	background: #ffb7b7; 
 }
 
+#iframeLink{
+  text-align: center;
+}
+
 .DraftEditor-editorContainer {
   background-color:#fff;
   color:black;
