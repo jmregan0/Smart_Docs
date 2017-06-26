@@ -1,5 +1,6 @@
 {
   "projects": {
-    "smartdocs": "draftjs-ec536"
+    "smartdocs": "draftjs-ec536",
+    "current": "smart-docs2"
   }
 }

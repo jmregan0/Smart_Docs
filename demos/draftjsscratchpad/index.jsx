@@ -2,6 +2,7 @@ import React from 'react'
 import firebase from 'APP/fire'
 const db = firebase.database()
 import SidebarContainer from '../../app/containers/SidebarContainer'
+import ResearchContainer from '../../app/containers/ResearchContainer'
 import MyEditor from './DraftjsScratchpad'
 import Sentimentometer from '../../app/components/Sentimentometer'
 
