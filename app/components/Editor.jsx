@@ -172,6 +172,7 @@ export default class MyEditor extends React.Component {
           <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
           <br/>
           <button onClick={() => this.findResearchOnInput(['arcade fire', 'devo']) }>Find me some Research</button>
+
       </div>
     )
   }

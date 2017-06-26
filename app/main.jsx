@@ -44,7 +44,7 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({children}) =>
  <div>
-   <nav className="navbar navbar-custom navbar-static-top" role="navigation">
+   <nav className="navbar navbar-custom navbar-static-top" role="navigation"><<<<<<< research-component-and-redux-work
        <div className="container">
          <div className="navbar-header">
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">

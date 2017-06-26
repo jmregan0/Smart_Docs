@@ -4,6 +4,7 @@ import Research from '../components/Research'
 import { findResearchOnInput } from '../action-creators/research'
 
 
+
 const mapState = (state) => {
 	return {
 		researchResults: state.researchResults
