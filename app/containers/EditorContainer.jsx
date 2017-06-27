@@ -34,7 +34,9 @@ const db = firebase.database()
 
 const mapState = (state) => {
 	return{
+
     fireRef: db.ref('DraftJs').child('room')
+
   }
 }
 
