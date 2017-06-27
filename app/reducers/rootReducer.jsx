@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 const rootReducer = combineReducers({
-  researchBatch: require('./research').default,
+  researchResults: require('./research').default,
 })
 
 export default rootReducer
