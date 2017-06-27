@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import * as Immutable from 'immutable'
 import {
   Editor,
@@ -8,32 +9,40 @@ import {
   convertToRaw,
 } from 'draft-js'
 import firebase from 'APP/fire'
+import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
 
-export default class extends React.Component {
+
+class DraftjsScratchpad extends React.Component {
   constructor(props) {
     super(props);
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
+    this.findRelationships = props.findRelationships;
   }
 
   state = {
     editorState: EditorState.createEmpty(),
-    loadingFromFirebase: false
+    loadingFromFirebase: false,
+    checkTextLength: 200
   }
 
   onChange = (editorState) => {
     this.setState({editorState})
     this.writeNoteToFirebase()
-
+    let currentText = editorState.getCurrentContent().getPlainText();
+    if(currentText.split(' ').length > this.state.checkTextLength){
+      this.findSentiment(currentText)
+      console.log('we have hit our limit')
+      this.state.checkTextLength += 150
+    }
   }
 
 
   componentDidMount() {
 
     this.loadNoteFromFirebase()
-    
+
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
@@ -64,13 +73,13 @@ export default class extends React.Component {
       }
     });
   }
-  
+
   loadNoteFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
 
     firebase.auth().onAuthStateChanged((user)=> {
-      
+
       if (user) {
         // User is signed in.
         return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
@@ -108,7 +117,7 @@ export default class extends React.Component {
   }
 
   deleteUserFromRoom = ()=>{
-     return this.props.fireRefRoom.set({user:user.uid, exists:false})   
+     return this.props.fireRefRoom.set({user:user.uid, exists:false})
   }
 
   loadUserFromFirebaseRoom = ()=>{
@@ -122,7 +131,7 @@ export default class extends React.Component {
     const rawState = convertToRaw(currentContent)
 
     firebase.auth().onAuthStateChanged((user)=> {
-      
+
       if (user) {
         // User is signed in.
         console.log(user.uid)
@@ -201,6 +210,20 @@ export default class extends React.Component {
     )
   }
 }
+
+const mapState = (state) => {
+	return {
+	}
+}
+
+const mapDispatch = (dispatch) => {
+  return {
+		findRelationships: (text) => dispatch(findRelationships(text))
+  }
+}
+
+export default connect(mapState, mapDispatch)(DraftjsScratchpad)
+
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -292,3 +315,4 @@ class StyleButton extends React.Component {
         );
     }
 }
+
