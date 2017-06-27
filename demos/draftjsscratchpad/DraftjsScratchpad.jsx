@@ -18,6 +18,8 @@ class DraftjsScratchpad extends React.Component {
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    this.findSentiment = props.findSentiment;
+    this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
   }
 
@@ -33,6 +35,8 @@ class DraftjsScratchpad extends React.Component {
     let currentText = editorState.getCurrentContent().getPlainText();
     if(currentText.split(' ').length > this.state.checkTextLength){
       this.findSentiment(currentText)
+      this.findEntity(currentText)
+      this.findRelationships(currentText)
       console.log('we have hit our limit')
       this.state.checkTextLength += 150
     }
@@ -174,6 +178,8 @@ class DraftjsScratchpad extends React.Component {
   render() {
         const { editorState } = this.state;
 
+        console.log('this.state.checkTextLength', this.state.checkTextLength)
+
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
         let className = 'RichEditor-editor';
@@ -218,7 +224,9 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-		findRelationships: (text) => dispatch(findRelationships(text))
+    findSentiment: (text) => dispatch(findSentiment(text)),
+    findEntity: (text) => dispatch(findEntity(text)),
+		findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
