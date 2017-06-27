@@ -54,8 +54,13 @@ export const findEntity = text => {
 
 export const findRelationships = text => {
   return dispatch => {
-    axios.post('http://localhost:3000/api/analyze/relationships', {
-        text: text})
+    return axios({
+        method: 'post',
+        url: 'http://localhost:3000/api/analyze/relationships',
+        data:{
+          text: text
+        }
+      })
     .then(res => res.data)
     .then(relationshipResults => {
       console.log('relationshipResults', relationshipResults)
