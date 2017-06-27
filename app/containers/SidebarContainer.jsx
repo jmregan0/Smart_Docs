@@ -10,8 +10,10 @@ const mapState = (state) => {
 	}
 }
 
-const mapDispatch = {
-		findResearchOnInput
+const mapDispatch = (dispatch) => {
+		return {
+			findResearchOnInput: (tags) => dispatch(findResearchOnInput(tags))
+		}
   }
 
 
