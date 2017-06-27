@@ -3,7 +3,7 @@ const axios = require('axios')
 module.exports = require('express').Router()
 
 .post('/', (req, res, next) => {
-  console.log('hit research route')
+  console.log('tags', req.body)
   // make sure tags for cross ref come across in array
   let tags = req.body.tags
 
