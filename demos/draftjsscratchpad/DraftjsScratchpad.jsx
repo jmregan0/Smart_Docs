@@ -7,7 +7,7 @@ import {
   convertFromRaw,
   convertToRaw,
 } from 'draft-js'
-
+import firebase from 'APP/fire'
 
 export default class extends React.Component {
   constructor(props) {
@@ -25,97 +25,114 @@ export default class extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    // this.restartSyncInterval()
+    this.writeNoteToFirebase()
+
   }
 
-  // syncWithFirebase = () => {
-  //   //this.writeToFirebase().then(this.loadFromFirebase)
-  //   this.writeToFirebase()
-  // }
-
-  // startSyncInterval() {
-  //   this.syncInterval = setInterval(this.syncWithFirebase, 3000)
-  // }
-
-  // clearSyncInterval() {
-  //   clearInterval(this.syncInterval)
-  // }
-
-  // restartSyncInterval() {
-  //   if (this.syncInterval) this.clearSyncInterval()
-  //   this.startSyncInterval()
-  // }
 
   componentDidMount() {
-    // When the component mounts, start listening to the fireRef
-    // we were given.
-    /* this.listenTo(this.props.fireRef)*/
 
-    this.loadFromFirebase()
-    // this.startSyncInterval()
+    this.loadNoteFromFirebase()
+    
 
-    this.props.fireRef.on('value',snapshot => {
-      this.setState({loadingFromFirebase: true},() => {
-        const rawContentState = snapshot.val();
-        rawContentState.entityMap = {};
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+      this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
+        this.setState({loadingFromFirebase: true},() => {
+          const rawContentState = snapshot.val();
+          rawContentState.entityMap = {};
 
-        const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
-        let newEditorState = EditorState.push(
-          this.state.editorState,
-          contentStateConvertedFromRaw
-        );
+          const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
+          let newEditorState = EditorState.push(
+            this.state.editorState,
+            contentStateConvertedFromRaw
+          );
 
-        newEditorState = EditorState.forceSelection(newEditorState,
-          this.state.editorState.getSelection()
-        );
+          newEditorState = EditorState.forceSelection(newEditorState,
+            this.state.editorState.getSelection()
+          );
 
-        this.setState({editorState: newEditorState},()=>{
-          this.setState({loadingFromFirebase: false});
+          this.setState({editorState: newEditorState},()=>{
+            this.setState({loadingFromFirebase: false});
+          });
         });
       });
+      } else {
+        // No user is signed in.
+        console.log("nothing loaded because a user is not signed in")
+      }
     });
   }
-
-  // componentWillUnmount() {
-  //   // When we unmount, stop listening.
-  //   if(this.unsubscribe){
-  //     this.unsubscribe()
-  //     this.clearLoadInterval()
-  //   }
-  // }
   
-  loadFromFirebase = () => {
+  loadNoteFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
-    return this.props.fireRef.once('value', snapshot => {
-      const rawContentState = snapshot.val()
-      // when we writeToFirebase the rawContent, firebase doesn't save the empty object value on the 'entityMap' key
-      // we need to add it back before we convertFromRaw so it doesn't throw a type error as it expects an object and would would
-      // otherwise operate on undefined
-      rawContentState.entityMap = {}
-      const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
-      let newEditorState = EditorState.push(
-        this.state.editorState,
-        contentStateConvertedFromRaw
-      )
-      console.log('are they equal? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
-      newEditorState = EditorState.forceSelection(newEditorState, this.state.editorState.getSelection())
 
-      console.log('how about now? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
-      this.setState({editorState: newEditorState})
-    })
-    .then((resp) => {
-      this.setState({loadingFromFirebase: false})
-      /* console.log('after loading selection state: ', this.state.editorState.getSelection())*/
-      return resp
-    })
+    firebase.auth().onAuthStateChanged((user)=> {
+      
+      if (user) {
+        // User is signed in.
+        return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
+          const rawContentState = snapshot.val()
+          // when we writeToFirebase the rawContent, firebase doesn't save the empty object value on the 'entityMap' key
+          // we need to add it back before we convertFromRaw so it doesn't throw a type error as it expects an object and would would
+          // otherwise operate on undefined
+          rawContentState.entityMap = {}
+          const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
+          let newEditorState = EditorState.push(
+            this.state.editorState,
+            contentStateConvertedFromRaw
+          )
+          console.log('are they equal? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
+          newEditorState = EditorState.forceSelection(newEditorState, this.state.editorState.getSelection())
+
+          console.log('how about now? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
+          this.setState({editorState: newEditorState})
+        })
+        .then((resp) => {
+          this.setState({loadingFromFirebase: false})
+          /* console.log('after loading selection state: ', this.state.editorState.getSelection())*/
+          return resp
+        })
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
+    });
+
   }
 
-  writeToFirebase = () => {
+  addUserToRoom = (user)=>{
+    return this.props.fireRefRoom.set({user:user.uid, exists:true})
+  }
+
+  deleteUserFromRoom = ()=>{
+     return this.props.fireRefRoom.set({user:user.uid, exists:false})   
+  }
+
+  loadUserFromFirebaseRoom = ()=>{
+
+  }
+
+
+  writeNoteToFirebase = () => {
     //console.log('before loading selection state: ', this.state.editorState.getSelection())
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    return this.props.fireRef.set(rawState)
+
+    firebase.auth().onAuthStateChanged((user)=> {
+      
+      if (user) {
+        // User is signed in.
+        console.log(user.uid)
+        return this.props.fireRefNotes.child(user.uid).set(rawState)
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
+    });
+
   }
 
   handleKeyCommand = command => {
@@ -158,25 +175,28 @@ export default class extends React.Component {
             }
         }
 
+        // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
+        // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
-      <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <button onClick={this.writeToFirebase}>write to firebase</button>
-        <button onClick={this.loadFromFirebase}>load from firebase</button>
-          {this.state.loadingFromFirebase?
-            null:<div>
-              < BlockStyleControls editorState = { this.state.editorState }
-              onToggle = { this.toggleBlockType }
-              /> < InlineStyleControls editorState = { this.state.editorState }
-              onToggle = { this.toggleInlineStyle }
-              />
-            </div>
-          }
-        <Editor
-          editorState={this.state.editorState}
-          handleKeyCommand={this.handleKeyCommand}
-          onChange={this.onChange}
-          blockStyleFn={myBlockStyleFn}
-        />
+      <div>
+
+        <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
+            {this.state.loadingFromFirebase?
+              null:<div>
+                < BlockStyleControls editorState = { this.state.editorState }
+                onToggle = { this.toggleBlockType }
+                /> < InlineStyleControls editorState = { this.state.editorState }
+                onToggle = { this.toggleInlineStyle }
+                />
+              </div>
+            }
+          <Editor
+            editorState={this.state.editorState}
+            handleKeyCommand={this.handleKeyCommand}
+            onChange={this.onChange}
+            blockStyleFn={myBlockStyleFn}
+          />
+        </div>
       </div>
     )
   }
@@ -266,7 +286,7 @@ class StyleButton extends React.Component {
         if (this.props.active) {
             className += ' RichEditor-activeButton';
         }
-        console.log('in DRAFTJSSCRATCHPAD')
+        // console.log('in DRAFTJSSCRATCHPAD')
         return ( < span className = { className }
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );

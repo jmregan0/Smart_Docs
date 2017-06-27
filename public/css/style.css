@@ -223,3 +223,12 @@ button{
   font-size: 0.9em;
   line-height:1.2em;
 }
+
+.sidebar-nav-fixed{
+  color:black;
+}
+
+#main-user-head{
+  background-color: bisque;
+  color: red;
+}
