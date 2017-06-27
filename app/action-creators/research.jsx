@@ -13,7 +13,7 @@ export const setInitialResearch = research => ({
 // thunks that are functions which return functions that take dispatch as arg. do something async and then finally dispatch one of the above basic action creators.
 
 
-export const findResearchOnInput = tags => {
+export const findResearchOnInput = (tags) => {
   return dispatch => {
     return axios({
     method: 'post',
