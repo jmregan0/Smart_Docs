@@ -7,13 +7,13 @@ export default function(state = initialState, action) {
 
   switch(action.type){
     case SET_SENTIMENT_RESULTS:
-      newState.sentimentResults = action.research
+      newState.nlpSentiment = action.research
       break
     case SET_ENTITY_RESULTS:
-      newState.entityResults = action.research
+      newState.nlpEntity = action.research
       break
     case SET_RELATIONSHIP_RESULTS:
-      newState.relationshipResults = action.research
+      newState.nlpRelationships = action.research
       break
     case SET_INITIAL_RESEARCH_RESULTS:
       newState.researchResults = action.research
