@@ -34,7 +34,7 @@ export const findSentiment = text => {
     .then(sentimentResults => {
       console.log('sentimentResults', sentimentResults)
       dispatch(setSentimentResults(sentimentResults))
-      browserHistory.push('/research')
+      // browserHistory.push('/research')
     })
   }
 }
@@ -47,7 +47,7 @@ export const findEntity = text => {
     .then(entityResults => {
       console.log('entityResults', entityResults)
       dispatch(setEntityResults(entityResults))
-      browserHistory.push('/research')
+      // browserHistory.push('/research')
     })
   }
 }
@@ -65,7 +65,7 @@ export const findRelationships = text => {
     .then(relationshipResults => {
       console.log('relationshipResults', relationshipResults)
       dispatch(setRelationshipResults(relationshipResults))
-      browserHistory.push('/research')
+      // browserHistory.push('/research')
     })
   }
 }

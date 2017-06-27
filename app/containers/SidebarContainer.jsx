@@ -6,7 +6,7 @@ import { findResearchOnInput } from '../action-creators/research'
 
 const mapState = (state) => {
 	return {
-		// nlp results
+		entities: state.nlpResults.nlpEntity,
 	}
 }
 
