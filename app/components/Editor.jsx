@@ -14,18 +14,21 @@ export default class MyEditor extends React.Component {
       editorState: EditorState.createEmpty(),
       nlpSentiment: null,
       nlpEntity: null,
-      nlpRelationships: null
+      nlpRelationships: null,
+      people: []
     };
     this.onChange = editorState=>this.setState({editorState});
     this.findEntity = findEntity.bind(this);
     this.findSentiment = findSentiment.bind(this);
     this.findRelationships = findRelationships.bind(this);
     this.findResearchOnInput = findResearchOnInput.bind(this);
+    this.executeRelationshipAnalysis = executeRelationshipAnalysis.bind(this);
+    this.executeSentimentAnalysis = executeSentimentAnalysis.bind(this);
     this.db = firebase.database();
   }
 
   render(){
-
+    console.log('this.state.people', this.state.people)
     return (
       <div>
         <h1>EDITOR!!</h1>
@@ -42,6 +45,7 @@ export default class MyEditor extends React.Component {
           <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
           <br/>
           <button onClick={() => this.findResearchOnInput(['arcade fire', 'devo']) }>Find me some Research</button>
+          <button onClick={() => this.findResearchOnInput(this.state.people) }>Research analyzed people</button>
 
       </div>
     )
