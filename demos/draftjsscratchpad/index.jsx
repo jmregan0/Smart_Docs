@@ -1,9 +1,16 @@
 import React from 'react'
 import firebase from 'APP/fire'
-const db = firebase.database()
 import SidebarContainer from '../../app/containers/SidebarContainer'
-import MyEditor from './DraftjsScratchpad'
+import DraftjsScratchpad from './DraftjsScratchpad'
 import Sentimentometer from '../../app/components/Sentimentometer'
+import RoomSidebar from '../../app/components/RoomSidebar'
+import UserSidebar from '../../app/components/UserSidebar'
+//room sidebar
+//user sidebar
+
+const db = firebase.database()
+    , auth = firebase.auth()
+
 
 // This component is a little piece of glue between React router
 // and our Scratchpad component. It takes in props.params.title, and
@@ -16,9 +23,13 @@ export default ({children, params: {room}}) =>
         stored in Firebase. Each scratchpad is just a string that the
         component will listen to, but it could be the root of a more complex
         data structure if we wanted. */}
+    <div className="col-sm-3">
+      <RoomSidebar fireRefRoom={db.ref('rooms').child(room)}/>
+      <UserSidebar fireRefRoom={db.ref('rooms').child(room)}/>
+    </div>
     <div className="col-sm-9">
       <div className="col-sm-12">
-        <MyEditor fireRef={db.ref('DraftJs').child(room)}/>
+        <DraftjsScratchpad fireRefNotes={db.ref('notes')} fireRefRoom={db.ref('rooms').child(room)}/>
       </div>
     </div>
     <div className="col-sm-3">
@@ -27,3 +38,7 @@ export default ({children, params: {room}}) =>
       <SidebarContainer/>
     </div>
   </div>
+
+//notes/userid-->notecontent
+//rooms/roomid/userid
+
