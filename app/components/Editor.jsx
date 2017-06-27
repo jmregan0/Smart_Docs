@@ -13,13 +13,16 @@ export default class MyEditor extends React.Component {
       editorState: EditorState.createEmpty(),
       nlpSentiment: null,
       nlpEntity: null,
-      nlpRelationships: null
+      nlpRelationships: null,
+      people: []
     };
     this.onChange = editorState=>this.setState({editorState});
     this.findEntity = this.findEntity.bind(this);
     this.findSentiment = this.findSentiment.bind(this);
     this.findRelationships = this.findRelationships.bind(this);
     this.findResearchOnInput = this.findResearchOnInput.bind(this);
+    this.executeRelationshipAnalysis = this.executeRelationshipAnalysis.bind(this);
+    this.executeSentimentAnalysis = this.executeSentimentAnalysis.bind(this);
     this.db = firebase.database();
   }
 
@@ -66,7 +69,7 @@ export default class MyEditor extends React.Component {
 
   executeSentimentAnalysis(){
     let places = [];
-    let people = [];
+    // let people = [];
     let organizations = [];
     let overallSentiment;
     let positive = 0;
@@ -74,7 +77,7 @@ export default class MyEditor extends React.Component {
     let neutral = 0;
     this.state.nlpSentiment.forEach(function(word){
       if(word.type === 'PERSON'){
-        people.push(word.normalized)
+        this.state.people.push(word.normalized)
         word.sentiment.label === 'pos' ? positive ++ : word.sentiment.label === 'neg' ? negative ++ : neutral ++
       } else if(word.type === 'LOCATION'){
         places.push(word.normalized)
@@ -155,7 +158,7 @@ export default class MyEditor extends React.Component {
   }
 
   render(){
-
+    console.log('this.state.people', this.state.people)
     return (
       <div>
         <h1>EDITOR!!</h1>
@@ -172,6 +175,7 @@ export default class MyEditor extends React.Component {
           <button onClick={() => this.executeRelationshipAnalysis()}>Show me Relationship Data</button>
           <br/>
           <button onClick={() => this.findResearchOnInput(['arcade fire', 'devo']) }>Find me some Research</button>
+          <button onClick={() => this.findResearchOnInput(this.state.people) }>Research analyzed people</button>
 
       </div>
     )
