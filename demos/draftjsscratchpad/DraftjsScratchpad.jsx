@@ -47,7 +47,6 @@ class DraftjsScratchpad extends React.Component {
 
     this.loadNoteFromFirebase()
 
-
     firebase.auth().onAuthStateChanged(function(user) {
       if (user&&this.props) {
         // User is signed in.
