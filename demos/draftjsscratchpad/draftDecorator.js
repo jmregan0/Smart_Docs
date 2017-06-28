@@ -1,3 +1,5 @@
+const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
+
 module.exports.strategy = (contentBlock,callback,contentState) => {
 }
 
@@ -31,7 +33,14 @@ const findMatches = (str,word,entityKey) => {
   if(!word || typeof word != "string" || word.length === 0) return [];
   let modstr = str;
   let buffer = [];
-  let r = new RegExp(`\\b${word}\\b`,'i');
+  //switch between multiple search behaviors, depending on word
+  let r;
+  if(word.match(/^\$/)){
+    //word is a dollar amount
+    r = new RegExp(`\\${word}\\b`,'i');
+  } else {
+    r = new RegExp(`\\b${word}\\b`,'i');
+  }
   let searchResult = r.exec(modstr);
   let start = 0;
   while(searchResult) {
@@ -48,33 +57,55 @@ const findMatches = (str,word,entityKey) => {
   return buffer;
 }
 
-module.exports.entityDecorate = (entityState,entities) => {
+//DEV ONLY
+module.exports.findMatches = findMatches;
+
+module.exports.entityDecorate = (editorState,entities) => {
   const rawContent = convertToRaw(editorState.getCurrentContent());
 
   //for each contentBlock,
   //  search the text for each entity [via findMatches]
   //  and set contentBlock.entityRanges to the result
-  rawContent.blocks.forEach( contentBlock => {
-    contentBlock.entityRanges = 
-      entities.reduce( (_newEntityRanges,entity) => 
-        _newEntityRanges.concat(
-          findMatches(contentBlock.text,entity,entity) )
-      ,[]);
+  //console.log("starting:\nrawContent: ",rawContent,"\nentities: ",entities);
+  rawContent.blocks.forEach( (contentBlock,i) => {
+    rawContent.blocks[i].entityRanges =
+      entities.reduce( (_newEntityRanges,entity) => {
+        let b = _newEntityRanges.concat(
+          findMatches(contentBlock.text,entity.mentions,entity.mentions) );
+        return b;
+      },[]);
   });
+  //console.log('after findMatches:',rawContent);
+  //console.log("contentBlock 0 entityRanges:",rawContent.blocks[0].entityRanges);
 
   // re-build entityMap based on entities
-  rawContent.entityMap = entities.reduce( (map,entity) => {
-      map[entity] = {
-        type: entity,
-        mutability: 'IMMUTABLE',
-      };
-      return map;
+  // NOTE: Assumes an entity will be of the form: 
+  //   {count, entityId, mentions, normalized, type}
+  //
+  // e.g.
+  //   {
+  //     count: 1,
+  //     entityId: "T0",
+  //     mentions: "Tuesday",
+  //     normalized: "Tuesday",
+  //     type: "TEMPORAL:DATE",
+  //   },
+  rawContent.entityMap = entities.reduce( (map,entity,i) => {
+    //let normalized = entity.normalized.replace(/[^a-zA-Z0-9]/,'_');
+    map[entity.normalized] = {
+      type: entity.normalized,
+      mutability: 'IMMUTABLE',
+    };
+    //console.log("map:",map);
+    return map;
   },{});
 
-  console.log('entityDecorate result:',rawContent);
+  //console.log('rawContent:',rawContent);
 
   const newContentState = convertFromRaw(rawContent);
-  const newEditorState = EditorState.push(editorState,newContentState);
+  const newEditorState = EditorState.createWithContent(newContentState);
+  //const newEditorState = EditorState.push(editorState,newContentState);
+  //console.log('entityDecorate result:',convertToRaw(newEditorState.getCurrentContent()));
 
   return newEditorState;
 }

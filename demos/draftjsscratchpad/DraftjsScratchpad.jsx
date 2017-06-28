@@ -205,6 +205,7 @@ class DraftjsScratchpad extends React.Component {
             onChange={this.onChange}
             blockStyleFn={myBlockStyleFn}
           />
+          <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
         </div>
       </div>
     )
