@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const Research = (props) => {
   const researchResults = props.researchResults;
-
+  console.log('research results', researchResults)
 
   return(
 
@@ -185,15 +185,15 @@ const Research = (props) => {
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col-xs-3">
-                                        <i className="fa fa-comments fa-5x"></i>
+                                        <i className="fa fa-book fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">26</div>
-                                        <div>New Comments!</div>
+                                        <div className="huge">{researchResults.researchResults.length}</div>
+                                        <div>Resources Found!</div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <a href="/bulk-found-research">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
@@ -210,8 +210,8 @@ const Research = (props) => {
                                         <i className="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">12</div>
-                                        <div>New Tasks!</div>
+                                        <div className="huge">0</div>
+                                        <div>Saved Resources</div>
                                     </div>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@ const Research = (props) => {
                                     </a>
                                     <a href="#" className="list-group-item">
                                         <span className="badge">4 minutes ago</span>
-                                        <i className="fa fa-fw fa-comment"></i> Commented on a post
+                                        <i className="fa fa-fw fa-book"></i> Commented on a post
                                     </a>
                                     <a href="#" className="list-group-item">
                                         <span className="badge">23 minutes ago</span>
