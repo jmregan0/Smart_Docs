@@ -5,7 +5,7 @@ import CollectedResources from '../components/CollectedResources'
 
 const mapState = (state) => {
 	return {
-		research: state.researchResults
+		researchResults: state.researchResults
 	}
 }
 
