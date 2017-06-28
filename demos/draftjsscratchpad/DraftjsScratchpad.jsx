@@ -36,7 +36,7 @@ export default class extends React.Component {
     
 
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user&&this.props) {
         // User is signed in.
       this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
         this.setState({loadingFromFirebase: true},() => {
@@ -111,8 +111,8 @@ export default class extends React.Component {
      return this.props.fireRefRoom.set({user:user.uid, exists:false})   
   }
 
-  loadUserFromFirebaseRoom = ()=>{
-
+  loadRoomsFromFirebase = ()=>{
+    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
   }
 
 
@@ -125,7 +125,7 @@ export default class extends React.Component {
       
       if (user) {
         // User is signed in.
-        console.log(user.uid)
+        
         return this.props.fireRefNotes.child(user.uid).set(rawState)
       } else {
         // No user is signed in.
@@ -204,7 +204,7 @@ export default class extends React.Component {
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  console.log(type)
+  
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
