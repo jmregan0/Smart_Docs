@@ -20,7 +20,6 @@ const staticEntities = [
     normalized: "Ukrainian central",
     type: "ORGANIZATION",
   },
-//const staticEntities = [
   {
     count: 1,
     entityId: "T123",
@@ -102,12 +101,14 @@ const rawContentShort = {
 
 // findMatches tests
 // ------------------------------------
+/*
 const findMatches = require('./draftDecorator').findMatches;
-//console.log('TEST: findMatches result:',findMatches(rawContent.blocks[0].text,'$300','$300'));
-
+console.log('TEST: findMatches result:',findMatches(rawContent.blocks[0].text,'$300','$300'));
+*/
 
 // entityDecorate tests
 // ------------------------------------
+/*
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
 const entityDecorate = require('./draftDecorator').entityDecorate;
 //console.log(entityDecorate.toString());
@@ -124,10 +125,23 @@ console.log(
     entityDecorate(newEditorState,staticEntities).getCurrentContent()
   )
 );
+*/
 
+// strategy tests
+// ------------------------------------
+const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
+const entityDecorate = require('./draftDecorator').entityDecorate;
+const strategy = require('./draftDecorator').strategy;
 
+const blocks = convertFromRaw(rawContent);
+let newEditorState = EditorState.createWithContent(blocks);
+newEditorState = entityDecorate(newEditorState,staticEntities);
 
+const contentState = newEditorState.getCurrentContent();
+const contentBlock = contentState.getBlocksAsArray()[0];
+const logIt = (start,end) => console.log(`start: ${start}, end: ${end}`);
 
+strategy(contentBlock,logIt,contentState);
 
 
 

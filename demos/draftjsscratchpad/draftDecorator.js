@@ -1,6 +1,12 @@
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
 
 module.exports.strategy = (contentBlock,callback,contentState) => {
+  const filterFn = characterMetadata => {
+    const entityKey = characterMetadata.getEntity();
+    return entityKey ? true : false;
+  }
+
+  contentBlock.findEntityRanges(filterFn,callback);
 }
 
 /*
@@ -109,3 +115,5 @@ module.exports.entityDecorate = (editorState,entities) => {
 
   return newEditorState;
 }
+
+
