@@ -28,7 +28,7 @@ export const setInitialResearch = research => ({
 // thunks that are functions which return functions that take dispatch as arg. do something async and then finally dispatch one of the above basic action creators.
 
 export const findSentiment = text => {
-  return dispatch => {
+  return dispatch => 
     axios.post('http://localhost:3000/api/analyze/sentiment', {
         text: text})
     .then(res => res.data)
@@ -37,11 +37,11 @@ export const findSentiment = text => {
       dispatch(setSentimentResults(sentimentResults))
       // browserHistory.push('/research')
     })
-  }
+  
 }
 
 export const findEntity = text => {
-  return dispatch => {
+  return dispatch => 
     axios.post('http://localhost:3000/api/analyze/entity', {
         text: text})
     .then(res => res.data)
@@ -50,12 +50,12 @@ export const findEntity = text => {
       dispatch(setEntityResults(entityResults))
       // browserHistory.push('/research')
     })
-  }
+  
 }
 
 export const findRelationships = text => {
-  return dispatch => {
-    return axios({
+  return dispatch => 
+    axios({
         method: 'post',
         url: 'http://localhost:3000/api/analyze/relationships',
         data:{
@@ -68,7 +68,7 @@ export const findRelationships = text => {
       dispatch(setRelationshipResults(relationshipResults))
       // browserHistory.push('/research')
     })
-  }
+  
 }
 
 export const findResearchOnInput = (tags) => {
