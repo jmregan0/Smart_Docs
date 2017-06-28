@@ -10,6 +10,7 @@ import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import EditorContainer from './containers/EditorContainer'
 import ResearchContainer from './containers/ResearchContainer'
+import CollectedResourceContainer from './containers/CollectedResourceContainer'
 
 import Demos from 'APP/demos'
 
@@ -86,6 +87,7 @@ render(
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
        <Route path="/research" component={ResearchContainer} />
+       <Route path="/bulk-found-research" component={CollectedResourceContainer}/>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,
