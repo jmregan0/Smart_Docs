@@ -44,7 +44,7 @@ class DraftjsScratchpad extends React.Component {
     let currentText = editorState.getCurrentContent().getPlainText();
     if(currentText.split(' ').length > this.state.checkTextLength){
       console.log('we have hit our limit')
-      this.state.checkTextLength += 150
+      this.setState({checkTextLength: this.state.checkTextLength + 150})
       Promise.all([
         this.findSentiment(currentText),
         this.findEntity(currentText),
