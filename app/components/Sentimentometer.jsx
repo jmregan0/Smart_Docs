@@ -23,8 +23,8 @@ export default class Sentimentbar extends React.Component {
   }
 
   gage(){
-    if (this.props.sentiment.nlpSentiment) {
-      $('.chart span').css({"width" : "0"}).parent().each(function(i){
+    if (this.props.sentiment.nlpSentiment && this.props.sentiment.nlpSentiment.document.label === 'neg') {
+      $('.chart span').css({"background-color" : "#db524b", "width" : "0"}).parent().each(function(i){
         // Loop through .gage elements
         $('p', this).html($(this).attr("data-label"));
         // Set p html value to the data-label attr set in the element
@@ -36,7 +36,7 @@ export default class Sentimentbar extends React.Component {
         });
       });
     } else {
-      $('.chart span').css({"width" : "0"}).parent().each(function(i){
+      $('.chart span').css({"background-color" : "#54b253", "width" : "0"}).parent().each(function(i){
         // Loop through .gage elements
         $('p', this).html($(this).attr("data-label"));
         // Set p html value to the data-label attr set in the element
@@ -51,13 +51,14 @@ export default class Sentimentbar extends React.Component {
   }
 
   render(){
-    let temp = this.props.sentiment.nlpSentiment ? Math.round(this.props.sentiment.nlpSentiment.document.confidence*100) : 10;
+    let temp = this.props.sentiment.nlpSentiment ? Math.round(this.props.sentiment.nlpSentiment.document.confidence*100) : 0;
     console.log("temp",temp);
 
     return(
 
       <div className="skills">
-        <div data-label="Sentiment" data-level={temp} className="chart"><span></span><p>{temp}</p></div>
+        {this.props.sentiment.nlpSentiment ? <div data-label="Sentiment" data-level={temp} className="chart"><span></span><p>{temp}</p></div> :
+      <div className="sentimeter">No sentiment for your content. Start composing your document for a sentiment analysis.</div>}
       </div>
 
     )
