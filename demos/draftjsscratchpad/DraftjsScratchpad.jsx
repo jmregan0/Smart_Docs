@@ -51,26 +51,27 @@ class DraftjsScratchpad extends React.Component {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-      this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
-        this.setState({loadingFromFirebase: true},() => {
-          const rawContentState = snapshot.val();
-          rawContentState.entityMap = {};
+        // register database listener
+        this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
+          this.setState({loadingFromFirebase: true},() => {
+            const rawContentState = snapshot.val();
+            rawContentState.entityMap = {};
 
-          const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
-          let newEditorState = EditorState.push(
-            this.state.editorState,
-            contentStateConvertedFromRaw
-          );
+            const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
+            let newEditorState = EditorState.push(
+              this.state.editorState,
+              contentStateConvertedFromRaw
+            );
 
-          newEditorState = EditorState.forceSelection(newEditorState,
-            this.state.editorState.getSelection()
-          );
+            newEditorState = EditorState.forceSelection(newEditorState,
+              this.state.editorState.getSelection()
+            );
 
-          this.setState({editorState: newEditorState},()=>{
-            this.setState({loadingFromFirebase: false});
+            this.setState({editorState: newEditorState},()=>{
+              this.setState({loadingFromFirebase: false});
+            });
           });
         });
-      });
       } else {
         // No user is signed in.
         console.log("nothing loaded because a user is not signed in")
@@ -80,32 +81,27 @@ class DraftjsScratchpad extends React.Component {
 
   loadNoteFromFirebase = () => {
     this.setState({loadingFromFirebase: true})
-    /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
 
     firebase.auth().onAuthStateChanged((user)=> {
-
       if (user) {
         // User is signed in.
         return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
           const rawContentState = snapshot.val()
-          // when we writeToFirebase the rawContent, firebase doesn't save the empty object value on the 'entityMap' key
-          // we need to add it back before we convertFromRaw so it doesn't throw a type error as it expects an object and would would
-          // otherwise operate on undefined
-          rawContentState.entityMap = {}
+          if(!rawContentState.entityMap) rawContentState.entityMap = {}
           const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
           let newEditorState = EditorState.push(
             this.state.editorState,
             contentStateConvertedFromRaw
           )
-          console.log('are they equal? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
-          newEditorState = EditorState.forceSelection(newEditorState, this.state.editorState.getSelection())
+          newEditorState = EditorState.forceSelection(
+            newEditorState,
+            this.state.editorState.getSelection()
+          )
 
-          console.log('how about now? ', Immutable.is(this.state.editorState.getSelection(), newEditorState.getSelection()))
           this.setState({editorState: newEditorState})
         })
         .then((resp) => {
           this.setState({loadingFromFirebase: false})
-          /* console.log('after loading selection state: ', this.state.editorState.getSelection())*/
           return resp
         })
       } else {
@@ -130,12 +126,10 @@ class DraftjsScratchpad extends React.Component {
 
 
   writeNoteToFirebase = () => {
-    //console.log('before loading selection state: ', this.state.editorState.getSelection())
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
 
     firebase.auth().onAuthStateChanged((user)=> {
-
       if (user) {
         // User is signed in.
         console.log(user.uid)
@@ -194,17 +188,17 @@ class DraftjsScratchpad extends React.Component {
         // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
       <div>
-
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-            {this.state.loadingFromFirebase?
-              null:<div>
-                < BlockStyleControls editorState = { this.state.editorState }
-                onToggle = { this.toggleBlockType }
-                /> < InlineStyleControls editorState = { this.state.editorState }
-                onToggle = { this.toggleInlineStyle }
-                />
-              </div>
-            }
+          <div>
+            <BlockStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleBlockType}
+            />
+            <InlineStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleInlineStyle}
+            />
+          </div>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
