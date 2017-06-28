@@ -7,15 +7,25 @@ import {
   RichUtils,
   convertFromRaw,
   convertToRaw,
+  CompositeDecorator,
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
 
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
     super(props);
 
+    /*
+    const decorator = new CompositeDecorator([
+      {
+        strategy: entityStrategy,
+        component: entitySpan,
+      },
+    ]);
+    */
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.findSentiment = props.findSentiment;

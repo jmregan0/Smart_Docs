@@ -9,7 +9,6 @@ module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   contentBlock.findEntityRanges(filterFn,callback);
 }
 
-/*
 module.exports.entitySpan = props => (
   <span
     data-offset-key={props.offsetKey}
@@ -17,7 +16,6 @@ module.exports.entitySpan = props => (
   >{props.children}
   </span>
 )
-*/
 
 // name: findMatches
 // description:

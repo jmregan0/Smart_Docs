@@ -253,3 +253,8 @@ button{
   color: white;
   padding: 10px;
 }
+
+.entitySpan {
+  background-color: rgba(204, 204, 255, 1.0);
+  padding: 2px 0;
+}
