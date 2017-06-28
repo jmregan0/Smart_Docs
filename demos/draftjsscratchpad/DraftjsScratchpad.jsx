@@ -12,20 +12,18 @@ import {
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
 import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
-
+import Promise from 'bluebird';
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
     super(props);
 
-    /*
     const decorator = new CompositeDecorator([
       {
         strategy: entityStrategy,
         component: entitySpan,
       },
     ]);
-    */
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.findSentiment = props.findSentiment;
@@ -44,11 +42,24 @@ class DraftjsScratchpad extends React.Component {
     this.writeNoteToFirebase()
     let currentText = editorState.getCurrentContent().getPlainText();
     if(currentText.split(' ').length > this.state.checkTextLength){
-      this.findSentiment(currentText)
-      this.findEntity(currentText)
-      this.findRelationships(currentText)
       console.log('we have hit our limit')
       this.state.checkTextLength += 150
+      Promise.all([
+        this.findSentiment(currentText),
+        this.findEntity(currentText),
+        this.findRelationships(currentText),
+      ])
+      .then(()=>{
+        // BEGIN ENTITY BLOCK
+        // ------------------
+        let entities = this.props.nlpEntity.entities;
+        console.log('Promise resolved.  State: ',entities);
+        let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
+        this.setState({editorState: newEditorState});
+        // ------------------
+        // END   ENTITY BLOCK
+      })
+      .catch(error=>console.error);
     }
   }
 
@@ -221,9 +232,8 @@ class DraftjsScratchpad extends React.Component {
   }
 }
 
-const mapState = (state) => {
-	return {
-	}
+const mapState = ({nlpResults}) => {
+	return nlpResults;
 }
 
 const mapDispatch = (dispatch) => {

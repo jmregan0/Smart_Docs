@@ -34,6 +34,7 @@ module.exports.entitySpan = props => (
 //   }
 // 
 const findMatches = (str,word,entityKey) => {
+  //console.log("findMatches:",str,word);
   if(!word || typeof word != "string" || word.length === 0) return [];
   let modstr = str;
   let buffer = [];
@@ -46,6 +47,7 @@ const findMatches = (str,word,entityKey) => {
     r = new RegExp(`\\b${word}\\b`,'i');
   }
   let searchResult = r.exec(modstr);
+  //console.log('findMatches initial search:',searchResult);
   let start = 0;
   while(searchResult) {
     buffer.push({
@@ -58,6 +60,7 @@ const findMatches = (str,word,entityKey) => {
     modstr = modstr.slice(searchResult.index + word.length);
     searchResult = r.exec(modstr);
   }
+  //console.log('findMatches result:',buffer);
   return buffer;
 }
 
@@ -75,7 +78,7 @@ module.exports.addEntitiesToEditorState = (editorState,entities) => {
     rawContent.blocks[i].entityRanges =
       entities.reduce( (_newEntityRanges,entity) => {
         let b = _newEntityRanges.concat(
-          findMatches(contentBlock.text,entity.mentions,entity.mentions) );
+          findMatches(contentBlock.text,entity.mention,entity.normalized) );
         return b;
       },[]);
   });
@@ -84,13 +87,13 @@ module.exports.addEntitiesToEditorState = (editorState,entities) => {
 
   // re-build entityMap based on entities
   // NOTE: Assumes an entity will be of the form: 
-  //   {count, entityId, mentions, normalized, type}
+  //   {count, entityId, mention, normalized, type}
   //
   // e.g.
   //   {
   //     count: 1,
   //     entityId: "T0",
-  //     mentions: "Tuesday",
+  //     mention: "Tuesday",
   //     normalized: "Tuesday",
   //     type: "TEMPORAL:DATE",
   //   },
@@ -107,9 +110,9 @@ module.exports.addEntitiesToEditorState = (editorState,entities) => {
   //console.log('rawContent:',rawContent);
 
   const newContentState = convertFromRaw(rawContent);
-  const newEditorState = EditorState.createWithContent(newContentState);
-  //const newEditorState = EditorState.push(editorState,newContentState);
-  //console.log('entityDecorate result:',convertToRaw(newEditorState.getCurrentContent()));
+  //const newEditorState = EditorState.createWithContent(newContentState);
+  const newEditorState = EditorState.push(editorState,newContentState);
+  console.log('entityDecorate result:',convertToRaw(newEditorState.getCurrentContent()));
 
   return newEditorState;
 }
