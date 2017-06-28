@@ -1,3 +1,4 @@
+import React from 'react';
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
 
 module.exports.entityStrategy = (contentBlock,callback,contentState) => {

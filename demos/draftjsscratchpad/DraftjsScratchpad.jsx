@@ -24,17 +24,18 @@ class DraftjsScratchpad extends React.Component {
         component: entitySpan,
       },
     ]);
+
+    this.state = {
+      editorState: EditorState.createEmpty(decorator),
+      loadingFromFirebase: false,
+      checkTextLength: 200
+    }
+
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
-  }
-
-  state = {
-    editorState: EditorState.createEmpty(),
-    loadingFromFirebase: false,
-    checkTextLength: 200
   }
 
   onChange = (editorState) => {
