@@ -29,7 +29,7 @@ export const setInitialResearch = research => ({
 
 export const findSentiment = text => {
   return dispatch => 
-    axios.post('http://192.168.119.101:3000/api/analyze/sentiment', {
+    axios.post('http://localhost:3000/api/analyze/sentiment', {
         text: text})
     .then(res => res.data)
     .then(sentimentResults => {
@@ -42,7 +42,7 @@ export const findSentiment = text => {
 
 export const findEntity = text => {
   return dispatch => 
-    axios.post('http://192.168.119.101:3000/api/analyze/entity', {
+    axios.post('http://localhost:3000/api/analyze/entity', {
         text: text})
     .then(res => res.data)
     .then(entityResults => {
@@ -57,7 +57,7 @@ export const findRelationships = text => {
   return dispatch => 
     axios({
         method: 'post',
-        url: 'http://192.168.119.101:3000/api/analyze/relationships',
+        url: 'http://localhost:3000/api/analyze/relationships',
         data:{
           text: text
         }
@@ -75,7 +75,7 @@ export const findResearchOnInput = (tags) => {
   return dispatch => {
     return axios({
     method: 'post',
-    url: 'http://192.168.119.101:3000/api/research',
+    url: 'http://localhost:3000/api/research',
     data: {
       tags: tags
     }
