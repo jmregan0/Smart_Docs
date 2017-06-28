@@ -47,9 +47,8 @@ class DraftjsScratchpad extends React.Component {
 
     this.loadNoteFromFirebase()
 
-
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user&&this.props) {
         // User is signed in.
         // register database listener
         this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
@@ -120,8 +119,8 @@ class DraftjsScratchpad extends React.Component {
      return this.props.fireRefRoom.set({user:user.uid, exists:false})
   }
 
-  loadUserFromFirebaseRoom = ()=>{
-
+  loadRoomsFromFirebase = ()=>{
+    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
   }
 
 
@@ -132,7 +131,7 @@ class DraftjsScratchpad extends React.Component {
     firebase.auth().onAuthStateChanged((user)=> {
       if (user) {
         // User is signed in.
-        console.log(user.uid)
+        
         return this.props.fireRefNotes.child(user.uid).set(rawState)
       } else {
         // No user is signed in.
@@ -230,7 +229,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  console.log(type)
+  
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }

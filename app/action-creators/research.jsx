@@ -11,7 +11,8 @@ export const setSentimentResults = sentimentResults => ({
 
 export const setEntityResults = entityResults => ({
   type: SET_ENTITY_RESULTS,
-  entityResults
+  entityResults,
+  overallSentiment: entityResults.document
 })
 
 export const setRelationshipResults = relationshipResults => ({

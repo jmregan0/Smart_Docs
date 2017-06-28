@@ -45,31 +45,30 @@ export const executeRelationshipAnalysis = () => {
     let places = [];
     let people = [];
     let organizations = [];
-    let overallSentiment;
-    let positive = 0;
-    let negative = 0;
-    let neutral = 0;
+    let products = [];
+    let nationalities = [];
+    let emails = [];
+    let urls = [];
+
     this.state.nlpSentiment.forEach(function(word){
       if(word.type === 'PERSON'){
         people.push(word.normalized)
-        word.sentiment.label === 'pos' ? positive ++ : word.sentiment.label === 'neg' ? negative ++ : neutral ++
       } else if(word.type === 'LOCATION'){
         places.push(word.normalized)
-        word.sentiment.label === 'pos' ? positive ++ : word.sentiment.label === 'neg' ? negative ++ : neutral ++
       } else if(word.type === 'ORGANIZATION'){
         organizations.push(word.normalized)
-        word.sentiment.label === 'pos' ? positive ++ : word.sentiment.label === 'neg' ? negative ++ : neutral ++
+      } else if(word.type === 'PRODUCT'){
+        products.push(word.normalized)
+      } else if(word.type === 'NATIONALITY'){
+        nationalities.push(word.normalized)
+      } else if(word.type === 'EMAIL'){
+        emails.push(word.normalized)
+      } else if(word.type === 'URL'){
+        urls.push(word.normalized)
       }
     })
-    if(positive > negative && positive > neutral){
-      overallSentiment = 'positive'
-    } else if (negative > positive && negative > neutral){
-      overallSentiment = 'negative'
-    } else {
-      overallSentiment = 'neutral'
-    }
-    console.log('results were: places', places, "people", people, "organizations", organizations, "sentiment", overallSentiment)
-    console.log('sentiments', positive, negative, neutral)
+
+    console.log('results were: places', places, "people", people, "organizations", organizations)
   }
 
   export const findEntity = (text) => {

@@ -2,7 +2,7 @@
   padding: 0;
 }
 
-.CodeMirror {
+/*.CodeMirror {
   overflow: visible;
 }
 
@@ -27,21 +27,21 @@ pre.firepad-li-29 {
 
 a.firepad-btn, a.firepad-btn:visited, a.firepad-btn:active {
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif
-}
+}*/
 
 #userlist {
   position: absolute; left: 0; top: 0; bottom: 0; height: auto;
   width: 175px;
 }
 
-#firepad {
+/*#firepad {
   position: absolute;
   left: 175px;
   top: 0;
   bottom: 0;
   right: 0;
   height: auto;
-}
+}*/
 
 textarea {
   color: #454545
@@ -162,20 +162,18 @@ button{
 }
 
 .skills{
-  
   margin:40px auto;
-  padding:5px;
   background:#fff;
-  box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
+  /*box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);*/
 }
 
 .skills h2{
   text-align:center;
   width:100%;
   margin: 0 0 20px 0;
-} 
+}
 
 .skills .chart{
   position:relative;
@@ -184,10 +182,10 @@ button{
   margin: 0 0 3px 0;
   text-align: center;
   position: relative;
-  border: 4px double rgba(0,0,0,0.1);
+  /*border: 4px double rgba(0,0,0,0.1);*/
   background:rgba(255,255,255,0.5);
 }
-  
+
 .skills .chart:after{
   content: "";
   position:absolute;
@@ -200,11 +198,28 @@ button{
   -webkit-box-shadow: inset 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
 }
 
+.skills .chart span red{
+  position: absolute;
+  left: 0;
+  top:0;
+  background-color: #db524b;
+  /*background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);*/
+  z-index:0;
+  height:100%;
+  width:0px;
+  -webkit-transition: all ease-in-out 1s;
+  -moz-transition: all ease-in-out 1s;
+  -ms-transition: all ease-in-out 1s;
+  -o-transition: all ease-in-out 1s;
+  transition: all ease-in-out 1s;
+}
+
 .skills .chart span{
   position: absolute;
   left: 0;
   top:0;
-  background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);
+  background-color: #54b253;
+  /*background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);*/
   z-index:0;
   height:100%;
   width:0px;
@@ -231,4 +246,10 @@ button{
 #main-user-head{
   background-color: bisque;
   color: red;
+}
+
+.sentimeter {
+  background-color: black;
+  color: white;
+  padding: 10px;
 }
