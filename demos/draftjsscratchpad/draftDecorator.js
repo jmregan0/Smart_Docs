@@ -1,6 +1,6 @@
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
 
-module.exports.strategy = (contentBlock,callback,contentState) => {
+module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   const filterFn = characterMetadata => {
     const entityKey = characterMetadata.getEntity();
     return entityKey ? true : false;
@@ -64,9 +64,9 @@ const findMatches = (str,word,entityKey) => {
 }
 
 //DEV ONLY
-module.exports.findMatches = findMatches;
+//module.exports.findMatches = findMatches;
 
-module.exports.entityDecorate = (editorState,entities) => {
+module.exports.addEntitiesToEditorState = (editorState,entities) => {
   const rawContent = convertToRaw(editorState.getCurrentContent());
 
   //for each contentBlock,
