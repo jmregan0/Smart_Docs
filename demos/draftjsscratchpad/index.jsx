@@ -24,12 +24,12 @@ export default ({children, params: {room}}) =>
         component will listen to, but it could be the root of a more complex
         data structure if we wanted. */}
     <div className="col-sm-3">
-      <RoomSidebar fireRefRoom={db.ref('rooms').child(room)}/>
-      <UserSidebar fireRefRoom={db.ref('rooms').child(room)}/>
+      <RoomSidebar fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
+      
     </div>
     <div className="col-sm-9">
       <div className="col-sm-12">
-        <DraftjsScratchpad fireRefNotes={db.ref('notes')} fireRefRoom={db.ref('rooms').child(room)}/>
+        <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms').child(room)}/>
       </div>
     </div>
     <div className="col-sm-3">
