@@ -162,7 +162,7 @@ button{
 }
 
 .skills{
-  
+
   margin:40px auto;
   padding:5px;
   background:#fff;
@@ -175,7 +175,7 @@ button{
   text-align:center;
   width:100%;
   margin: 0 0 20px 0;
-} 
+}
 
 .skills .chart{
   position:relative;
@@ -187,7 +187,7 @@ button{
   border: 4px double rgba(0,0,0,0.1);
   background:rgba(255,255,255,0.5);
 }
-  
+
 .skills .chart:after{
   content: "";
   position:absolute;
@@ -204,7 +204,24 @@ button{
   position: absolute;
   left: 0;
   top:0;
-  background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);
+  background-color: red;
+  /*background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);*/
+  z-index:0;
+  height:100%;
+  width:0px;
+  -webkit-transition: all ease-in-out 1s;
+  -moz-transition: all ease-in-out 1s;
+  -ms-transition: all ease-in-out 1s;
+  -o-transition: all ease-in-out 1s;
+  transition: all ease-in-out 1s;
+}
+
+.skills .chart span2{
+  position: absolute;
+  left: 0;
+  top:0;
+  background-color: green;
+  /*background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0344/5202/r3445202_rrPineapple_-_med_repeats_teal_f_shop_preview.png") repeat rgba(0, 155, 119, 0.8);*/
   z-index:0;
   height:100%;
   width:0px;
