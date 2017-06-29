@@ -11,7 +11,12 @@ return(
     <div className="col-sm-12 sidebar-nav-fixed pull-right">
         <div className="well">
             {
-                props.entities ? <button type="button" className="btn btn-primary center margin-bottom" onClick={ () => { props.findResearchOnInput([props.entities.entities[0].mention, props.entities.entities[1].mention])} }>Take me to my Research</button> : null
+                props.entities ? <button type="button" className="btn btn-primary center margin-bottom" onClick={ () => {
+                    let selectedEntities = props.entities.entities.map(entity => {
+                        return entity.normalized
+                    })
+                    console.log("entities sent to research", selectedEntities)
+                    props.findResearchOnInput(selectedEntities)} }>Show Research</button> : null
             }
             {
                 props.entities ?
