@@ -20,7 +20,7 @@ const Research = (props) => {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                 </button>
-                <a className="navbar-brand" href="index.html">SB Admin</a>
+                <a className="navbar-brand" href="index.html">Dashboard</a>
             </div>
             <ul className="nav navbar-right top-nav">
                 <li className="dropdown">
@@ -125,13 +125,13 @@ const Research = (props) => {
             <div className="collapse navbar-collapse navbar-ex1-collapse">
                 <ul className="nav navbar-nav side-nav">
                     <li>
-                        <a href="index.html"><i className="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <Link to="research"><i className="fa fa-fw fa-dashboard"></i> Dashboard</Link>
                     </li>
                     <li>
                         <a href="charts.html"><i className="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
-                        <a href="tables.html"><i className="fa fa-fw fa-table"></i> Tables</a>
+                        <Link to="bulk-found-research"><i className="fa fa-fw fa-table"></i> Research</Link>
                     </li>
                     <li>
                         <a href="forms.html"><i className="fa fa-fw fa-edit"></i> Forms</a>
