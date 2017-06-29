@@ -33,6 +33,8 @@ export default class extends React.Component {
 
   render() {
     const {user} = this.state || {}
+
+    //console.log('WhoAmI:',user,auth);
     return <WhoAmI user={user} auth={auth}/>
   }
 }
