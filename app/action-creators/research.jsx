@@ -1,4 +1,4 @@
-import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS } from '../constants'
+import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS, REMOVE_ENTITY } from '../constants'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
@@ -25,10 +25,14 @@ export const setInitialResearch = research => ({
   research
 })
 
+export const removeEntity = (entityId) => ({
+  type: REMOVE_ENTITY,
+  entityToRemove: entityId
+})
 // thunks that are functions which return functions that take dispatch as arg. do something async and then finally dispatch one of the above basic action creators.
 
 export const findSentiment = text => {
-  return dispatch => 
+  return dispatch =>
     axios.post('http://localhost:3000/api/analyze/sentiment', {
         text: text})
     .then(res => res.data)
@@ -37,11 +41,11 @@ export const findSentiment = text => {
       dispatch(setSentimentResults(sentimentResults))
       // browserHistory.push('/research')
     })
-  
+
 }
 
 export const findEntity = text => {
-  return dispatch => 
+  return dispatch =>
     axios.post('http://localhost:3000/api/analyze/entity', {
         text: text})
     .then(res => res.data)
@@ -50,11 +54,11 @@ export const findEntity = text => {
       dispatch(setEntityResults(entityResults))
       // browserHistory.push('/research')
     })
-  
+
 }
 
 export const findRelationships = text => {
-  return dispatch => 
+  return dispatch =>
     axios({
         method: 'post',
         url: 'http://localhost:3000/api/analyze/relationships',
@@ -68,7 +72,7 @@ export const findRelationships = text => {
       dispatch(setRelationshipResults(relationshipResults))
       // browserHistory.push('/research')
     })
-  
+
 }
 
 export const findResearchOnInput = (tags) => {
@@ -87,8 +91,3 @@ export const findResearchOnInput = (tags) => {
     })
   }
 }
-
-
-
-
-
