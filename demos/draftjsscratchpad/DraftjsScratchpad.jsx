@@ -27,7 +27,6 @@ class DraftjsScratchpad extends React.Component {
 
     this.state = {
       editorState: EditorState.createEmpty(decorator),
-      loadingFromFirebase: false,
       checkTextLength: 200,
       userUidToGetNotes:""
     }
@@ -40,11 +39,15 @@ class DraftjsScratchpad extends React.Component {
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
+    this.loadNoteFromFirebase = this.loadNoteFromFirebase.bind(this);
   }
 
   onChange = (editorState) => {
     this.setState({editorState})
     this.writeNoteToFirebase()
+
+    // BEGIN NLP BLOCK
+    // ---------------
     let currentText = editorState.getCurrentContent().getPlainText();
     if(currentText.split(' ').length > this.state.checkTextLength){
       console.log('we have hit our limit')
@@ -66,93 +69,83 @@ class DraftjsScratchpad extends React.Component {
       })
       .catch(error=>console.error);
     }
+    // ---------------
+    // END   NLP BLOCK
   }
 
 
   componentDidMount() {
-    
-    this.loadNoteFromFirebase()
+    //this.loadNoteFromFirebase()
 
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user&&this.props) {
-        // User is signed in.
-
+    // register auth listener
+    firebase.auth().onAuthStateChanged((user)=>{
+      if(!user) {
+        console.error("Firebase AUTH: No user detected. user: ",user);
+        this.setState({userUidToGetNotes:null});
+        //this.setState({editorState: EditorState.createEmpty()});
+      }
+      else {
         this.setState({userUidToGetNotes:user.uid});
+
+        //remove previous listener, if exists
+        //if(this.unsubscribe) this.unsubscribe();
+
+        console.log('new user, yes?',user.uid);
+        this.loadNoteFromFirebase(user.uid);
+        /*
         // register database listener
-        this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
-          this.setState({loadingFromFirebase: true},() => {
-            const rawContentState = snapshot.val();
-            rawContentState.entityMap = {};
+        const listener = this.props.fireRefNotes.child(user.uid).once('value',snapshot => {
+          console.log("new firebase listener! db val:",snapshot.val());
+          //DB value will return null if no data
+          if(snapshot.val()){
+            const newEditorState =
+              rawContentToEditorState(this.state.editorState,snapshot.val());
 
-            const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
-            let newEditorState = EditorState.push(
-              this.state.editorState,
-              contentStateConvertedFromRaw
-            );
-
-
-            newEditorState = EditorState.forceSelection(newEditorState,
-              this.state.editorState.getSelection()
-            );
-
-            this.setState({editorState: newEditorState},()=>{
-              this.setState({loadingFromFirebase: false});
-            });
-          });
+            this.setState({editorState: newEditorState});
+          }
         });
-      } else {
-        // No user is signed in.
-        console.log("nothing loaded because a user is not signed in")
+
+        //set this.unsubscribe, to be executed on user change or componentWillUnmount
+        //this.unsubscribe = this.props.fireRefNotes.child(user.uid).off('value',listener);
+        */
       }
     });
   }
 
+  componentWillUnmount(){
+    //this.unsubscribe();
+  }
+
+  /*
   componentWillReceiveProps(nextProps){
     console.log("component did receiverprops", nextProps.users.selected)
     this.setState({userUidToGetNotes:nextProps.users.selected})
 
-    this.loadNoteFromFirebase(nextProps.users.selected)
-
+    //this.loadNoteFromFirebase(nextProps.users.selected)
   }
+  */
 
-  loadNoteFromFirebase = (selectedUser) => {
-    this.setState({loadingFromFirebase: true})
+  loadNoteFromFirebase(uid){
+    return this.props.fireRefNotes.child(uid).once(
+      'value',
+      snapshot => {
+        console.log("From loadNoteFromFirebase:",snapshot.val());
 
-    firebase.auth().onAuthStateChanged((user)=> {
-      if (user) {
-        var selectedUserUidWithNote=selectedUser?selectedUser:user.uid;
-        // User is signed in.
-        return this.props.fireRefNotes.child(selectedUserUidWithNote).once('value', snapshot => {
-          const rawContentState = snapshot.val()
-          if(!rawContentState.entityMap) rawContentState.entityMap = {}
-          const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
-          let newEditorState = EditorState.push(
-            this.state.editorState,
-            contentStateConvertedFromRaw
-          )
-          newEditorState = EditorState.forceSelection(
-            newEditorState,
-            this.state.editorState.getSelection()
-          )
+        if(snapshot.val()){
+          const newEditorState =
+            rawContentToEditorState(this.state.editorState,snapshot.val());
 
           this.setState({editorState: newEditorState})
-        })
-        .then((resp) => {
-          this.setState({loadingFromFirebase: false})
-          return resp
-        })
-      } else {
-        // No user is signed in.
-        console.log("please sign in")
-      }
+        }
     });
-
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
+    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
 
+    /*
     firebase.auth().onAuthStateChanged((user)=> {
       if (user) {
         // User is signed in.
@@ -163,6 +156,7 @@ class DraftjsScratchpad extends React.Component {
         console.log("please sign in")
       }
     });
+    */
 
   }
 
@@ -194,22 +188,23 @@ class DraftjsScratchpad extends React.Component {
   }
 
   render() {
-        const { editorState } = this.state;
-        // console.log("---------will---", this.props.users.selected)
-        // console.log('this.state.checkTextLength', this.state.checkTextLength)
+    const { editorState } = this.state;
+    // console.log("---------will---", this.props.users.selected)
+    // console.log('this.state.checkTextLength', this.state.checkTextLength)
 
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
-        let className = 'RichEditor-editor';
-        var contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' RichEditor-hidePlaceholder';
-            }
+    // If the user changes block type before entering any text, we can
+    // either style the placeholder or hide it. Let's just hide it now.
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+            className += ' RichEditor-hidePlaceholder';
         }
-        // this.props.users.selected?this.loadNoteFromFirebase(this.props.users.selected):null
-        // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
-        // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
+    }
+
+    // NOTE: BlockStyleControls and InlineStyleControls are throwing errors
+    // cannot read getLength or some shit
+
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
@@ -345,3 +340,18 @@ class StyleButton extends React.Component {
     }
 }
 
+const rawContentToEditorState = (editorState,rawContent) => {
+  if(!rawContent.entityMap) rawContent.entityMap = {}
+
+  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
+
+  let newEditorState = EditorState.push(
+    editorState,
+    contentStateConvertedFromRaw
+  )
+
+  return EditorState.forceSelection(
+    newEditorState,
+    editorState.getSelection()
+  )
+}
