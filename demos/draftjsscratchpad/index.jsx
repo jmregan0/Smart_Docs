@@ -5,6 +5,7 @@ import SentimentometerContainer from '../../app/containers/SentimentometerContai
 import DraftjsScratchpad from './DraftjsScratchpad'
 import RoomSidebar from '../../app/components/RoomSidebar'
 import UserSidebar from '../../app/components/UserSidebar'
+import store from '../../app/store'
 //room sidebar
 //user sidebar
 

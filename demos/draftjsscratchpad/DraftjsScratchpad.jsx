@@ -18,6 +18,9 @@ class DraftjsScratchpad extends React.Component {
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
+    this.selectedUser=""
+
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
@@ -26,7 +29,8 @@ class DraftjsScratchpad extends React.Component {
   state = {
     editorState: EditorState.createEmpty(),
     loadingFromFirebase: false,
-    checkTextLength: 200
+    checkTextLength: 200,
+    userUidToGetNotes:""
   }
 
   onChange = (editorState) => {
@@ -44,12 +48,14 @@ class DraftjsScratchpad extends React.Component {
 
 
   componentDidMount() {
-
+    
     this.loadNoteFromFirebase()
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user&&this.props) {
         // User is signed in.
+        //listen for changes to note
+      this.setState({userUidToGetNotes:user.uid});
       this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
         this.setState({loadingFromFirebase: true},() => {
           const rawContentState = snapshot.val();
@@ -77,15 +83,24 @@ class DraftjsScratchpad extends React.Component {
     });
   }
 
-  loadNoteFromFirebase = () => {
+  componentWillReceiveProps(nextProps){
+    console.log("component did receiverprops", nextProps.users.selected)
+    this.setState({userUidToGetNotes:nextProps.users.selected})
+
+    this.loadNoteFromFirebase(nextProps.users.selected)
+
+  }
+
+  loadNoteFromFirebase = (selectedUser) => {
     this.setState({loadingFromFirebase: true})
     /* console.log('before writing selection state: ', this.state.editorState.getSelection())*/
 
     firebase.auth().onAuthStateChanged((user)=> {
 
       if (user) {
+        var selectedUserUidWithNote=selectedUser?selectedUser:user.uid;
         // User is signed in.
-        return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
+        return this.props.fireRefNotes.child(selectedUserUidWithNote).once('value', snapshot => {
           const rawContentState = snapshot.val()
           // when we writeToFirebase the rawContent, firebase doesn't save the empty object value on the 'entityMap' key
           // we need to add it back before we convertFromRaw so it doesn't throw a type error as it expects an object and would would
@@ -114,19 +129,6 @@ class DraftjsScratchpad extends React.Component {
     });
 
   }
-
-  addUserToRoom = (user)=>{
-    return this.props.fireRefRoom.set({user:user.uid, exists:true})
-  }
-
-  deleteUserFromRoom = ()=>{
-     return this.props.fireRefRoom.set({user:user.uid, exists:false})
-  }
-
-  loadRoomsFromFirebase = ()=>{
-    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
-  }
-
 
   writeNoteToFirebase = () => {
     //console.log('before loading selection state: ', this.state.editorState.getSelection())
@@ -176,8 +178,8 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
         const { editorState } = this.state;
-
-        console.log('this.state.checkTextLength', this.state.checkTextLength)
+        // console.log("---------will---", this.props.users.selected)
+        // console.log('this.state.checkTextLength', this.state.checkTextLength)
 
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
@@ -188,7 +190,7 @@ class DraftjsScratchpad extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-
+        // this.props.users.selected?this.loadNoteFromFirebase(this.props.users.selected):null
         // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
         // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
@@ -218,6 +220,7 @@ class DraftjsScratchpad extends React.Component {
 
 const mapState = (state) => {
 	return {
+    users:state.users
 	}
 }
 
