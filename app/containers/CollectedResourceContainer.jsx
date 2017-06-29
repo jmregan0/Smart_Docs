@@ -3,11 +3,7 @@ import { connect } from 'react-redux'
 import CollectedResources from '../components/CollectedResources'
 
 
-const mapState = (state) => {
-	return {
-		research: state.researchResults
-	}
-}
+const mapState = ({researchResults}) => ({researchResults})
 
 const mapDispatch = (dispatch) => {
   return {
