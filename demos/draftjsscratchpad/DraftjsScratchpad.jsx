@@ -44,7 +44,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   setTimer(){
-    return this.unSetTimer = setInterval(this.emitChanges,5000);
+    return this.unSetTimer = setInterval(this.emitChanges,2000);
   }
 
   clearTimer(){
@@ -58,9 +58,13 @@ class DraftjsScratchpad extends React.Component {
     // BEGIN NLP BLOCK
     // ---------------
     let currentText = this.state.editorState.getCurrentContent().getPlainText();
-    if(currentText.split(' ').length > this.state.checkTextLength){
-      console.log('we have hit our limit')
-      this.setState({checkTextLength: this.state.checkTextLength + 150})
+    let currentTextLength = currentText.split(' ').length;
+    let newLimit = Math.floor(currentTextLength/150)*150+150;
+
+    if(currentTextLength > this.state.checkTextLength){
+      console.log('Text length: ',currentTextLength);
+      console.log('Increasing limit to ',newLimit);
+      this.setState({checkTextLength: newLimit})
       Promise.all([
         this.findSentiment(currentText),
         this.findEntity(currentText),
@@ -79,9 +83,10 @@ class DraftjsScratchpad extends React.Component {
       })
       .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
     }
-    else if(currentText.split(' ').length < this.state.checkTextLength - 150){
-      console.log('decreasing limit')
-      this.setState({checkTextLength: this.state.checkTextLength - 150})
+    else if(currentTextLength < this.state.checkTextLength - 150){
+      console.log('Text length: ',currentTextLength);
+      console.log('decreasing limit to ',newLimit);
+      this.setState({checkTextLength: newLimit})
     }
     // ---------------
     // END   NLP BLOCK
