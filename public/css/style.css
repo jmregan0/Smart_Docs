@@ -2,6 +2,14 @@
   padding: 0;
 }
 
+a {
+  color: #2f79b9;
+}
+
+div, p {
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 /*.CodeMirror {
   overflow: visible;
 }
@@ -237,10 +245,13 @@ button{
   color:#333;
   font-size: 0.9em;
   line-height:1.2em;
+  border-radius: 4px;
 }
 
 .sidebar-nav-fixed{
   color:black;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 #main-user-head{
@@ -257,4 +268,28 @@ button{
 .entitySpan {
   background-color: rgba(204, 204, 255, 1.0);
   padding: 2px 0;
+}
+
+.nav>li>a {
+padding: 5px 0px;
+display: inline-block;
+}
+
+.ok {
+  color: #368435;
+  padding: 0px 5px;
+}
+
+.remove {
+  color: #db524b;
+  padding: 0px 5px;
+  float: right;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
 }
