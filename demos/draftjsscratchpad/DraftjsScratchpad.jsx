@@ -28,11 +28,15 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       loadingFromFirebase: false,
-      checkTextLength: 200
+      checkTextLength: 200,
+      userUidToGetNotes:""
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
+    this.selectedUser=""
+
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
@@ -66,12 +70,14 @@ class DraftjsScratchpad extends React.Component {
 
 
   componentDidMount() {
-
+    
     this.loadNoteFromFirebase()
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user&&this.props) {
         // User is signed in.
+
+        this.setState({userUidToGetNotes:user.uid});
         // register database listener
         this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
           this.setState({loadingFromFirebase: true},() => {
@@ -83,6 +89,7 @@ class DraftjsScratchpad extends React.Component {
               this.state.editorState,
               contentStateConvertedFromRaw
             );
+
 
             newEditorState = EditorState.forceSelection(newEditorState,
               this.state.editorState.getSelection()
@@ -100,13 +107,22 @@ class DraftjsScratchpad extends React.Component {
     });
   }
 
-  loadNoteFromFirebase = () => {
+  componentWillReceiveProps(nextProps){
+    console.log("component did receiverprops", nextProps.users.selected)
+    this.setState({userUidToGetNotes:nextProps.users.selected})
+
+    this.loadNoteFromFirebase(nextProps.users.selected)
+
+  }
+
+  loadNoteFromFirebase = (selectedUser) => {
     this.setState({loadingFromFirebase: true})
 
     firebase.auth().onAuthStateChanged((user)=> {
       if (user) {
+        var selectedUserUidWithNote=selectedUser?selectedUser:user.uid;
         // User is signed in.
-        return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
+        return this.props.fireRefNotes.child(selectedUserUidWithNote).once('value', snapshot => {
           const rawContentState = snapshot.val()
           if(!rawContentState.entityMap) rawContentState.entityMap = {}
           const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
@@ -132,19 +148,6 @@ class DraftjsScratchpad extends React.Component {
     });
 
   }
-
-  addUserToRoom = (user)=>{
-    return this.props.fireRefRoom.set({user:user.uid, exists:true})
-  }
-
-  deleteUserFromRoom = ()=>{
-     return this.props.fireRefRoom.set({user:user.uid, exists:false})
-  }
-
-  loadRoomsFromFirebase = ()=>{
-    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
-  }
-
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
@@ -192,8 +195,8 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
         const { editorState } = this.state;
-
-        console.log('this.state.checkTextLength', this.state.checkTextLength)
+        // console.log("---------will---", this.props.users.selected)
+        // console.log('this.state.checkTextLength', this.state.checkTextLength)
 
         // If the user changes block type before entering any text, we can
         // either style the placeholder or hide it. Let's just hide it now.
@@ -204,7 +207,7 @@ class DraftjsScratchpad extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-
+        // this.props.users.selected?this.loadNoteFromFirebase(this.props.users.selected):null
         // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
         // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
@@ -233,9 +236,12 @@ class DraftjsScratchpad extends React.Component {
   }
 }
 
-const mapState = ({nlpResults}) => {
-	return nlpResults;
-}
+
+const mapState = ({users, nlpResults}) => ({
+    users,
+    nlpResults
+});
+
 
 const mapDispatch = (dispatch) => {
   return {
