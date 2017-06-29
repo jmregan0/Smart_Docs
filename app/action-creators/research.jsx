@@ -1,4 +1,4 @@
-import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS, REMOVE_ENTITY } from '../constants'
+import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS, REMOVE_ENTITY, SAVE_BOOKMARK } from '../constants'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
@@ -29,6 +29,12 @@ export const removeEntity = (entityId) => ({
   type: REMOVE_ENTITY,
   entityToRemove: entityId
 })
+
+export const saveBookmark = (item) => ({
+  type: SAVE_BOOKMARK,
+  savedBookmark: item
+})
+
 // thunks that are functions which return functions that take dispatch as arg. do something async and then finally dispatch one of the above basic action creators.
 
 export const findSentiment = text => {

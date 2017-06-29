@@ -185,10 +185,13 @@ const CollectedResources = (props) => {
 
                             <div className="col-lg-12">
                                 <h2>Collected Research Based on Your Keywords</h2>
+                                <div className="alert-box success fadeout">Saved to your Bookmarks
+                                </div>
                                 <div className="table-responsive">
                                     <table className="table table-bordered table-hover">
                                         <thead>
                                             <tr>
+                                                <th>Save?</th>
                                                 <th>Data Type</th>
                                                 <th>Title</th>
                                                 {/*<th>Abstract</th>*/}
@@ -256,6 +259,7 @@ const CollectedResources = (props) => {
 
                         return (
                             <tr key={'' + index}>
+                                <td><span className="ok"><span className="glyphicon glyphicon-ok" aria-label="Click to save this research to your Bookmarks" onClick={() => props.saveBookmark(item)}></span></span></td>
                                 <td>{data.type}</td>
                                 <td>{data.title}</td>
                                 {/*<td>{data.abstract || 'NA'}</td>*/}
