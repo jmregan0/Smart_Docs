@@ -2,6 +2,13 @@ import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SE
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
+//START CONFIGURE IP ADDRESS OF NLP SERVER
+//----------------------------------------
+//const IPADDR = 'localhost:3000';
+const IPADDR = '192.168.119.101:3000';
+//----------------------------------------
+//  END CONFIGURE IP ADDRESS OF NLP SERVER
+
 // basic action creators with action object {type: constant, payload: data}
 
 export const setSentimentResults = sentimentResults => ({
@@ -33,7 +40,7 @@ export const removeEntity = (entityId) => ({
 
 export const findSentiment = text => {
   return dispatch =>
-    axios.post('http://localhost:3000/api/analyze/sentiment', {
+    axios.post(`http://${IPADDR}/api/analyze/sentiment`, {
         text: text})
     .then(res => res.data)
     .then(sentimentResults => {
@@ -46,7 +53,7 @@ export const findSentiment = text => {
 
 export const findEntity = text => {
   return dispatch =>
-    axios.post('http://localhost:3000/api/analyze/entity', {
+    axios.post(`http://${IPADDR}/api/analyze/entity`, {
         text: text})
     .then(res => res.data)
     .then(entityResults => {
@@ -61,7 +68,7 @@ export const findRelationships = text => {
   return dispatch =>
     axios({
         method: 'post',
-        url: 'http://localhost:3000/api/analyze/relationships',
+        url: `http://${IPADDR}/api/analyze/relationships`,
         data:{
           text: text
         }
@@ -79,7 +86,7 @@ export const findResearchOnInput = (tags) => {
   return dispatch => {
     return axios({
     method: 'post',
-    url: 'http://localhost:3000/api/research',
+    url: `http://${IPADDR}/api/research`,
     data: {
       tags: tags
     }
