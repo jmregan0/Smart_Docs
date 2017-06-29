@@ -52,7 +52,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   emitChanges(){
-    console.log('emitting changes');
+    //console.log('emitting changes');
     this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
