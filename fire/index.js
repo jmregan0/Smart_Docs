@@ -2,7 +2,8 @@ const firebase = require('firebase')
 const secrets = require('../secrets.js')
 // -- // -- // -- // Firebase Config // -- // -- // -- //
 
-const config = secrets.config;
+const config = secrets.config
+
 
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 

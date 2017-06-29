@@ -184,18 +184,18 @@ const CollectedResources = (props) => {
                 <div className="row">
 
                             <div className="col-lg-12">
-                                <h2>Bordered Table</h2>
+                                <h2>Collected Research Based on Your Keywords</h2>
                                 <div className="table-responsive">
                                     <table className="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Data Type</th>
                                                 <th>Title</th>
-                                                <th>Abstract</th>
+                                                {/*<th>Abstract</th>*/}
                                                 <th>Author</th>
                                                 <th>Publisher</th>
-                                                <th>ISBN</th>
-                                                <th>Publication Date</th>
+                                                {/*<th>ISBN</th>*/}
+                                                {/*<th>Publication Date</th>*/}
                                                 <th>URL/Location</th>
                                             </tr>
                                         </thead>
@@ -205,19 +205,19 @@ const CollectedResources = (props) => {
                     props.researchResults ? props.researchResults.researchResults.map((item, index) => {
                         let data = {}
 
-                        if(item.type === 'Book'){
-                            data.type = 'book';
+                        if(item.type === 'book'){
+                            data.type = 'Book';
                             data.title = item.title[0];
-                            data.author = item.author[0].given + item.author[0].family
+                            data.author = item.author[0].given +' '+ item.author[0].family
                             data.abstract = item.abstract;
                             data.publisher = item.publisher;
                             {/*data.publicationDate = item.published-print;*/}
                             data.url = item.URL;
 
-                        } else if(item.type === 'Journal Article'){
-                            data.type = 'journal-article';
+                        } else if(item.type === 'journal-article'){
+                            data.type = 'Journal Article';
                             data.title = item.title[0];
-                            data.author = item.author[0].given + item.author[0].family
+                            data.author = item.author[0].given +' '+ item.author[0].family
                             data.publisher = item.publisher;
                             {/*data.publicationDate = item.published-print;*/}
                             data.url = item.URL;
@@ -248,7 +248,7 @@ const CollectedResources = (props) => {
                         } else if(item.type === 'dissertation'){
                             data.type = 'Dissertation';
                             data.title = item.title[0];
-                            data.author = item.author[0].given + item.author[0].family
+                            data.author = item.author[0].given + ' ' + item.author[0].family
                             data.publisher = item.publisher;
                             {/*data.publicationDate = item.issued.date-parts[0];*/}
                             data.url = item.URL;
@@ -258,10 +258,11 @@ const CollectedResources = (props) => {
                             <tr key={'' + index}>
                                 <td>{data.type}</td>
                                 <td>{data.title}</td>
-                                <td>{data.abstract || 'NA'}</td>
+                                {/*<td>{data.abstract || 'NA'}</td>*/}
                                 <td>{data.author || 'Not Found'}</td>
                                 <td>{data.publisher || 'Not Found'}</td>
                                 {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
+                                <td><a>{data.url}></a></td>
                             </tr>
                         )
                     })
