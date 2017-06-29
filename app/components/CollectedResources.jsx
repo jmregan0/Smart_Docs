@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios'
 
 const CollectedResources = (props) => {
- console.log('research', props)
+ console.log('research', props.researchResults.researchResults)
 
   return(
 
@@ -181,76 +181,100 @@ const CollectedResources = (props) => {
                     </div>
                 </div>
 
-
-
                 <div className="row">
 
-                    <div className="col-lg-6">
-                        <h2>Bordered Table</h2>
-                        <div className="table-responsive">
-                            <table className="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Page</th>
-                                        <th>Visits</th>
-                                        <th>% New Visits</th>
-                                        <th>Revenue</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>/index.html</td>
-                                        <td>1265</td>
-                                        <td>32.3%</td>
-                                        <td>$321.33</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/about.html</td>
-                                        <td>261</td>
-                                        <td>33.3%</td>
-                                        <td>$234.12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/sales.html</td>
-                                        <td>665</td>
-                                        <td>21.3%</td>
-                                        <td>$16.34</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog.html</td>
-                                        <td>9516</td>
-                                        <td>89.3%</td>
-                                        <td>$1644.43</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/404.html</td>
-                                        <td>23</td>
-                                        <td>34.3%</td>
-                                        <td>$23.52</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/services.html</td>
-                                        <td>421</td>
-                                        <td>60.3%</td>
-                                        <td>$724.32</td>
-                                    </tr>
-                                    <tr>
-                                        <td>/blog/post.html</td>
-                                        <td>1233</td>
-                                        <td>93.2%</td>
-                                        <td>$126.34</td>
-                                    </tr>
+                            <div className="col-lg-12">
+                                <h2>Bordered Table</h2>
+                                <div className="table-responsive">
+                                    <table className="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Data Type</th>
+                                                <th>Title</th>
+                                                <th>Abstract</th>
+                                                <th>Author</th>
+                                                <th>Publisher</th>
+                                                <th>ISBN</th>
+                                                <th>Publication Date</th>
+                                                <th>URL/Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                {
+                    props.researchResults ? props.researchResults.researchResults.map((item, index) => {
+                        let data = {}
+
+                        if(item.type === 'Book'){
+                            data.type = 'book';
+                            data.title = item.title[0];
+                            data.author = item.author[0].given + item.author[0].family
+                            data.abstract = item.abstract;
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.published-print;*/}
+                            data.url = item.URL;
+
+                        } else if(item.type === 'Journal Article'){
+                            data.type = 'journal-article';
+                            data.title = item.title[0];
+                            data.author = item.author[0].given + item.author[0].family
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.published-print;*/}
+                            data.url = item.URL;
+
+                        } else if(item.type === 'book-chapter'){
+                            data.type = 'Book Chapter';
+                            data.title = item.title[0];
+                            data.location = item.page;
+                            data.ISBN = item.ISBN;
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.published-print;*/}
+                            data.url = item.URL;
+
+                        } else if(item.type === 'reference-entry'){
+                            data.type = 'Reference Entry';
+                            data.title = item.title[0];
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.issued.date-parts[0];*/}
+                            data.url = item.URL;
+
+                        } else if(item.type === 'dataset'){
+                            data.type = 'Dataset';
+                            data.title = item.title[0];
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.issued.date-parts[0];*/}
+                            data.url = item.URL;
+
+                        } else if(item.type === 'dissertation'){
+                            data.type = 'Dissertation';
+                            data.title = item.title[0];
+                            data.author = item.author[0].given + item.author[0].family
+                            data.publisher = item.publisher;
+                            {/*data.publicationDate = item.issued.date-parts[0];*/}
+                            data.url = item.URL;
+                        }
+
+                        return (
+                            <tr key={'' + index}>
+                                <td>{data.type}</td>
+                                <td>{data.title}</td>
+                                <td>{data.abstract || 'NA'}</td>
+                                <td>{data.author || 'Not Found'}</td>
+                                <td>{data.publisher || 'Not Found'}</td>
+                                {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
+                            </tr>
+                        )
+                    })
+                    : null
+                }
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
         </div>
-
     </div>
   )
 }

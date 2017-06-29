@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router'
 
 import axios from 'axios'
 
@@ -193,13 +194,13 @@ const Research = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <a href="/bulk-found-research">
+                            <Link to="/bulk-found-research">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
                                     <div className="clearfix"></div>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-6">
