@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 //START CONFIGURE IP ADDRESS OF NLP SERVER
 //----------------------------------------
 //const IPADDR = 'localhost:3000';
-const IPADDR = '192.168.119.101:3000';
+const IPADDR = 'web02.com:3000';
 //----------------------------------------
 //  END CONFIGURE IP ADDRESS OF NLP SERVER
 
@@ -40,7 +40,7 @@ export const removeEntity = (entityId) => ({
 
 export const findSentiment = text => {
   return dispatch =>
-    axios.post(`http://${IPADDR}/api/analyze/sentiment`, {
+    axios.post('http://' + IPADDR + '/api/analyze/sentiment', {
         text: text})
     .then(res => res.data)
     .then(sentimentResults => {
@@ -48,12 +48,13 @@ export const findSentiment = text => {
       dispatch(setSentimentResults(sentimentResults))
       // browserHistory.push('/research')
     })
+    .catch(error=>console.error('findSentiment error:',error));
 
 }
 
 export const findEntity = text => {
   return dispatch =>
-    axios.post(`http://${IPADDR}/api/analyze/entity`, {
+    axios.post('http://' + IPADDR + '/api/analyze/entity', {
         text: text})
     .then(res => res.data)
     .then(entityResults => {
@@ -61,6 +62,7 @@ export const findEntity = text => {
       dispatch(setEntityResults(entityResults))
       // browserHistory.push('/research')
     })
+    .catch(error=>console.error('findEntity error:',error));
 
 }
 
@@ -68,7 +70,7 @@ export const findRelationships = text => {
   return dispatch =>
     axios({
         method: 'post',
-        url: `http://${IPADDR}/api/analyze/relationships`,
+        url: 'http://' + IPADDR + '/api/analyze/relationships',
         data:{
           text: text
         }
@@ -79,22 +81,23 @@ export const findRelationships = text => {
       dispatch(setRelationshipResults(relationshipResults))
       // browserHistory.push('/research')
     })
+    .catch(error=>console.error('findRelationships error:',error));
 
 }
 
 export const findResearchOnInput = (tags) => {
-  return dispatch => {
-    return axios({
-    method: 'post',
-    url: `http://${IPADDR}/api/research`,
-    data: {
-      tags: tags
-    }
+  return dispatch => 
+    axios({
+      method: 'post',
+      url: 'http://' + IPADDR + '/api/research',
+      data: {
+        tags: tags
+      }
     })
     .then(result => result)
     .then(result => {
       dispatch(setInitialResearch(result.data.message.items));
       browserHistory.push('/research')
     })
-  }
+    .catch(error=>console.error('findResearchOnInput error:',error));
 }

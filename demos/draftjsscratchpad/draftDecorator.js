@@ -35,7 +35,6 @@ module.exports.entitySpan = props => (
 //   }
 // 
 const findMatches = (str,word,entityKey) => {
-  //console.log("findMatches:",str,word);
   if(!word || typeof word != "string" || word.length === 0) return [];
   let modstr = str;
   let buffer = [];
