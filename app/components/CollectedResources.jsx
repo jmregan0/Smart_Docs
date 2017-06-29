@@ -262,7 +262,7 @@ const CollectedResources = (props) => {
                                 <td>{data.author || 'Not Found'}</td>
                                 <td>{data.publisher || 'Not Found'}</td>
                                 {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
-                                <td><a>{data.url}</a></td>
+                                <td><a>{data.url}></a></td>
                             </tr>
                         )
                     })
