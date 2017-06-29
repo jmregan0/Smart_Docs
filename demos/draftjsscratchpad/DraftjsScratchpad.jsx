@@ -82,7 +82,7 @@ class DraftjsScratchpad extends React.Component {
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
         this.setState({userUidToGetNotes:null});
-        //this.setState({editorState: EditorState.createEmpty()});
+        this.setState({editorState: EditorState.createEmpty()});
       }
       else {
         this.setState({userUidToGetNotes:user.uid});
@@ -135,7 +135,7 @@ class DraftjsScratchpad extends React.Component {
           const newEditorState =
             rawContentToEditorState(this.state.editorState,snapshot.val());
 
-          this.setState({editorState: newEditorState})
+          this.setState({editorState: newEditorState});
         }
     });
   }
@@ -284,18 +284,20 @@ const BlockStyleControls = (props) => {
 };
 
 const InlineStyleControls = (props) => {
-
     var currentStyle = props.editorState.getCurrentInlineStyle();
-    return ( < div className = "RichEditor-controls" > {
-        INLINE_STYLES.map(type =>
-            < StyleButton key = { type.label }
-            active = { currentStyle.has(type.style) }
-            label = { type.label }
-            onToggle = { props.onToggle }
-            style = { type.style }
-            />
+
+    return (
+      <div className="RichEditor-controls">
+        {INLINE_STYLES.map(type =>
+          <StyleButton
+            key={type.label}
+            active={currentStyle.has(type.style)}
+            label={type.label}
+            onToggle={props.onToggle}
+            style={type.style}
+          />
         )
-    } < /div>);
+    } </div>);
 };
 
 const BLOCK_TYPES = [
@@ -349,9 +351,12 @@ const rawContentToEditorState = (editorState,rawContent) => {
     editorState,
     contentStateConvertedFromRaw
   )
+  return newEditorState;
 
+  /*
   return EditorState.forceSelection(
     newEditorState,
     editorState.getSelection()
   )
+  */
 }
