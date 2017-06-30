@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
 import axios from 'axios'
 
@@ -20,7 +21,6 @@ const CollectedResources = (props) => {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                 </button>
-                <a className="navbar-brand" href="index.html">SB Admin</a>
             </div>
             <ul className="nav navbar-right top-nav">
                 <li className="dropdown">
@@ -125,39 +125,7 @@ const CollectedResources = (props) => {
             <div className="collapse navbar-collapse navbar-ex1-collapse">
                 <ul className="nav navbar-nav side-nav">
                     <li>
-                        <a href="index.html"><i className="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="charts.html"><i className="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li className="active">
-                        <a href="tables.html"><i className="fa fa-fw fa-table"></i> Tables</a>
-                    </li>
-                    <li>
-                        <a href="forms.html"><i className="fa fa-fw fa-edit"></i> Forms</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-elements.html"><i className="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-grid.html"><i className="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i className="fa fa-fw fa-arrows-v"></i> Dropdown <i className="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" className="collapse">
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="blank-page.html"><i className="fa fa-fw fa-file"></i> Blank Page</a>
-                    </li>
-                    <li>
-                        <a href="index-rtl.html"><i className="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
+                        <Link to="/research"><i className="fa fa-fw fa-chevron-left"></i> Back to Dashboard</Link>
                     </li>
                 </ul>
             </div>
@@ -174,7 +142,7 @@ const CollectedResources = (props) => {
                         </h1>
                         <ol className="breadcrumb">
                             <li>
-                                <i className="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+                                <i className="fa fa-chevron-left"></i>  <Link to="/research">Dashboard</Link>
                             </li>
                             <li className="active">
                                 <i className="fa fa-table"></i> Tables
@@ -196,7 +164,6 @@ const CollectedResources = (props) => {
                                                 <th>Save?</th>
                                                 <th>Data Type</th>
                                                 <th>Title</th>
-                                                {/*<th>Abstract</th>*/}
                                                 <th>Author</th>
                                                 <th>Publisher</th>
                                                 {/*<th>ISBN</th>*/}
@@ -222,7 +189,7 @@ const CollectedResources = (props) => {
                         } else if(item.type === 'journal-article'){
                             data.type = 'Journal Article';
                             data.title = item.title[0];
-                            data.author = item.author[0].given +' '+ item.author[0].family
+                            {/*data.author = item.author[0].given +' '+ item.author[0].family*/}
                             data.publisher = item.publisher;
                             {/*data.publicationDate = item.published-print;*/}
                             data.url = item.URL;
@@ -268,7 +235,7 @@ const CollectedResources = (props) => {
                                 <td>{data.author || 'Not Found'}</td>
                                 <td>{data.publisher || 'Not Found'}</td>
                                 {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
-                                <td><a>{data.url}></a></td>
+                                <td><a href={data.url}>{data.url}</a></td>
                             </tr>
                         )
                     })
