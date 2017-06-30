@@ -248,7 +248,7 @@ button {
 
 .remove {
   color: #db524b;
-  padding: 0px 5px;
+  padding: 5px 5px;
   float: right; }
 
 .center {
@@ -278,3 +278,10 @@ button {
 @media (min-width: 768px) {
   body {
     margin-top: 0; } }
+
+.move {
+  color: #2f79b9;
+  padding: 0 0 0 5px; }
+
+li a:hover {
+  color: darkslategray; }
