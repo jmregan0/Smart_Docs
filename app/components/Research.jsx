@@ -206,21 +206,21 @@ const Research = (props) => {
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col-xs-3">
-                                        <i className="fa fa-shopping-cart fa-5x"></i>
+                                        <i className="fa fa-smile-o fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
                                         <div className="huge">124</div>
-                                        <div>New Orders!</div>
+                                        <div>SentimentResults</div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <Link to="/sentiment">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
                                     <div className="clearfix"></div>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-lg-4 col-md-4">

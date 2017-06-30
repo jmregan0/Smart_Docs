@@ -10,6 +10,7 @@ import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import Editor from '../demos/draftjsscratchpad'
 import ResearchContainer from './containers/ResearchContainer'
+import SentimentContainer from './containers/SentimentContainer'
 import CollectedResourceContainer from './containers/CollectedResourceContainer'
 import RelationshipsContainer from './containers/RelationshipsContainer'
 
@@ -89,6 +90,7 @@ render(
        </Route>
        <Route path="/research" component={ResearchContainer} />
        <Route path="/bulk-found-research" component={CollectedResourceContainer}/>
+       <Route path="/sentiment" component={SentimentContainer}/>
        <Route path="/relationships" component={RelationshipsContainer}/>
      <Route path='*' component={NotFound}/>
    </Router>

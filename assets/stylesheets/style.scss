@@ -465,3 +465,28 @@ input {
 .panel-heading a:hover {
   color: black;
 }
+
+.panel-footer .pull-left {
+  color: black;
+}
+
+.sentiment-header {
+  color: black;
+}
+
+.bg-neutral {
+  background-color: $light-gray;
+}
+
+.bg-success {
+  background-color: $bs-green;
+}
+
+.bg-danger {
+  background-color: $bs-red;
+}
+
+.bg-primary {
+  background-color: $bs-blue;
+  color: white;
+}
