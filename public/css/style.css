@@ -1,4 +1,4 @@
-.navbar-brand, .brand-heading {
+.navbar-brand, .navbar-brand a, .brand-heading {
   padding: 0;
   color: white;
   font-weight: bold; }
@@ -8,6 +8,9 @@
 
 h1, h2 {
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+div h1, div h2, div h2 p, #about p, #contact p, footer p {
+  color: white; }
 
 a {
   color: #2f79b9; }

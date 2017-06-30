@@ -5,7 +5,7 @@ $bs-green: #54b253;
 $yellow: #ffffcc;
 $font: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-.navbar-brand, .brand-heading {
+.navbar-brand, .navbar-brand a, .brand-heading {
   padding: 0;
   color: white;
   font-weight: bold;
@@ -17,6 +17,10 @@ $font: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 h1, h2 {
   font-family: $font;
+}
+
+div h1, div h2, div h2 p, #about p, #contact p, footer p {
+  color: white;
 }
 
 a {
