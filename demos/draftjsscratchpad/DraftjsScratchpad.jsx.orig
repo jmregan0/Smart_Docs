@@ -27,123 +27,153 @@ class DraftjsScratchpad extends React.Component {
 
     this.state = {
       editorState: EditorState.createEmpty(decorator),
-      checkTextLength: 200,
-      userUidToGetNotes:""
+      loadingFromFirebase: false,
+      checkTextLength: 200
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
-    this.selectedUser=""
-
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
-    this.loadNoteFromFirebase = this.loadNoteFromFirebase.bind(this);
-    this.emitChanges = this.emitChanges.bind(this);
   }
 
-  setTimer(){
-    return this.unSetTimer = setInterval(this.emitChanges,2000);
-  }
-
-  clearTimer(){
-    return clearInterval(this.unSetTimer);
-  }
-
-  emitChanges(){
-    //console.log('emitting changes');
+  onChange = (editorState) => {
+    this.setState({editorState})
     this.writeNoteToFirebase()
-
-    // BEGIN NLP BLOCK
-    // ---------------
-    let currentText = this.state.editorState.getCurrentContent().getPlainText();
-    let currentTextLength = currentText.split(' ').length;
-    let newLimit = Math.floor(currentTextLength/150)*150+150;
-
-    if(currentTextLength > this.state.checkTextLength){
-      console.log('Text length: ',currentTextLength);
-      console.log('Increasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
+    let currentText = editorState.getCurrentContent().getPlainText();
+    if(currentText.split(' ').length > this.state.checkTextLength){
+<<<<<<< HEAD
+      // this.findSentiment(currentText)
+      console.log('editor change?!?????????????????')
+      this.findEntity(currentText)
+      // this.findRelationships(currentText)
+=======
+>>>>>>> master
+      console.log('we have hit our limit')
+      this.setState({checkTextLength: this.state.checkTextLength + 150})
       Promise.all([
         this.findSentiment(currentText),
         this.findEntity(currentText),
         this.findRelationships(currentText),
       ])
       .then(()=>{
-        console.log('this.props:',this.props);
         // BEGIN ENTITY BLOCK
         // ------------------
-        let entities = this.props.nlpResults.nlpEntity.entities;
+        let entities = this.props.nlpEntity.entities;
         console.log('Promise resolved.  State: ',entities);
         let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
         this.setState({editorState: newEditorState});
         // ------------------
         // END   ENTITY BLOCK
       })
-      .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
+      .catch(error=>console.error);
     }
-    else if(currentTextLength < this.state.checkTextLength - 150){
-      console.log('Text length: ',currentTextLength);
-      console.log('decreasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
-    }
-    // ---------------
-    // END   NLP BLOCK
-  }
-
-  onChange = (editorState) => {
-    this.setState({editorState})
-    this.clearTimer();
-    this.setTimer();
   }
 
 
-  componentWillUnmount(){
-    this.clearTimer();
-  }
   componentDidMount() {
-    this.setTimer();
 
-    // register auth listener
-    firebase.auth().onAuthStateChanged((user)=>{
-      if(!user) {
-        console.error("Firebase AUTH: No user detected. user: ",user);
-        this.setState({userUidToGetNotes:null});
-        this.setState({editorState: EditorState.createEmpty()});
-      }
-      else {
-        this.setState({userUidToGetNotes:user.uid});
-        console.log('new user, yes?',user.uid);
-        this.loadNoteFromFirebase(user.uid);
+    this.loadNoteFromFirebase()
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user&&this.props) {
+        // User is signed in.
+        // register database listener
+        this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
+          this.setState({loadingFromFirebase: true},() => {
+            const rawContentState = snapshot.val();
+            rawContentState.entityMap = {};
+
+            const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
+            let newEditorState = EditorState.push(
+              this.state.editorState,
+              contentStateConvertedFromRaw
+            );
+
+            newEditorState = EditorState.forceSelection(newEditorState,
+              this.state.editorState.getSelection()
+            );
+
+            this.setState({editorState: newEditorState},()=>{
+              this.setState({loadingFromFirebase: false});
+            });
+          });
+        });
+      } else {
+        // No user is signed in.
+        console.log("nothing loaded because a user is not signed in")
       }
     });
   }
 
-  loadNoteFromFirebase(uid){
-    return this.props.fireRefNotes.child(uid).once(
-      'value',
-      snapshot => {
-        console.log("From loadNoteFromFirebase:",snapshot.val());
+  loadNoteFromFirebase = () => {
+    this.setState({loadingFromFirebase: true})
 
-        if(snapshot.val()){
-          const newEditorState =
-            rawContentToEditorState(this.state.editorState,snapshot.val());
+    firebase.auth().onAuthStateChanged((user)=> {
+      if (user) {
+        // User is signed in.
+        return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
+          const rawContentState = snapshot.val()
+          if(!rawContentState.entityMap) rawContentState.entityMap = {}
+          const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
+          let newEditorState = EditorState.push(
+            this.state.editorState,
+            contentStateConvertedFromRaw
+          )
+          newEditorState = EditorState.forceSelection(
+            newEditorState,
+            this.state.editorState.getSelection()
+          )
 
-          this.setState({editorState: newEditorState});
-        }
+          this.setState({editorState: newEditorState})
+        })
+        .then((resp) => {
+          this.setState({loadingFromFirebase: false})
+          return resp
+        })
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
     });
+
   }
+
+  addUserToRoom = (user)=>{
+    return this.props.fireRefRoom.set({user:user.uid, exists:true})
+  }
+
+  deleteUserFromRoom = ()=>{
+     return this.props.fireRefRoom.set({user:user.uid, exists:false})
+  }
+
+  loadRoomsFromFirebase = ()=>{
+    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
+  }
+
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
+
+    firebase.auth().onAuthStateChanged((user)=> {
+      if (user) {
+        // User is signed in.
+
+        return this.props.fireRefNotes.child(user.uid).set(rawState)
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
+    });
+
   }
 
   handleKeyCommand = command => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
     if (newState) {
+      console.log("heey!!!!!!!!!!!!!!!")
       this.onChange(newState)
       return 'handled'
     }
@@ -169,19 +199,22 @@ class DraftjsScratchpad extends React.Component {
   }
 
   render() {
-    const { editorState } = this.state;
-    // console.log("---------will---", this.props.users.selected)
-    // console.log('this.state.checkTextLength', this.state.checkTextLength)
+        const { editorState } = this.state;
 
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
-    let className = 'RichEditor-editor';
-    var contentState = editorState.getCurrentContent();
-    if (!contentState.hasText()) {
-        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-            className += ' RichEditor-hidePlaceholder';
+        console.log('this.state.checkTextLength', this.state.checkTextLength)
+
+        // If the user changes block type before entering any text, we can
+        // either style the placeholder or hide it. Let's just hide it now.
+        let className = 'RichEditor-editor';
+        var contentState = editorState.getCurrentContent();
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                className += ' RichEditor-hidePlaceholder';
+            }
         }
-    }
+
+        // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
+        // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
@@ -208,12 +241,9 @@ class DraftjsScratchpad extends React.Component {
   }
 }
 
-
-const mapState = ({users, nlpResults}) => ({
-    users,
-    nlpResults
-});
-
+const mapState = ({nlpResults}) => {
+	return nlpResults;
+}
 
 const mapDispatch = (dispatch) => {
   return {
@@ -228,7 +258,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
@@ -261,20 +291,18 @@ const BlockStyleControls = (props) => {
 };
 
 const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
 
-    return (
-      <div className="RichEditor-controls">
-        {INLINE_STYLES.map(type =>
-          <StyleButton
-            key={type.label}
-            active={currentStyle.has(type.style)}
-            label={type.label}
-            onToggle={props.onToggle}
-            style={type.style}
-          />
+    var currentStyle = props.editorState.getCurrentInlineStyle();
+    return ( < div className = "RichEditor-controls" > {
+        INLINE_STYLES.map(type =>
+            < StyleButton key = { type.label }
+            active = { currentStyle.has(type.style) }
+            label = { type.label }
+            onToggle = { props.onToggle }
+            style = { type.style }
+            />
         )
-    } </div>);
+    } < /div>);
 };
 
 const BLOCK_TYPES = [
@@ -319,21 +347,3 @@ class StyleButton extends React.Component {
     }
 }
 
-const rawContentToEditorState = (editorState,rawContent) => {
-  if(!rawContent.entityMap) rawContent.entityMap = {}
-
-  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
-
-  let newEditorState = EditorState.push(
-    editorState,
-    contentStateConvertedFromRaw
-  )
-  return newEditorState;
-
-  /*
-  return EditorState.forceSelection(
-    newEditorState,
-    editorState.getSelection()
-  )
-  */
-}

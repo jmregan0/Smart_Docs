@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router'
 
 import axios from 'axios'
 
@@ -19,7 +20,7 @@ const Research = (props) => {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                 </button>
-                <a className="navbar-brand" href="index.html">SB Admin</a>
+                <a className="navbar-brand" href="index.html">Dashboard</a>
             </div>
             <ul className="nav navbar-right top-nav">
                 <li className="dropdown">
@@ -124,13 +125,13 @@ const Research = (props) => {
             <div className="collapse navbar-collapse navbar-ex1-collapse">
                 <ul className="nav navbar-nav side-nav">
                     <li>
-                        <a href="index.html"><i className="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                        <Link to="research"><i className="fa fa-fw fa-dashboard"></i> Dashboard</Link>
                     </li>
                     <li>
                         <a href="charts.html"><i className="fa fa-fw fa-bar-chart-o"></i> Charts</a>
                     </li>
                     <li>
-                        <a href="tables.html"><i className="fa fa-fw fa-table"></i> Tables</a>
+                        <Link to="bulk-found-research"><i className="fa fa-fw fa-table"></i> Research</Link>
                     </li>
                     <li>
                         <a href="forms.html"><i className="fa fa-fw fa-edit"></i> Forms</a>
@@ -193,13 +194,13 @@ const Research = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <a href="/bulk-found-research">
+                            <Link to="/bulk-found-research">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
                                     <div className="clearfix"></div>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-lg-3 col-md-6">

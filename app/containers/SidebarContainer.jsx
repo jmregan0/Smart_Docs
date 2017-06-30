@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Sidebar from '../components/Sidebar'
-import { findResearchOnInput } from '../action-creators/research'
+import { findResearchOnInput, removeEntity, moveEntityUp, moveEntityDown } from '../action-creators/research'
 
 
 const mapState = (state) => {
@@ -12,7 +12,10 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
 		return {
-			findResearchOnInput: (tags) => dispatch(findResearchOnInput(tags))
+			findResearchOnInput: (tags) => dispatch(findResearchOnInput(tags)),
+			removeEntity: (entityId) => dispatch(removeEntity(entityId)),
+			moveEntityUp: (entityId) => dispatch(moveEntityUp(entityId)),
+			moveEntityDown: (entityId) => dispatch(moveEntityDown(entityId)),
 		}
   }
 
