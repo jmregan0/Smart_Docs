@@ -21,7 +21,8 @@ class EntityContainer extends React.Component {
       wikiSearch(entity)
       .then(searchResults=>{
         //TRIM SEARCH RESULTS
-        const trimmed = searchResults.query.search.slice(0,3);
+        console.log('search results from wiki api', searchResults)
+        const trimmed = searchResults.search.slice(0,3);
 
         //update state with new object
         const oldResults = this.state.searchResults;
@@ -52,7 +53,7 @@ const mapState = ({nlpResults}) => ({nlpResults})
 export default connect(mapState)(EntityContainer)
 
 const wikiSearch = entity => {
-  const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
+  const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
 
   // encode non-ascii characters
   let query = encoder.htmlEncode(entity);
