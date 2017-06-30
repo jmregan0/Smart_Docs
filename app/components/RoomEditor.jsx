@@ -28,7 +28,8 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      refRoute:null
+      refRoute:null,
+      self: {uid:"", name:""}
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -98,10 +99,24 @@ class DraftjsScratchpad extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log("these props are set", nextProps.users.selected)
-    console.log(this.props.fireRefRoom.child(nextProps.users.selected.name))
-    // this.fireRefPath = this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)
-    this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)})
+    // console.log("roomeditor, somponent wil receive props", nextProps.users.selected)
+    if(nextProps.users.selected.name){
+      // console.log("roomeditor, component will receive props", this.props.fireRefRoom.child(nextProps.users.selected.name))
+      // this.fireRefPath = this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)
+      var uid=nextProps.users.selected.uid?nextProps.users.selected.uid:this.state.self.uid
+      console.log("user loading from", uid)
+      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{
+        console.log("(child 1)", nextProps.users.selected.name, "(child 2)", this.state.self.uid)
+
+        this.loadNoteFromFirebase()
+      })
+      
+    }else{
+      // console.log("refroute set to null")
+      this.setState({refRoute:null})
+      this.setState({editorState: EditorState.createEmpty()})
+      
+    }
     //load note
 
 
@@ -117,11 +132,11 @@ class DraftjsScratchpad extends React.Component {
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
-        this.setState({userUidToGetNotes:null});
         this.setState({editorState: EditorState.createEmpty()});
       }
       else {
-        this.setState({userUidToGetNotes:user.uid});
+        var name = user.email?user.email:"anon"
+        this.setState({self: {uid:user.uid, name:name}})
         console.log('new user, yes?',user.uid);
         this.loadNoteFromFirebase(user.uid);
       }
@@ -129,12 +144,14 @@ class DraftjsScratchpad extends React.Component {
   }
 
   loadNoteFromFirebase(uid){
-    if(this.state.refRoute){
+    // console.log("coooooooooooool")
 
+    if(this.state.refRoute&&this.props.users.selected.uid){
+      console.log("made it into loading block")
       return this.state.refRoute.once(
         'value',
         snapshot => {
-          console.log("From loadNoteFromFirebase:",snapshot.val());
+          // console.log("From loadNoteFromFirebase:",snapshot.val());
 
           if(snapshot.val()){
             const newEditorState =
@@ -143,6 +160,24 @@ class DraftjsScratchpad extends React.Component {
             this.setState({editorState: newEditorState});
           }
       });
+    }else if(this.state.refRoute&&this.props.users.selected.name){
+        // console.log("else if fired on room editor, should clear")
+        console.log()
+        return this.state.refRoute.once(
+        'value',
+        snapshot => {
+          // console.log("From loadNoteFromFirebase:",snapshot.val());
+
+          if(snapshot.val()){
+            const newEditorState =
+              rawContentToEditorState(this.state.editorState,snapshot.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      });
+    }else{
+        this.setState({editorState: EditorState.createEmpty()});
+
     }
   }
 
@@ -199,6 +234,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
+        <h2>Ownnotes Current Room(current room here)</h2>
           <div>
             <BlockStyleControls
               editorState={this.state.editorState}
@@ -330,4 +366,23 @@ class StyleButton extends React.Component {
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
     }
+}
+
+const rawContentToEditorState = (editorState,rawContent) => {
+  if(!rawContent.entityMap) rawContent.entityMap = {}
+
+  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
+
+  let newEditorState = EditorState.push(
+    editorState,
+    contentStateConvertedFromRaw
+  )
+  return newEditorState;
+
+  /*
+  return EditorState.forceSelection(
+    newEditorState,
+    editorState.getSelection()
+  )
+  */
 }

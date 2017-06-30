@@ -28,7 +28,7 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      userUidToGetNotes:""
+      refRoute:null
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -99,6 +99,15 @@ class DraftjsScratchpad extends React.Component {
   }
 
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.users.selected.uid){
+      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid).child("note")}, ()=>{
+        this.loadNoteFromFirebase();
+        
+      })
+    }
+  }
+
   componentWillUnmount(){
     this.clearTimer();
   }
@@ -121,7 +130,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   loadNoteFromFirebase(uid){
-    return this.props.fireRefNotes.child(uid).once(
+    return this.state.refRoute.once(
       'value',
       snapshot => {
         console.log("From loadNoteFromFirebase:",snapshot.val());
@@ -185,6 +194,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
+        <h2>(RoomName & PeerName)</h2>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
@@ -307,4 +317,23 @@ class StyleButton extends React.Component {
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
     }
+}
+
+const rawContentToEditorState = (editorState,rawContent) => {
+  if(!rawContent.entityMap) rawContent.entityMap = {}
+
+  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
+
+  let newEditorState = EditorState.push(
+    editorState,
+    contentStateConvertedFromRaw
+  )
+  return newEditorState;
+
+  /*
+  return EditorState.forceSelection(
+    newEditorState,
+    editorState.getSelection()
+  )
+  */
 }
