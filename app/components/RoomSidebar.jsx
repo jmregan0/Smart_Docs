@@ -21,7 +21,7 @@ export default class RoomSidebar extends React.Component {
         this.handleFormChange = this.handleFormChange.bind(this)
         this.roomClickHandler = this.roomClickHandler.bind(this)
         this.backToRoomsClickHandler = this.backToRoomsClickHandler.bind(this)
-
+        this.userClickHandler = this.userClickHandler.bind(this)
     }
 
 
@@ -34,6 +34,7 @@ export default class RoomSidebar extends React.Component {
         var name = event.target.name;
         
         var userName=this.state.self.name
+        var userUid = this.state.self.uid
         //set selected room
         this.props.fireRefRoom.child(name).child('users').on('value', data=>{
             this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
@@ -46,14 +47,14 @@ export default class RoomSidebar extends React.Component {
             this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).transaction((currentData)=>{
                 // console.log("-----this should never be null", this.state.roomsSelected)
                 console.log("----------important", name)
-            this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:this.state.self.name, inRoom:false}) 
+            this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:userName, uid:userUid, inRoom:false}) 
 
                 if(currentData===null){
                     // console.log("currentdata doesnt exist")
-                    return {userName:userName, inRoom:true} 
+                    return {userName:userName, uid:userUid, inRoom:true} 
                 }else{
                     // console.log("currentData exists")
-                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).set({userName:userName, inRoom:true})
+                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).set({userName:userName, uid:userUid, inRoom:true})
                 }
 
             })
@@ -64,8 +65,8 @@ export default class RoomSidebar extends React.Component {
     }
     
     userClickHandler(event){
-
-        store.dispatch(setCurrentUser(event.target.innerHTML))
+        // console.log("this is rid", this)
+        store.dispatch(setCurrentUser({uid:event.target.name, rid:this.state.roomsSelected.rid}))
 
     }
 
@@ -74,7 +75,7 @@ export default class RoomSidebar extends React.Component {
         console.log("1", this.state.roomsSelected.name)
         console.log("2", this.state.self.uid)
 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, inRoom:false})   
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})   
 
         this.setState({inRoom:false})
         this.setState({value:""})
@@ -91,7 +92,7 @@ export default class RoomSidebar extends React.Component {
 
         this.setState(
             {setSelectedRoomFirebase:name}, ()=>{
-                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:this.state.self.name, inRoom:false})
+                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
                 this.props.fireRefRoom.child(name).child('users').on('value', data=>{
                     console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
                     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
@@ -99,10 +100,10 @@ export default class RoomSidebar extends React.Component {
 
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).transaction((currentData)=>{
                     if(currentData===null){
-                        return {userName:userName, inRoom:true} 
+                        return {userName:this.state.self.name, uid:this.state.self.uid, inRoom:true} 
                     }else{
                         console.log("room is already created", currentData)
-                        this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).set({userName:userName, inRoom:true})
+                        this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:true})
                     }
 
                 })
@@ -148,7 +149,7 @@ export default class RoomSidebar extends React.Component {
                 var name = user.email?user.email:"anon"
 
                 if(this.state.roomsSelected.name){
-                    this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, inRoom:false})
+                    this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
                 }
                 
                 this.setState({self: {uid:user.uid, name:name}, inRoom:false, roomsSelected: {name:"", rid:"", users:{}}}, ()=>{
@@ -164,7 +165,7 @@ export default class RoomSidebar extends React.Component {
     render(){
         var bool=this.state.inRoom
 
-        console.log(this.state.roomsList)
+        console.log(this.state.roomsSelected.users)
         return(
         <div>
         {
