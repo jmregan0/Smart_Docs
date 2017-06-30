@@ -27,9 +27,7 @@ class EntityContainer extends React.Component {
         //update state with new object
         const oldResults = this.state.searchResults;
         const newResults = Object.assign({},oldResults,{[entity]:trimmed});
-        this.setState({searchResults: newResults},
-          ()=>console.log('Promise returned for: ',entity,', new state: ',this.state.searchResults)
-        );
+        this.setState({searchResults: newResults});
       })
       .catch(error=>console.log('wikiSearch result error for entity: ',entity,', error: ',error));
     });

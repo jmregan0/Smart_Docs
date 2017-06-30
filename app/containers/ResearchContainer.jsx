@@ -10,6 +10,7 @@ const mapState = (state) => {
 		researchResults: state.researchResults,
 		nlpRelationships: state.nlpResults.nlpRelationships.relationships,
 		nlpSentiment: state.nlpResults.nlpSentiment,
+		nlpEntity: state.nlpResults.nlpEntity.entities
 	}
 }
 

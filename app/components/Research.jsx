@@ -9,6 +9,7 @@ const Research = (props) => {
   const relationships = props.nlpRelationships
   console.log('research results', researchResults)
   console.log('all props', props)
+  console.log('props.nlpEntity', props.nlpEntity)
 
   return(
 
@@ -187,21 +188,21 @@ const Research = (props) => {
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col-xs-3">
-                                        <i className="fa fa-tasks fa-5x"></i>
+                                        <i className="fa fa-map fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">0</div>
-                                        <div><h5>Saved Resources</h5></div>
+                                        <div className="huge">{props.nlpEntity.length}</div>
+                                        <div><h5>Entity Details</h5></div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <Link to="/entity">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
                                     <div className="clearfix"></div>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-lg-6 col-md-6">
