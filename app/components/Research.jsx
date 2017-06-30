@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import axios from 'axios'
 
 const Research = (props) => {
-  const researchResults = props.researchResults;
+  const researchResults = props.researchResults
   const relationships = props.nlpRelationships
   console.log('research results', researchResults)
   console.log('all props', props)
@@ -209,8 +209,8 @@ const Research = (props) => {
                                         <i className="fa fa-smile-o fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">124</div>
-                                        <div>SentimentResults</div>
+                                        <div className="huge">{props.nlpSentiment.entities.length}</div>
+                                        <div>Sentiment Results</div>
                                     </div>
                                 </div>
                             </div>
@@ -343,7 +343,7 @@ const Research = (props) => {
                                               props.researchResults ? researchResults.researchResults.map((item, index) => {
                                                   var title = item.title[0].slice(0,50) + '...'
                                                   return (
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{index + 1}</td>
                                                         <td>{title}</td>
                                                         <td>{item.type}</td>
