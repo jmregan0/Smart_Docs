@@ -59,9 +59,6 @@ export default class RoomSidebar extends React.Component {
             })
         })
         
-            // place for transaction
-
-        
         this.setState({inRoom:true})
         
     }
