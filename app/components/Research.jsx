@@ -183,7 +183,6 @@ const Research = (props) => {
                 <div className="row">
                     <div className="col-lg-12 col-md-12">
                         <div className="panel panel-primary">
-                            <Link to="/bulk-found-research">
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col-xs-3">
@@ -195,6 +194,7 @@ const Research = (props) => {
                                     </div>
                                 </div>
                             </div>
+                            <Link to="/bulk-found-research">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
@@ -203,7 +203,7 @@ const Research = (props) => {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-6">
+                    <div className="col-lg-4 col-md-4">
                         <div className="panel panel-green">
                             <div className="panel-heading">
                                 <div className="row">
@@ -225,7 +225,7 @@ const Research = (props) => {
                             </a>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-6">
+                    <div className="col-lg-4 col-md-4">
                         <div className="panel panel-yellow">
                             <div className="panel-heading">
                                 <div className="row">
@@ -247,7 +247,7 @@ const Research = (props) => {
                             </a>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-6">
+                    <div className="col-lg-4 col-md-4">
                         <div className="panel panel-red">
                             <div className="panel-heading">
                                 <div className="row">
