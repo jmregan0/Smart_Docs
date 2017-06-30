@@ -283,5 +283,8 @@ button {
   color: #2f79b9;
   padding: 0 0 0 5px; }
 
+li {
+  cursor: pointer; }
+
 li a:hover {
   color: darkslategray; }

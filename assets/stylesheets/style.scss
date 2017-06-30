@@ -436,6 +436,10 @@ display: inline-block;
 //   opacity: 1;
 // }
 
+li {
+  cursor: pointer;
+}
+
 li a:hover {
   color: darkslategray
 }
