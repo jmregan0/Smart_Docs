@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const Research = (props) => {
   const researchResults = props.researchResults;
-  console.log('research results', researchResults)
+  console.log('Research component:', props);
 
   return(
 
