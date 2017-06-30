@@ -1,10 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import {Encoder} from 'node-html-encoder';
+import ReactHtmlParser from 'react-html-parser';
 
 var encoder = new Encoder('entity');
 
-var staticEntities = ['pikachu','charmander'];
+var staticEntities = ['beets','bears','Battlestar Galactica'];
 
 export default class EntityDetail extends React.Component {
   constructor(){
@@ -55,15 +56,6 @@ const wikiSearch = entity => {
 
   return axios.post(SEARCHURL,{tag:query})
   .then(res => res.data)
-  /*
-  .then(searchResults=>{
-    console.log('axios result:',searchResults);
-    const oldResults = this.state.searchResults;
-    const newResults = Object.assign({},oldResults,{[query]:searchResults.query.search});
-    this.setState({searchResults: newResults});
-  })
-  .catch(error=>console.error);
-  */
 }
 
 const EntityTable = ({entity,results}) => {
@@ -72,8 +64,8 @@ const EntityTable = ({entity,results}) => {
     <div>
       <table className="table table-striped">
         <thead>
-          <tr colSpan='4'>
-            <th>{entity}</th>
+          <tr>
+            <th colSpan='4'>{entity}</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +79,7 @@ const EntityTable = ({entity,results}) => {
             <tr key={result.title}>
               <td>{i}</td>
               <td>{result.title}</td>
-              <td>{result.snippet}</td>
+              <td><div>{ReactHtmlParser(result.snippet)}</div></td>
               <td>{result.timestamp}</td>
             </tr>
           )}
