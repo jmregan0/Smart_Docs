@@ -11,7 +11,7 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
 
 class DraftjsScratchpad extends React.Component {
@@ -28,7 +28,7 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      userUidToGetNotes:""
+      refRoute:null
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -94,10 +94,18 @@ class DraftjsScratchpad extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.clearTimer();
-    this.setTimer();
+    this.writeNoteToFirebase()
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log("these props are set", nextProps.users.selected)
+    console.log(this.props.fireRefRoom.child(nextProps.users.selected.name))
+    // this.fireRefPath = this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)
+    this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)})
+    //load note
+
+
+  }
 
   componentWillUnmount(){
     this.clearTimer();
@@ -121,24 +129,30 @@ class DraftjsScratchpad extends React.Component {
   }
 
   loadNoteFromFirebase(uid){
-    return this.props.fireRefNotes.child(uid).once(
-      'value',
-      snapshot => {
-        console.log("From loadNoteFromFirebase:",snapshot.val());
+    if(this.state.refRoute){
 
-        if(snapshot.val()){
-          const newEditorState =
-            rawContentToEditorState(this.state.editorState,snapshot.val());
+      return this.state.refRoute.once(
+        'value',
+        snapshot => {
+          console.log("From loadNoteFromFirebase:",snapshot.val());
 
-          this.setState({editorState: newEditorState});
-        }
-    });
+          if(snapshot.val()){
+            const newEditorState =
+              rawContentToEditorState(this.state.editorState,snapshot.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      });
+    }
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
+    
+    if(this.state.refRoute){
+      return this.state.refRoute.set(rawState)
+    }
   }
 
   handleKeyCommand = command => {
@@ -218,7 +232,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-		findRelationships: (text) => dispatch(findRelationships(text)),
+    findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -316,23 +330,4 @@ class StyleButton extends React.Component {
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
     }
-}
-
-const rawContentToEditorState = (editorState,rawContent) => {
-  if(!rawContent.entityMap) rawContent.entityMap = {}
-
-  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
-
-  let newEditorState = EditorState.push(
-    editorState,
-    contentStateConvertedFromRaw
-  )
-  return newEditorState;
-
-  /*
-  return EditorState.forceSelection(
-    newEditorState,
-    editorState.getSelection()
-  )
-  */
 }

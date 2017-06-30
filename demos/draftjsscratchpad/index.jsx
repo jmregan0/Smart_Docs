@@ -2,6 +2,8 @@ import React from 'react'
 import firebase from 'APP/fire'
 import SidebarContainer from '../../app/containers/SidebarContainer'
 import SentimentometerContainer from '../../app/containers/SentimentometerContainer'
+import RoomEditorContainer from '../../app/containers/RoomEditorContainer'
+import PeerContentsContainer from '../../app/containers/PeerContentsContainer'
 import DraftjsScratchpad from './DraftjsScratchpad'
 import RoomSidebar from '../../app/components/RoomSidebar'
 import UserSidebar from '../../app/components/UserSidebar'
@@ -36,6 +38,12 @@ export default ({children, params: {room}}) =>
       {/*sentiment bar is passed level 0-100*/}
       <SentimentometerContainer />
       <SidebarContainer/>
+    </div>
+    <div className="col-sm-6">
+      <RoomEditorContainer fireRefRoom={db.ref('rooms')} />
+    </div>
+    <div className="col-sm-6">
+      <PeerContentsContainer fireRefRoom={db.ref('rooms')} />
     </div>
   </div>
 

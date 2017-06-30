@@ -11,7 +11,7 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
 
 class DraftjsScratchpad extends React.Component {
@@ -53,7 +53,7 @@ class DraftjsScratchpad extends React.Component {
 
   emitChanges(){
     //console.log('emitting changes');
-    this.writeNoteToFirebase()
+    // this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
     // ---------------
@@ -135,11 +135,11 @@ class DraftjsScratchpad extends React.Component {
     });
   }
 
-  writeNoteToFirebase = () => {
-    const currentContent = this.state.editorState.getCurrentContent()
-    const rawState = convertToRaw(currentContent)
-    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
-  }
+  // writeNoteToFirebase = () => {
+  //   const currentContent = this.state.editorState.getCurrentContent()
+  //   const rawState = convertToRaw(currentContent)
+  //   return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
+  // }
 
   handleKeyCommand = command => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
@@ -185,21 +185,12 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-          <div>
-            <BlockStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleBlockType}
-            />
-            <InlineStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleInlineStyle}
-            />
-          </div>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             blockStyleFn={myBlockStyleFn}
+            readOnly="true"
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
         </div>
@@ -218,7 +209,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-		findRelationships: (text) => dispatch(findRelationships(text)),
+    findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -316,23 +307,4 @@ class StyleButton extends React.Component {
             onMouseDown = { this.onToggle } > { this.props.label } < /span>
         );
     }
-}
-
-const rawContentToEditorState = (editorState,rawContent) => {
-  if(!rawContent.entityMap) rawContent.entityMap = {}
-
-  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
-
-  let newEditorState = EditorState.push(
-    editorState,
-    contentStateConvertedFromRaw
-  )
-  return newEditorState;
-
-  /*
-  return EditorState.forceSelection(
-    newEditorState,
-    editorState.getSelection()
-  )
-  */
 }

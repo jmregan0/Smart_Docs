@@ -17,6 +17,9 @@ export default class RoomSidebar extends React.Component {
                     inRoom:false                 
                  }
 
+        this.toggleBlockType = (type) => this._toggleBlockType(type);
+        this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleFormChange = this.handleFormChange.bind(this)
         this.roomClickHandler = this.roomClickHandler.bind(this)
@@ -66,14 +69,14 @@ export default class RoomSidebar extends React.Component {
     
     userClickHandler(event){
         // console.log("this is rid", this)
-        store.dispatch(setCurrentUser({uid:event.target.name, rid:this.state.roomsSelected.rid}))
+        store.dispatch(setCurrentUser({uid:event.target.name, name:this.state.roomsSelected.rid}))
 
     }
 
     backToRoomsClickHandler(){
-        console.log("-----this.selectedRoom", this.state.roomsSelected)
-        console.log("1", this.state.roomsSelected.name)
-        console.log("2", this.state.self.uid)
+        // console.log("-----this.selectedRoom", this.state.roomsSelected)
+        // console.log("1", this.state.roomsSelected.name)
+        // console.log("2", this.state.self.uid)
 
         this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})   
 
@@ -127,12 +130,12 @@ export default class RoomSidebar extends React.Component {
         this.props.fireRefRoom.on('value', data=>{
 
             this.setState({roomsList:data.val()})
-            console.log("update before fire", this.state.setSelectedRoomFirebase)
+            // console.log("update before fire", this.state.setSelectedRoomFirebase)
             if(this.state.setSelectedRoomFirebase){
                 // console.log("update is firing")
                 var newStatePrime = Object.assign(this.state, {roomsSelected: {rid:this.state.setSelectedRoomFirebase, name:this.state.setSelectedRoomFirebase, users:data.val()[this.state.setSelectedRoomFirebase].users}})
                 this.setState(newStatePrime)
-                console.log("setting setSelectedRoomFirebase to false")
+                // console.log("setting setSelectedRoomFirebase to false")
                 this.setState({setSelectedRoomFirebase:false})
             }else{
 
@@ -165,7 +168,7 @@ export default class RoomSidebar extends React.Component {
     render(){
         var bool=this.state.inRoom
 
-        console.log(this.state.roomsSelected.users)
+        // console.log(this.state.roomsSelected.users)
         return(
         <div>
         {
@@ -174,8 +177,8 @@ export default class RoomSidebar extends React.Component {
                 <div className="well">
                     <ul className="nav ">
                         <li onClick={this.backToRoomsClickHandler}><a href="#">Back to Rooms List</a></li>
-                        <li id="main-user-head" className="nav-header"><a href="#">Current Room - {this.state.roomsSelected.rid}</a></li>
-                        <li onClick={this.userClickHandler}>Users List</li>
+                        <li id="main-user-head" className="nav-header">Current Room - {this.state.roomsSelected.rid}</li>
+                        <li onClick={this.userClickHandler}>Browse Collab Notes By User</li>
                         {
                             Object.keys(this.state.roomsSelected.users).map((user)=>{
                                 return (
@@ -196,7 +199,7 @@ export default class RoomSidebar extends React.Component {
                   <input type="submit" value="Submit"/>
                 </form> 
                 <ul className="nav ">
-                    <li className="nav-header">List Rooms</li>
+                    <li className="nav-header">Contribute To These Rooms</li>
                     {
                         this.state.roomsList?Object.keys(this.state.roomsList).map((room)=>{
                             return(
