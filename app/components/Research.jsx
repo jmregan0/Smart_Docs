@@ -212,7 +212,7 @@ const Research = (props) => {
                                         <i className="fa fa-smile-o fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">124</div>
+                                        <div className="huge">{props.nlpSentiment.entities.length}</div>
                                         <div><h5>Sentiment Results</h5></div>
                                     </div>
                                 </div>
