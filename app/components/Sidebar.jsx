@@ -21,7 +21,7 @@ return(
             {
                 props.entities ?
                 <ul className="nav">
-                        <li className="nav-header">Entities:
+                        <li className="entities-header">Entities:
                         <a href="#" data-tooltip="Entities are real-world objects, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. These will be used to generate further research when you click the 'Show Research' button. You may click the red 'X' to remove a given entity from further research. Entities are also grouped in threes for more meaningful research relationships so you may click the blue up/down arrows to group the entities into threes."><span className="glyphicon glyphicon-info-sign tooltip">
                         </span>
                         </a>

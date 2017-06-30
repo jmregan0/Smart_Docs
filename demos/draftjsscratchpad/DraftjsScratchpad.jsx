@@ -185,26 +185,25 @@ class DraftjsScratchpad extends React.Component {
     }
     return (
       <div>
-        <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-          <div>
-            <BlockStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleBlockType}
-            />
-            <InlineStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleInlineStyle}
-            />
-          </div>
-          <Editor
+        <div>
+          <BlockStyleControls
             editorState={this.state.editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.onChange}
-            blockStyleFn={myBlockStyleFn}
+            onToggle={this.toggleBlockType}
+          />
+          <InlineStyleControls
+            editorState={this.state.editorState}
+            onToggle={this.toggleInlineStyle}
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
           <Link to="/entity">EntityDetail</Link>
         </div>
+        <Editor
+          editorState={this.state.editorState}
+          handleKeyCommand={this.handleKeyCommand}
+          onChange={this.onChange}
+          blockStyleFn={myBlockStyleFn}
+        />
+        <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
       </div>
     )
   }
@@ -230,7 +229,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }

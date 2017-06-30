@@ -3,9 +3,10 @@ const axios = require('axios')
 module.exports = require('express').Router()
 
 .post('/', (req, res, next) => {
-  console.log('tags', req.body)
-  // make sure tags for cross ref come across in array
-  let tags = req.body.tags
+
+  let tags = req.body.tags.slice(0,13)
+
+  console.log('tags', tags)
 
   // following algorithm to construct proper url query with users tags appended
   var query = '';

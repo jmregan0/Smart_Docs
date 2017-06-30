@@ -5,10 +5,12 @@ import { findResearchOnInput } from '../action-creators/research'
 
 
 
-const mapState = ({nlpResults, researchResults}) => ({
-    nlpResults,
-		researchResults,
-})
+const mapState = (state) => {
+	return {
+		researchResults: state.researchResults,
+		nlpRelationships: state.nlpResults.nlpRelationships.relationships
+	}
+}
 
 const mapDispatch = (dispatch) => {
   return {
