@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 import axios from 'axios'
 
 const Research = (props) => {
-  const researchResults = props.researchResults
+  const researchResults = props.researchResults;
   const relationships = props.nlpRelationships
   console.log('research results', researchResults)
   console.log('all props', props)
@@ -135,6 +135,9 @@ const Research = (props) => {
                     <li>
                         <Link to="/relationships"><i className="fa fa-fw fa-connectdevelop"></i> Relationships</Link>
                     </li>
+                    <li>
+                        <Link to="/sentiment"><i className="fa fa-fw fa-smile-o"></i> Relationships</Link>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -157,7 +160,7 @@ const Research = (props) => {
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-12 col-md-12">
+                    <div className="col-lg-6 col-md-6">
                         <div className="panel panel-primary">
                             <div className="panel-heading">
                                 <div className="row">
@@ -166,7 +169,7 @@ const Research = (props) => {
                                     </div>
                                     <div className="col-xs-9 text-right">
                                         <div className="huge">{researchResults.researchResults.length}</div>
-                                        <div>Resources Found!</div>
+                                        <div><h5>Resources Found!</h5></div>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +182,7 @@ const Research = (props) => {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4">
+                    <div className="col-lg-6 col-md-6">
                         <div className="panel panel-green">
                             <div className="panel-heading">
                                 <div className="row">
@@ -188,7 +191,7 @@ const Research = (props) => {
                                     </div>
                                     <div className="col-xs-9 text-right">
                                         <div className="huge">0</div>
-                                        <div>Saved Resources</div>
+                                        <div><h5>Saved Resources</h5></div>
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +204,7 @@ const Research = (props) => {
                             </a>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4">
+                    <div className="col-lg-6 col-md-6">
                         <div className="panel panel-yellow">
                             <div className="panel-heading">
                                 <div className="row">
@@ -209,8 +212,8 @@ const Research = (props) => {
                                         <i className="fa fa-smile-o fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">{props.nlpSentiment.entities.length}</div>
-                                        <div>Sentiment Results</div>
+                                        <div className="huge">124</div>
+                                        <div><h5>Sentiment Results</h5></div>
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +226,7 @@ const Research = (props) => {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4">
+                    <div className="col-lg-6 col-md-6">
                         <div className="panel panel-red">
                             <div className="panel-heading">
                                 <div className="row">
@@ -232,7 +235,7 @@ const Research = (props) => {
                                     </div>
                                     <div className="col-xs-9 text-right">
                                         <div className="huge">{relationships.length}</div>
-                                        <div>Relationship Results</div>
+                                        <div><h5>Relationship Results</h5></div>
                                     </div>
                                 </div>
                             </div>
