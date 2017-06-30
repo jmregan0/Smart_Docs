@@ -24,10 +24,10 @@ export default ({children, params: {room}}) =>
         stored in Firebase. Each scratchpad is just a string that the
         component will listen to, but it could be the root of a more complex
         data structure if we wanted. */}
-    <div className="col-sm-3">
+    <div className="col-sm-2">
       <RoomSidebar fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
     </div>
-    <div className="col-sm-6">
+    <div className="col-sm-7">
       <div className="col-sm-12">
         <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms').child(room)}/>
       </div>
