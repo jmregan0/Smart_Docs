@@ -212,7 +212,7 @@ const Research = (props) => {
                                         <i className="fa fa-smile-o fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">124</div>
+                                        <div className="huge">{props.nlpSentiment.entities.length}</div>
                                         <div><h5>Sentiment Results</h5></div>
                                     </div>
                                 </div>
@@ -346,7 +346,7 @@ const Research = (props) => {
                                               props.researchResults ? researchResults.researchResults.map((item, index) => {
                                                   var title = item.title[0].slice(0,50) + '...'
                                                   return (
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{index + 1}</td>
                                                         <td>{title}</td>
                                                         <td>{item.type}</td>
