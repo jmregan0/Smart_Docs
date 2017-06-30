@@ -11,6 +11,7 @@ import firebase from 'APP/fire'
 import Editor from '../demos/draftjsscratchpad'
 import ResearchContainer from './containers/ResearchContainer'
 import CollectedResourceContainer from './containers/CollectedResourceContainer'
+import RelationshipsContainer from './containers/RelationshipsContainer'
 
 import Demos from 'APP/demos'
 
@@ -88,6 +89,7 @@ render(
        </Route>
        <Route path="/research" component={ResearchContainer} />
        <Route path="/bulk-found-research" component={CollectedResourceContainer}/>
+       <Route path="/relationships" component={RelationshipsContainer}/>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,
