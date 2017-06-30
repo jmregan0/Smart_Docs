@@ -13,6 +13,7 @@ import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
 import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
 import Promise from 'bluebird';
+import {Link} from 'react-router';
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
@@ -202,6 +203,7 @@ class DraftjsScratchpad extends React.Component {
             blockStyleFn={myBlockStyleFn}
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
+          <Link to="/entity">EntityDetail</Link>
         </div>
       </div>
     )
