@@ -44,7 +44,8 @@ export default class RoomSidebar extends React.Component {
         console.log(" disconnecting from", name)
         this.setState({setSelectedRoomFirebase:name},()=>{
             this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).transaction((currentData)=>{
-                console.log("-----this should never be null", this.state.roomsSelected)
+                // console.log("-----this should never be null", this.state.roomsSelected)
+                console.log("----------important", name)
             this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:this.state.self.name, inRoom:false}) 
 
                 if(currentData===null){
@@ -84,7 +85,6 @@ export default class RoomSidebar extends React.Component {
 
     handleSubmit(event){
         event.preventDefault()
-
 
             // User is signed in.
 
@@ -129,7 +129,7 @@ export default class RoomSidebar extends React.Component {
         this.props.fireRefRoom.on('value', data=>{
 
             this.setState({roomsList:data.val()})
-            // console.log("update before fire", this.state.setSelectedRoomFirebase)
+            console.log("update before fire", this.state.setSelectedRoomFirebase)
             if(this.state.setSelectedRoomFirebase){
                 // console.log("update is firing")
                 var newStatePrime = Object.assign(this.state, {roomsSelected: {rid:this.state.setSelectedRoomFirebase, name:this.state.setSelectedRoomFirebase, users:data.val()[this.state.setSelectedRoomFirebase].users}})
@@ -146,9 +146,19 @@ export default class RoomSidebar extends React.Component {
         // this.props.fireRefRoom.child("disconnected").onDisconnect().set("disconnected")
 
         firebase.auth().onAuthStateChanged((user)=> {
-            var name = user.email?user.email:"anon"
-            var newState = Object.assign(this.state, {self: {uid:user.uid, name:name}})
-            this.setState(newState)
+            if(user){
+
+                var name = user.email?user.email:"anon"
+
+                if(this.state.roomsSelected.name){
+                    this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, inRoom:false})
+                }
+                
+                this.setState({self: {uid:user.uid, name:name}, inRoom:false, roomsSelected: {name:"", rid:"", users:{}}}, ()=>{
+                    // this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, inRoom:false})
+                })
+                
+            }
 
 
         })
@@ -156,8 +166,8 @@ export default class RoomSidebar extends React.Component {
 
     render(){
         var bool=this.state.inRoom
-        // console.log("this.state.roomsSelected before render", this.state.roomsSelected)
-        // console.log("this.state.roomsSelected before render", this.state.roomsSelected.users)
+
+        console.log(this.state.roomsList)
         return(
         <div>
         {
