@@ -35,6 +35,11 @@ export default class RoomSidebar extends React.Component {
         
         var userName=this.state.self.name
         //set selected room
+        this.props.fireRefRoom.child(name).child('users').on('value', data=>{
+            console.log("ok", data.val())
+            console.log("we got a changer", {roomsSelected: {rid:name, name:name, users:data.val()}})
+            this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+        });
 
         //fix
 
@@ -132,6 +137,7 @@ export default class RoomSidebar extends React.Component {
             }
 
         });
+
         
         // this.props.fireRefRoom.child("disconnected").onDisconnect().set("disconnected")
 
@@ -158,7 +164,6 @@ export default class RoomSidebar extends React.Component {
                         <li onClick={this.backToRoomsClickHandler}><a href="#">Back to Rooms List</a></li>
                         <li id="main-user-head" className="nav-header"><a href="#">Current Room - {this.state.roomsSelected.rid}</a></li>
                         <li onClick={this.userClickHandler}>Users List</li>
-                        <li id="main-user-head" className="nav-header"><a href="#">Own User -{this.state.self.name}</a></li>
                         {
                             Object.keys(this.state.roomsSelected.users).map((user)=>{
                                 return (
