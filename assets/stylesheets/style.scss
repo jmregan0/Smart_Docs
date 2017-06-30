@@ -490,3 +490,11 @@ input {
   background-color: $bs-blue;
   color: white;
 }
+
+.bold {
+  font-weight: 900;
+}
+
+#about p, #download p, #contact p {
+  color: $light-gray;
+}

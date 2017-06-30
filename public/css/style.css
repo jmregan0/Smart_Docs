@@ -324,3 +324,9 @@ input {
 .bg-primary {
   background-color: #2f79b9;
   color: white; }
+
+.bold {
+  font-weight: 900; }
+
+#about p, #download p, #contact p {
+  color: #b2b2b3; }

@@ -19,10 +19,10 @@ const Landing = () => {
         </div>
       </header>
 
-      <section id="about" className="container content-section text-center">
+      <section id="about" className="container content-section">
         <div className="row">
           <div className="col-lg-8 col-lg-offset-2">
-              <h2>About SmartDocs</h2>
+              <h2 className="text-center">About <span className="bold">SmartDocs</span></h2>
               <p>SmartDocs is a collaborative document editor with Edison, an integrated research assistant.</p>
               <p>As you type, Edison parses your document for important entities. You can add and remove entities and when you're ready, Edison will perform research based on those entities. You can save research results you like and ignore the rest.</p>
               <p>Edison will also find relationships between entities and perform a sentiment analysis on individual entities and your document as a whole.</p>
@@ -37,7 +37,7 @@ const Landing = () => {
           <div className="container">
             <div className="col-lg-8 col-lg-offset-2">
               <h2>Try it now</h2>
-              <p>Start writing a document or even just paste a news story to get a feel for how SmartDocs works.</p>
+              <p>Start writing a document to get a feel for how SmartDocs works.</p>
               <a href="/demos/draftjsscratchpad/welcome" className="btn btn-default btn-lg">Start SmartDocs</a>
             </div>
           </div>
