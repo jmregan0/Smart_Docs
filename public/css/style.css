@@ -302,3 +302,6 @@ input {
 .entities-header {
   margin-top: 0px;
   color: black; }
+
+.panel-heading a:hover {
+  color: black; }
