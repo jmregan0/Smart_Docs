@@ -295,20 +295,26 @@ display: inline-block;
 }
 
 .alert-box {
+  width: 50vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -25vw;
+  margin-top: -40px;
 	padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }
 
 .success {
-    color: #368435;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    display: none;
+  color: #368435;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  display: none;
 }
 
-@-webkit-keyframes fadeout {
+/*@-webkit-keyframes fadeout {
     0% {opacity:1;}
     100% {opacity:0;}
 }
@@ -323,4 +329,4 @@ display: inline-block;
   -moz-animation   : fadeout 1s linear;
   -webkit-animation: fadeout 1s linear;
   animation        : fadeout 1s linear;
-}
+}*/
