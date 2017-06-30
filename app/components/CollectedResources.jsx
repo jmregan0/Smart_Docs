@@ -164,7 +164,6 @@ const CollectedResources = (props) => {
                                                 <th>Save?</th>
                                                 <th>Data Type</th>
                                                 <th>Title</th>
-                                                {/*<th>Abstract</th>*/}
                                                 <th>Author</th>
                                                 <th>Publisher</th>
                                                 {/*<th>ISBN</th>*/}
@@ -190,7 +189,7 @@ const CollectedResources = (props) => {
                         } else if(item.type === 'journal-article'){
                             data.type = 'Journal Article';
                             data.title = item.title[0];
-                            data.author = item.author[0].given +' '+ item.author[0].family
+                            {/*data.author = item.author[0].given +' '+ item.author[0].family*/}
                             data.publisher = item.publisher;
                             {/*data.publicationDate = item.published-print;*/}
                             data.url = item.URL;
@@ -236,7 +235,7 @@ const CollectedResources = (props) => {
                                 <td>{data.author || 'Not Found'}</td>
                                 <td>{data.publisher || 'Not Found'}</td>
                                 {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
-                                <td><a>{data.url}></a></td>
+                                <td><a href={data.url}>{data.url}</a></td>
                             </tr>
                         )
                     })
