@@ -36,8 +36,6 @@ export default class RoomSidebar extends React.Component {
         var userName=this.state.self.name
         //set selected room
         this.props.fireRefRoom.child(name).child('users').on('value', data=>{
-            console.log("ok", data.val())
-            console.log("we got a changer", {roomsSelected: {rid:name, name:name, users:data.val()}})
             this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
         });
 
@@ -92,9 +90,15 @@ export default class RoomSidebar extends React.Component {
 
         var userName=this.state.self.name?this.state.self.name:"anon"
         var name = this.state.value;
+
+
         this.setState(
             {setSelectedRoomFirebase:name}, ()=>{
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).onDisconnect().set({userName:this.state.self.name, inRoom:false})
+                this.props.fireRefRoom.child(name).child('users').on('value', data=>{
+                    console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+                    this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                });
 
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).transaction((currentData)=>{
                     if(currentData===null){
