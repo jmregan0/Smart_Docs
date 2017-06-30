@@ -6,7 +6,9 @@ import axios from 'axios'
 
 const Research = (props) => {
   const researchResults = props.researchResults;
+  const relationships = props.nlpRelationships
   console.log('research results', researchResults)
+  console.log('all props', props)
 
   return(
 
@@ -125,39 +127,13 @@ const Research = (props) => {
             <div className="collapse navbar-collapse navbar-ex1-collapse">
                 <ul className="nav navbar-nav side-nav">
                     <li>
-                        <Link to="research"><i className="fa fa-fw fa-dashboard"></i> Dashboard</Link>
+                        <Link to="/research"><i className="fa fa-fw fa-dashboard"></i> Dashboard</Link>
                     </li>
                     <li>
-                        <a href="charts.html"><i className="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+                        <Link to="/bulk-found-research"><i className="fa fa-fw fa-table"></i> Research</Link>
                     </li>
                     <li>
-                        <Link to="bulk-found-research"><i className="fa fa-fw fa-table"></i> Research</Link>
-                    </li>
-                    <li>
-                        <a href="forms.html"><i className="fa fa-fw fa-edit"></i> Forms</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-elements.html"><i className="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-                    </li>
-                    <li>
-                        <a href="bootstrap-grid.html"><i className="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i className="fa fa-fw fa-arrows-v"></i> Dropdown <i className="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" className="collapse">
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Dropdown Item</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="blank-page.html"><i className="fa fa-fw fa-file"></i> Blank Page</a>
-                    </li>
-                    <li className="active">
-                        <a href="index-rtl.html"><i className="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
+                        <Link to="/relationships"><i className="fa fa-fw fa-connectdevelop"></i> Relationships</Link>
                     </li>
                 </ul>
             </div>
@@ -252,10 +228,10 @@ const Research = (props) => {
                             <div className="panel-heading">
                                 <div className="row">
                                     <div className="col-xs-3">
-                                        <i className="fa fa-support fa-5x"></i>
+                                        <i className="fa fa-connectdevelop fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">13</div>
+                                        <div className="huge">{relationships.length}</div>
                                         <div>Relationship Results</div>
                                     </div>
                                 </div>
