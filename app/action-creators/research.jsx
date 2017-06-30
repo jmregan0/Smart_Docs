@@ -1,4 +1,4 @@
-import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS, REMOVE_ENTITY, SAVE_BOOKMARK } from '../constants'
+import { SET_SENTIMENT_RESULTS, SET_ENTITY_RESULTS, SET_RELATIONSHIP_RESULTS, SET_INITIAL_RESEARCH_RESULTS, MOVE_ENTITY_UP, MOVE_ENTITY_DOWN, REMOVE_ENTITY, SAVE_BOOKMARK } from '../constants'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
@@ -30,6 +30,16 @@ export const setRelationshipResults = relationshipResults => ({
 export const setInitialResearch = research => ({
   type: SET_INITIAL_RESEARCH_RESULTS,
   research
+})
+
+export const moveEntityUp = (entityId) => ({
+  type: MOVE_ENTITY_UP,
+  entityToMoveUp: entityId
+})
+
+export const moveEntityDown = (entityId) => ({
+  type: MOVE_ENTITY_DOWN,
+  entityToMoveDown: entityId
 })
 
 export const removeEntity = (entityId) => ({

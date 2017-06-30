@@ -5,7 +5,9 @@ import axios from 'axios'
 
 const CollectedResources = (props) => {
  console.log('research', props.researchResults.researchResults)
-
+ $( ".ok" ).unbind().click(function() {
+    $( "div.success" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
+  });
   return(
 
     <div id="wrapper">
@@ -185,7 +187,7 @@ const CollectedResources = (props) => {
 
                             <div className="col-lg-12">
                                 <h2>Collected Research Based on Your Keywords</h2>
-                                <div className="alert-box success fadeout">Saved to your Bookmarks
+                                <div className="alert-box success">Saved to your Bookmarks
                                 </div>
                                 <div className="table-responsive">
                                     <table className="table table-bordered table-hover">
@@ -259,7 +261,7 @@ const CollectedResources = (props) => {
 
                         return (
                             <tr key={'' + index}>
-                                <td><span className="ok"><span className="glyphicon glyphicon-ok" aria-label="Click to save this research to your Bookmarks" onClick={() => props.saveBookmark(item)}></span></span></td>
+                                <td><span className="glyphicon glyphicon-ok ok" aria-label="Click to save this research to your Bookmarks" onClick={() => props.saveBookmark(item)}></span></td>
                                 <td>{data.type}</td>
                                 <td>{data.title}</td>
                                 {/*<td>{data.abstract || 'NA'}</td>*/}

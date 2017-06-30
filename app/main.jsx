@@ -8,7 +8,7 @@ import WhoAmI from './components/WhoAmI'
 import Landing from './components/Landing'
 import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
-import EditorContainer from './containers/EditorContainer'
+import Editor from '../demos/draftjsscratchpad'
 import ResearchContainer from './containers/ResearchContainer'
 import CollectedResourceContainer from './containers/CollectedResourceContainer'
 
@@ -51,7 +51,7 @@ const App = ({children}) =>
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                Menu <i className="fa fa-bars"></i>
            </button>
-           <Link to='/demos' className="navbar-brand page-scroll">
+           <Link to='/demos/draftjsscratchpad/welcome' className="navbar-brand page-scroll">
                <i className="fa fa-play-circle"></i> <span className="light">Start</span> SmartDocs
            </Link>
            <Link to='/about' className="navbar-custom page-scroll">About</Link>
@@ -83,7 +83,7 @@ render(
      <Route path="/" component={App}>
        <IndexRedirect to="/landing" />
        <Route path="/landing" component={Landing}/>
-       <Route path="/demos/draft/:room" component={EditorContainer}/>
+       <Route path="/demos/:room" component={Editor}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
        <Route path="/research" component={ResearchContainer} />

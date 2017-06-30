@@ -26,9 +26,9 @@ export default ({children, params: {room}}) =>
         data structure if we wanted. */}
     <div className="col-sm-3">
       <RoomSidebar fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
-      
+
     </div>
-    <div className="col-sm-9">
+    <div className="col-sm-6">
       <div className="col-sm-12">
         <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms').child(room)}/>
       </div>
