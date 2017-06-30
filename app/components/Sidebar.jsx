@@ -16,7 +16,9 @@ return(
                         return entity.normalized
                     })
                     console.log("entities sent to research", selectedEntities)
-                    props.findResearchOnInput(selectedEntities)} }>Show Research</button> : null
+                    props.findResearchOnInput(selectedEntities)
+                    // props.sendSentiment(props.sentiment)
+                } }>Show Research</button> : null
             }
             {
                 props.entities ?

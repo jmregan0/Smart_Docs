@@ -305,3 +305,22 @@ input {
 
 .panel-heading a:hover {
   color: black; }
+
+.panel-footer .pull-left {
+  color: black; }
+
+.sentiment-header {
+  color: black; }
+
+.bg-neutral {
+  background-color: #b2b2b3; }
+
+.bg-success {
+  background-color: #54b253; }
+
+.bg-danger {
+  background-color: #db524b; }
+
+.bg-primary {
+  background-color: #2f79b9;
+  color: white; }
