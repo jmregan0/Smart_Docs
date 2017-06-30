@@ -110,7 +110,10 @@ export const findResearchOnInput = (tags) => {
         tags: tags
       }
     })
-    .then(result => result)
+    .then(result => {
+      console.log('result: ',result);
+      return result
+    })
     .then(result => {
       dispatch(setInitialResearch(result.data.message.items));
       browserHistory.push('/research')
