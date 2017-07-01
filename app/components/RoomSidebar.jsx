@@ -43,6 +43,7 @@ export default class RoomSidebar extends React.Component {
         //set selected room
         this.props.fireRefRoom.child(name).child('users').on('value', data=>{
             this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+            // this.props.fireRefRoom.child(name).child('users').off()
         });
 
         //fix
@@ -78,7 +79,8 @@ export default class RoomSidebar extends React.Component {
     backToRoomsClickHandler(event){
         event.preventDefault()
         store.dispatch(setCurrentUser({uid:"", name:""})) 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})   
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false}) 
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()  
 
         this.setState({inRoom:false})
         this.setState({value:""})
@@ -96,9 +98,10 @@ export default class RoomSidebar extends React.Component {
         this.setState(
             {setSelectedRoomFirebase:name}, ()=>{
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').onDisconnect().set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
-                this.props.fireRefRoom.child(name).child('users').on('value', data=>{
+                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
                     // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
                     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
                 });
 
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').transaction((currentData)=>{

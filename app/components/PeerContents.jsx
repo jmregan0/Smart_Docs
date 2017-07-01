@@ -100,6 +100,10 @@ class DraftjsScratchpad extends React.Component {
 
 
   componentWillReceiveProps(nextProps){
+    if(this.state.refRoute){
+      this.state.refRoute.off()
+    }
+
     if(nextProps.users.selected.uid){
       this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid).child("note")}, ()=>{
         this.loadNoteFromFirebase();
@@ -130,18 +134,32 @@ class DraftjsScratchpad extends React.Component {
   }
 
   loadNoteFromFirebase(uid){
-    return this.state.refRoute.once(
+    this.state.refRoute.once(
       'value',
       snapshot => {
         console.log("From loadNoteFromFirebase:",snapshot.val());
 
         if(snapshot.val()){
-          const newEditorState =
-            rawContentToEditorState(this.state.editorState,snapshot.val());
+          const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
 
           this.setState({editorState: newEditorState});
         }
     });
+
+    this.state.refRoute.on('value', (data)=>{
+      if(data.val()){
+          const newEditorState = rawContentToEditorState(this.state.editorState,data.val());
+
+          this.setState({editorState: newEditorState});
+        }
+    })
+
+                // this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
+                //     // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+                //     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                //     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
+                // });
+
   }
 
   // writeNoteToFirebase = () => {
