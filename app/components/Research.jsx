@@ -6,7 +6,8 @@ import axios from 'axios'
 
 const Research = (props) => {
   const researchResults = props.researchResults;
-  const relationships = props.nlpRelationships
+  const relationships = props.nlpRelationships;
+  const sentiment = props.nlpSentiment.entities;
   console.log('research results', researchResults)
   console.log('all props', props)
 
@@ -250,7 +251,7 @@ const Research = (props) => {
                     </div>
                 </div>
 
-                <div className="row">
+                {/*<div className="row">
                     <div className="col-lg-12">
                         <div className="panel panel-default">
                             <div className="panel-heading">
@@ -261,10 +262,10 @@ const Research = (props) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*/}
 
                 <div className="row">
-                    <div className="col-lg-4">
+                    {/*<div className="col-lg-4">
                         <div className="panel panel-default">
                             <div className="panel-heading">
                                 <h3 className="panel-title"><i className="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
@@ -276,55 +277,88 @@ const Research = (props) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-lg-4">
+                    </div>*/}
+
+                    <div className="col-lg-6">
                         <div className="panel panel-default">
                             <div className="panel-heading">
-                                <h3 className="panel-title"><i className="fa fa-clock-o fa-fw"></i> Tasks Panel</h3>
+                                <h3 className="panel-title"><i className="fa fa-linode fa-fw"></i> Breakdown of Writing </h3>
                             </div>
                             <div className="panel-body">
-                                <div className="list-group">
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">just now</span>
-                                        <i className="fa fa-fw fa-calendar"></i> Calendar updated
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">4 minutes ago</span>
-                                        <i className="fa fa-fw fa-book"></i> Commented on a post
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">23 minutes ago</span>
-                                        <i className="fa fa-fw fa-truck"></i> Order 392 shipped
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">46 minutes ago</span>
-                                        <i className="fa fa-fw fa-money"></i> Invoice 653 has been paid
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">1 hour ago</span>
-                                        <i className="fa fa-fw fa-user"></i> A new user has been added
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">2 hours ago</span>
-                                        <i className="fa fa-fw fa-check"></i> Completed task: "pick up dry cleaning"
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">yesterday</span>
-                                        <i className="fa fa-fw fa-globe"></i> Saved the world
-                                    </a>
-                                    <a href="#" className="list-group-item">
-                                        <span className="badge">two days ago</span>
-                                        <i className="fa fa-fw fa-check"></i> Completed task: "fix error on sales page"
-                                    </a>
+                                <div className="table-responsive">
+                                    <table className="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th> People </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {
+                                              sentiment.length ? sentiment.map((item, index) => {
+                                                  if(item.type === 'PERSON'){
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{item.normalized}</td>
+                                                        </tr>
+                                                    )
+                                                  }
+                                              })
+                                              : null
+                                            }
+                                        <br/>
+                                        <thead>
+                                            <tr>
+                                                <th> Places </th>
+                                            </tr>
+                                        </thead>
+
+                                            {
+                                                sentiment.length ? sentiment.map((item, index) => {
+                                                  if(item.type === 'LOCATION'){
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{item.normalized}</td>
+                                                        </tr>
+                                                    )
+                                                  }
+                                              })
+                                              : null
+                                            }
+                                        <br/>
+                                        <thead>
+                                            <tr>
+                                                <th> Organizations </th>
+                                            </tr>
+                                        </thead>
+
+                                            {
+                                                sentiment.length ? sentiment.map((item, index) => {
+                                                  if(item.type === 'ORGANIZATION'){
+                                                    return (
+                                                        <tr key={index}>
+                                                            <td>{item.normalized}</td>
+                                                        </tr>
+                                                    )
+                                                  }
+                                              })
+                                              : null
+                                            }
+
+                                        </tbody>
+
+                                    </table>
                                 </div>
                                 <div className="text-right">
-                                    <a href="#">View All Activity <i className="fa fa-arrow-circle-right"></i></a>
+                                    <Link to="bulk-found-research">View Research Detail <i className="fa fa-arrow-circle-right"></i></Link>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-4">
+
+
+                    <div className="col-lg-6">
                         <div className="panel panel-default">
                             <div className="panel-heading">
                                 <h3 className="panel-title"><i className="fa fa-paper-plane-o fa-fw"></i> Retrieved Research Digest</h3>
@@ -367,6 +401,8 @@ const Research = (props) => {
                             </div>
                         </div>
                     </div>
+
+
                 </div>
 
             </div>
