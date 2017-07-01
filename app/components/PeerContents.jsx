@@ -212,7 +212,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h2>(RoomName & PeerName)</h2>
+        <h2>Peer Notes</h2>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}

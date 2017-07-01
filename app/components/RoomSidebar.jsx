@@ -178,7 +178,7 @@ export default class RoomSidebar extends React.Component {
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
                     <ul className="nav ">
-                        <li onClick={this.backToRoomsClickHandler}><a href="#">Back to Rooms List</a></li>
+                        <li onClick={this.backToRoomsClickHandler}><a href="#">Back to Topics</a></li>
                         <li id="main-user-head" className="nav-header">Current Room - {this.state.roomsSelected.rid}</li>
                         <li onClick={this.userClickHandler}>Browse Collab Notes By User</li>
                         {

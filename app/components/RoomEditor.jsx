@@ -118,8 +118,6 @@ class DraftjsScratchpad extends React.Component {
       
     }
     //load note
-
-
   }
 
   componentWillUnmount(){
@@ -127,7 +125,6 @@ class DraftjsScratchpad extends React.Component {
   }
   componentDidMount() {
     this.setTimer();
-
     // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
@@ -135,19 +132,21 @@ class DraftjsScratchpad extends React.Component {
         this.setState({editorState: EditorState.createEmpty()});
       }
       else {
-        var name = user.email?user.email:"anon"
-        this.setState({self: {uid:user.uid, name:name}})
-        console.log('new user, yes?',user.uid);
-        this.loadNoteFromFirebase(user.uid);
+        var name = user.email?user.email:"anon";
+        this.setState({self: {uid:user.uid, name:name}});
+        this.setState({refRoute:this.props.fireRefRoom.child(this.props.users.selected.name).child("users").child(user.uid).child("note")}, ()=>{
+
+          this.loadNoteFromFirebase(user.uid);
+        })
+
       }
     });
   }
 
   loadNoteFromFirebase(uid){
-    // console.log("coooooooooooool")
 
     if(this.state.refRoute&&this.props.users.selected.uid){
-      console.log("made it into loading block")
+      console.log("block 1")
       return this.state.refRoute.once(
         'value',
         snapshot => {
@@ -161,8 +160,8 @@ class DraftjsScratchpad extends React.Component {
           }
       });
     }else if(this.state.refRoute&&this.props.users.selected.name){
-        // console.log("else if fired on room editor, should clear")
-        console.log()
+        console.log("block 2")
+        
         return this.state.refRoute.once(
         'value',
         snapshot => {
@@ -234,7 +233,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h2>Ownnotes Current Room(current room here)</h2>
+        <h2>My Notes</h2>
           <div>
             <BlockStyleControls
               editorState={this.state.editorState}
