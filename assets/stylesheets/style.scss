@@ -21,6 +21,7 @@ h1, h2 {
 
 div h1, div h2, div h2 p, #about p, #contact p, footer p {
   color: white;
+  padding-left: 10px;
 }
 
 a {
@@ -182,13 +183,6 @@ button{
   color: #5890ff;
 }
 
-.superFancyBlockquote {
-  color: #999;
-  font-family: 'Hoefler Text', Georgia, serif;
-  font-style: italic;
-  text-align: center;
-}
-
 ::selection {
   background: #ffb7b7; /* WebKit/Blink Browsers */
 }
@@ -201,7 +195,7 @@ button{
 }
 
 .skills{
-  margin:40px auto;
+  margin-bottom: 20px;
   background:#fff;
   /*box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 3px 5px 2.5px rgba(0, 0, 0, 0.5);
@@ -267,6 +261,7 @@ button{
   color:black;
   padding-left: 0;
   padding-right: 0;
+  width: 100%;
 }
 
 #main-user-head{
@@ -446,4 +441,60 @@ li {
 
 li a:hover {
   color: darkslategray
+}
+
+.col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+input {
+  width: 100%;
+}
+
+.well .nav-header {
+  margin-top: 20px;
+  color: $bs-blue;
+}
+
+.entities-header {
+  margin-top: 0px;
+  color: black;
+}
+
+.panel-heading a:hover {
+  color: black;
+}
+
+.panel-footer .pull-left {
+  color: black;
+}
+
+.sentiment-header {
+  color: black;
+}
+
+.bg-neutral {
+  background-color: $light-gray;
+}
+
+.bg-success {
+  background-color: $bs-green;
+}
+
+.bg-danger {
+  background-color: $bs-red;
+}
+
+.bg-primary {
+  background-color: $bs-blue;
+  color: white;
+}
+
+.bold {
+  font-weight: 900;
+}
+
+#about p, #download p, #contact p {
+  color: $light-gray;
 }

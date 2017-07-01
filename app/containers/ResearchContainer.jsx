@@ -7,7 +7,9 @@ import { findResearchOnInput } from '../action-creators/research'
 
 const mapState = (state) => {
 	return {
-		researchResults: state.researchResults
+		researchResults: state.researchResults,
+		nlpRelationships: state.nlpResults.nlpRelationships.relationships,
+		nlpSentiment: state.nlpResults.nlpSentiment,
 	}
 }
 

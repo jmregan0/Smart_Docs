@@ -12,10 +12,11 @@ export default class RoomSidebar extends React.Component {
                     setSelectedRoomFirebase:false,
                     roomsList: {},
                     roomsSelected: {name:"", rid:"", users:{}},
-                    self:{uid:"", name:""},                       
+                    self:{uid:"", name:""},
                     value:'',
                     inRoom:false,
                     refRoom:null                
+
                  }
 
         this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -31,11 +32,12 @@ export default class RoomSidebar extends React.Component {
 
     handleFormChange(event){
         this.setState({value: event.target.value});
-        
+
     }
 
     roomClickHandler(event){
         var name = event.target.name;
+
 
         store.dispatch(setCurrentUser({uid:"", name:name}))       
         var userName=this.state.self.name
@@ -52,12 +54,14 @@ export default class RoomSidebar extends React.Component {
         this.setState({setSelectedRoomFirebase:name},()=>{
             this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').transaction((currentData)=>{
                 // console.log("-----this should never be null", this.state.roomsSelected)
+
                 // console.log("----------important", name)
             this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').onDisconnect().set({userName:userName, uid:userUid, inRoom:false}) 
 
                 if(currentData===null){
                     // console.log("currentdata doesnt exist")
                     return {userName:userName, uid:userUid, inRoom:true} 
+
                 }else{
                     // console.log("currentData exists")
                     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').set({userName:userName, uid:userUid, inRoom:true})
@@ -65,22 +69,24 @@ export default class RoomSidebar extends React.Component {
 
             })
         })
-        
+
         this.setState({inRoom:true})
-        
+
     }
-    
+
     userClickHandler(event){
         // console.log("this is rid", this)
         store.dispatch(setCurrentUser({uid:event.target.name, name:this.state.roomsSelected.rid}))
 
     }
 
+
     backToRoomsClickHandler(event){
         event.preventDefault()
         store.dispatch(setCurrentUser({uid:"", name:""})) 
         this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false}) 
         this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()  
+
 
         this.setState({inRoom:false})
         this.setState({value:""})
@@ -146,7 +152,7 @@ export default class RoomSidebar extends React.Component {
 
         });
 
-        
+
         // this.props.fireRefRoom.child("disconnected").onDisconnect().set("disconnected")
 
         firebase.auth().onAuthStateChanged((user)=> {
@@ -157,11 +163,11 @@ export default class RoomSidebar extends React.Component {
                 if(this.state.roomsSelected.name){
                     this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
                 }
-                
+
                 this.setState({self: {uid:user.uid, name:name}, inRoom:false, roomsSelected: {name:"", rid:"", users:{}}}, ()=>{
                     // this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).set({userName:this.state.self.name, inRoom:false})
                 })
-                
+
             }
 
         })
@@ -191,15 +197,15 @@ export default class RoomSidebar extends React.Component {
                     </ul>
                 </div>
             </div>
-            :            
+            :
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
                 <form onSubmit={this.handleSubmit}>
                   Create Room:<br/>
                   <input type="text" name="firstname" value={this.state.value} onChange={this.handleFormChange}/>
                   <br/>
-                  <input type="submit" value="Submit"/>
-                </form> 
+                  <input className="btn btn-primary" type="submit" value="Submit"/>
+                </form>
                 <ul className="nav ">
                     <li className="nav-header">Contribute To These Rooms</li>
                     {
@@ -212,12 +218,12 @@ export default class RoomSidebar extends React.Component {
                 </ul>
                 </div>
             </div>
-            
+
         }
         </div>
 
         )
 
-    }  
+    }
 }
 

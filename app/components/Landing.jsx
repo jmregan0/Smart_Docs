@@ -19,13 +19,15 @@ const Landing = () => {
         </div>
       </header>
 
-      <section id="about" className="container content-section text-center">
+      <section id="about" className="container content-section">
         <div className="row">
           <div className="col-lg-8 col-lg-offset-2">
-              <h2>About SmartDocs</h2>
-              <p>SmartDocs is a collaborative document editor that </p>
-              <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-              <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+              <h2 className="text-center">About <span className="bold">SmartDocs</span></h2>
+              <p>SmartDocs is a collaborative document editor with Edison, an integrated research assistant.</p>
+              <p>As you type, Edison parses your document for important entities. You can add and remove entities and when you're ready, Edison will perform research based on those entities. You can save research results you like and ignore the rest.</p>
+              <p>Edison will also find relationships between entities and perform a sentiment analysis on individual entities and your document as a whole.</p>
+              <p>You can also create rooms for other team members who are writing about the same subject and even do analysis on their docs.</p>
+              <p>Try it for yourself and see if it will change the way you write.</p>
           </div>
         </div>
       </section>
@@ -34,9 +36,9 @@ const Landing = () => {
         <div className="download-section">
           <div className="container">
             <div className="col-lg-8 col-lg-offset-2">
-              <h2>Download Grayscale</h2>
-              <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-              <a href="http://startbootstrap.com/template-overviews/grayscale/" className="btn btn-default btn-lg">Visit Download Page</a>
+              <h2>Try it now</h2>
+              <p>Start writing a document to get a feel for how SmartDocs works.</p>
+              <a href="/demos/draftjsscratchpad/welcome" className="btn btn-default btn-lg">Start SmartDocs</a>
             </div>
           </div>
         </div>
@@ -45,16 +47,16 @@ const Landing = () => {
       <section id="contact" className="container content-section text-center">
         <div className="row">
           <div className="col-lg-8 col-lg-offset-2">
-            <h2>Contact Start Bootstrap</h2>
-            <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-            <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
+            <h2>Contact Team SmartDocs</h2>
+            <p>Feel free to email us to provide some feedback on SmartDocs, give us suggestions for new features, or to just say hello!</p>
+            <p><a href="mailto:feedback@smartdocs.com">feedback@smartdocs.com</a>
             </p>
             <ul className="list-inline banner-social-buttons">
               <li>
-                <a href="https://twitter.com/SBootstrap" className="btn btn-default btn-lg"><i className="fa fa-twitter fa-fw"></i> <span className="network-name">Twitter</span></a>
+                <a href="https://twitter.com/smartdocs" className="btn btn-default btn-lg"><i className="fa fa-twitter fa-fw"></i> <span className="network-name">Twitter</span></a>
               </li>
               <li>
-                <a href="https://github.com/IronSummitMedia/startbootstrap" className="btn btn-default btn-lg"><i className="fa fa-github fa-fw"></i> <span className="network-name">Github</span></a>
+                <a href="https://github.com/jmregan0/Smart_Docs" className="btn btn-default btn-lg"><i className="fa fa-github fa-fw"></i> <span className="network-name">Github</span></a>
               </li>
             </ul>
           </div>

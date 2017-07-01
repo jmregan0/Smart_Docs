@@ -10,8 +10,10 @@ import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import Editor from '../demos/draftjsscratchpad'
 import ResearchContainer from './containers/ResearchContainer'
+import SentimentContainer from './containers/SentimentContainer'
 import CollectedResourceContainer from './containers/CollectedResourceContainer'
-
+import EntityContainer from './containers/EntityContainer'
+import RelationshipsContainer from './containers/RelationshipsContainer'
 import Demos from 'APP/demos'
 
 // Get the auth API from Firebase.
@@ -87,7 +89,10 @@ render(
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
        <Route path="/research" component={ResearchContainer} />
+       <Route path="/entity" component={EntityContainer} />
        <Route path="/bulk-found-research" component={CollectedResourceContainer}/>
+       <Route path="/sentiment" component={SentimentContainer}/>
+       <Route path="/relationships" component={RelationshipsContainer}/>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,

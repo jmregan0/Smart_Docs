@@ -6,6 +6,7 @@ api
   .get('/heartbeat', (req, res) => res.send({ok: true}))
   .use('/analyze', require('./analyze'))
   .use('/research', require('./research'))
+  .use('/wikipedia', require('./wikipedia'))
 
 
 api.use(morgan('dev'))

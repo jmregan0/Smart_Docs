@@ -4,8 +4,8 @@ import { browserHistory } from 'react-router'
 
 //START CONFIGURE IP ADDRESS OF NLP SERVER
 //----------------------------------------
-//const IPADDR = 'localhost:3000';
-const IPADDR = 'web02.com:3000';
+const IPADDR = 'localhost:3000';
+// const IPADDR = 'web02.com:3000';
 //----------------------------------------
 //  END CONFIGURE IP ADDRESS OF NLP SERVER
 
@@ -102,7 +102,7 @@ export const findRelationships = text => {
 }
 
 export const findResearchOnInput = (tags) => {
-  return dispatch => 
+  return dispatch =>
     axios({
       method: 'post',
       url: 'http://' + IPADDR + '/api/research',
@@ -110,7 +110,10 @@ export const findResearchOnInput = (tags) => {
         tags: tags
       }
     })
-    .then(result => result)
+    .then(result => {
+      console.log('result: ',result);
+      return result
+    })
     .then(result => {
       dispatch(setInitialResearch(result.data.message.items));
       browserHistory.push('/research')

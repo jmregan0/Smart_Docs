@@ -1,14 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
-
 import axios from 'axios'
+import { Link } from 'react-router'
 
-const CollectedResources = (props) => {
- console.log('research', props.researchResults.researchResults)
- $( ".ok" ).unbind().click(function() {
-    $( "div.success" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
-  });
+const Sentiment = (props) => {
+  console.log('sentimentResults', props.sentimentResults)
   return(
 
     <div id="wrapper">
@@ -21,6 +17,7 @@ const CollectedResources = (props) => {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                 </button>
+                <a className="navbar-brand" href="index.html">SB Admin</a>
             </div>
             <ul className="nav navbar-right top-nav">
                 <li className="dropdown">
@@ -125,7 +122,7 @@ const CollectedResources = (props) => {
             <div className="collapse navbar-collapse navbar-ex1-collapse">
                 <ul className="nav navbar-nav side-nav">
                     <li>
-                        <Link to="/research"><i className="fa fa-fw fa-chevron-left"></i> Back to Dashboard</Link>
+                        <Link to="research"><i className="fa fa-fw fa-chevron-left"></i> Back to Dashboard</Link>
                     </li>
                 </ul>
             </div>
@@ -136,115 +133,61 @@ const CollectedResources = (props) => {
             <div className="container-fluid">
 
                 <div className="row">
-                    <div className="col-lg-12">
-                        <h1 className="page-header">
-                            Tables
-                        </h1>
-                        <ol className="breadcrumb">
-                            <li>
-                                <i className="fa fa-chevron-left"></i>  <Link to="/research">Dashboard</Link>
-                            </li>
-                            <li className="active">
-                                <i className="fa fa-table"></i> Tables
-                            </li>
-                        </ol>
-                    </div>
+                  <div className="col-lg-12">
+                    <h1 className="page-header">
+                        Tables
+                    </h1>
+                    <ol className="breadcrumb">
+                      <li>
+                        <i className="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+                      </li>
+                      <li className="active">
+                        <i className="fa fa-table"></i> Tables
+                      </li>
+                    </ol>
+                  </div>
                 </div>
 
                 <div className="row">
 
-                            <div className="col-lg-12">
-                                <h2>Collected Research Based on Your Keywords</h2>
-                                <div className="alert-box success">Saved to your Bookmarks
-                                </div>
-                                <div className="table-responsive">
-                                    <table className="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Save?</th>
-                                                <th>Data Type</th>
-                                                <th>Title</th>
-                                                <th>Author</th>
-                                                <th>Publisher</th>
-                                                {/*<th>ISBN</th>*/}
-                                                {/*<th>Publication Date</th>*/}
-                                                <th>URL/Location</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                  <div className="col-lg-12">
+                    <h2 className="sentiment-header">Sentiment Analysis of Your Document's Entities</h2>
+                    <div className="alert-box success">Saved to your Bookmarks
+                    </div>
+                    <div className="table-responsive">
+                      <table className="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th className="bg-primary">Sentiment</th>
+                            <th className="bg-primary">Entity</th>
+                            <th className="bg-primary">Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
 
                 {
-                    props.researchResults ? props.researchResults.researchResults.map((item, index) => {
-                        let data = {}
+                    props.sentimentResults.entities ? props.sentimentResults.entities.map((item, index) => {
+                      let value = 0
+                      let entity = item.normalized
+                      let rawNumber = item.sentiment.confidence
+                      let number = Math.round(rawNumber*100)
+                      let polarity = item.sentiment.label
+                      polarity === 'pos' ? value = "+" + number : polarity === 'neg' ? value = "-" + number : value = number
 
-                        if(item.type === 'book'){
-                            data.type = 'Book';
-                            data.title = item.title[0];
-                            data.author = item.author[0].given +' '+ item.author[0].family
-                            data.abstract = item.abstract;
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.published-print;*/}
-                            data.url = item.URL;
-
-                        } else if(item.type === 'journal-article'){
-                            data.type = 'Journal Article';
-                            data.title = item.title[0];
-                            {/*data.author = item.author[0].given +' '+ item.author[0].family*/}
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.published-print;*/}
-                            data.url = item.URL;
-
-                        } else if(item.type === 'book-chapter'){
-                            data.type = 'Book Chapter';
-                            data.title = item.title[0];
-                            data.location = item.page;
-                            data.ISBN = item.ISBN;
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.published-print;*/}
-                            data.url = item.URL;
-
-                        } else if(item.type === 'reference-entry'){
-                            data.type = 'Reference Entry';
-                            data.title = item.title[0];
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.issued.date-parts[0];*/}
-                            data.url = item.URL;
-
-                        } else if(item.type === 'dataset'){
-                            data.type = 'Dataset';
-                            data.title = item.title[0];
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.issued.date-parts[0];*/}
-                            data.url = item.URL;
-
-                        } else if(item.type === 'dissertation'){
-                            data.type = 'Dissertation';
-                            data.title = item.title[0];
-                            data.author = item.author[0].given + ' ' + item.author[0].family
-                            data.publisher = item.publisher;
-                            {/*data.publicationDate = item.issued.date-parts[0];*/}
-                            data.url = item.URL;
-                        }
-
-                        return (
-                            <tr key={'' + index}>
-                                <td><span className="glyphicon glyphicon-ok ok" aria-label="Click to save this research to your Bookmarks" onClick={() => props.saveBookmark(item)}></span></td>
-                                <td>{data.type}</td>
-                                <td>{data.title}</td>
-                                {/*<td>{data.abstract || 'NA'}</td>*/}
-                                <td>{data.author || 'Not Found'}</td>
-                                <td>{data.publisher || 'Not Found'}</td>
-                                {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
-                                <td><a href={data.url}>{data.url}</a></td>
-                            </tr>
-                        )
+                      return (
+                        <tr key={index}>
+                          <td>{polarity === 'pos' ? <div className="progress"><div className="progress-bar bg-success" style={{width: number + '%'}} role="progressbar" aria-valuenow={value} aria-valuemin="0" aria-valuemax="100">{value}</div></div> : polarity === 'neg' ? <div className="progress"><div className="progress-bar bg-danger" style={{width: number + '%'}} role="progressbar" aria-valuenow={value} aria-valuemin="0" aria-valuemax="100">{value}</div></div> : <div className="progress"><div className="progress-bar bg-neutral" style={{width: value + '%'}} role="progressbar" aria-valuenow={value} aria-valuemin="0" aria-valuemax="100">{value}</div></div>}</td>
+                          <td>{entity}</td>
+                          <td>{value}</td>
+                        </tr>
+                      )
                     })
                     : null
                 }
 
-                                </tbody>
-                            </table>
-                        </div>
+                        </tbody>
+                      </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -253,4 +196,4 @@ const CollectedResources = (props) => {
   )
 }
 
-export default CollectedResources
+export default Sentiment

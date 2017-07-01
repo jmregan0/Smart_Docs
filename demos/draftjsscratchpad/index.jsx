@@ -21,5 +21,7 @@ const db = firebase.database()
 // and our Scratchpad component. It takes in props.params.title, and
 // shows the Scratchpad along with that title.
 export default ({children, params: {room}}) =>
+
   <IndexComponent room={room}/>
+
 
