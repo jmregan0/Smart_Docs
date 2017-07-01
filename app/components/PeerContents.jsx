@@ -11,9 +11,8 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
-import {Link} from 'react-router';
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
@@ -29,7 +28,7 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      userUidToGetNotes:""
+      refRoute:null
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -54,7 +53,7 @@ class DraftjsScratchpad extends React.Component {
 
   emitChanges(){
     //console.log('emitting changes');
-    this.writeNoteToFirebase()
+    // this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
     // ---------------
@@ -100,6 +99,19 @@ class DraftjsScratchpad extends React.Component {
   }
 
 
+  componentWillReceiveProps(nextProps){
+    if(this.state.refRoute){
+      this.state.refRoute.off()
+    }
+
+    if(nextProps.users.selected.uid){
+      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid).child("note")}, ()=>{
+        this.loadNoteFromFirebase();
+        
+      })
+    }
+  }
+
   componentWillUnmount(){
     this.clearTimer();
   }
@@ -122,25 +134,39 @@ class DraftjsScratchpad extends React.Component {
   }
 
   loadNoteFromFirebase(uid){
-    return this.props.fireRefNotes.child(uid).once(
+    this.state.refRoute.once(
       'value',
       snapshot => {
         console.log("From loadNoteFromFirebase:",snapshot.val());
 
         if(snapshot.val()){
-          const newEditorState =
-            rawContentToEditorState(this.state.editorState,snapshot.val());
+          const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
 
           this.setState({editorState: newEditorState});
         }
     });
+
+    this.state.refRoute.on('value', (data)=>{
+      if(data.val()){
+          const newEditorState = rawContentToEditorState(this.state.editorState,data.val());
+
+          this.setState({editorState: newEditorState});
+        }
+    })
+
+                // this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
+                //     // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+                //     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                //     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
+                // });
+
   }
 
-  writeNoteToFirebase = () => {
-    const currentContent = this.state.editorState.getCurrentContent()
-    const rawState = convertToRaw(currentContent)
-    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
-  }
+  // writeNoteToFirebase = () => {
+  //   const currentContent = this.state.editorState.getCurrentContent()
+  //   const rawState = convertToRaw(currentContent)
+  //   return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
+  // }
 
   handleKeyCommand = command => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
@@ -185,25 +211,17 @@ class DraftjsScratchpad extends React.Component {
     }
     return (
       <div>
-        <div>
-          <BlockStyleControls
+        <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
+        <h2>Peer Notes</h2>
+          <Editor
             editorState={this.state.editorState}
-            onToggle={this.toggleBlockType}
-          />
-          <InlineStyleControls
-            editorState={this.state.editorState}
-            onToggle={this.toggleInlineStyle}
+            handleKeyCommand={this.handleKeyCommand}
+            onChange={this.onChange}
+            blockStyleFn={myBlockStyleFn}
+            readOnly="true"
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
-          <Link to="/entity">EntityDetail</Link>
         </div>
-        <Editor
-          editorState={this.state.editorState}
-          handleKeyCommand={this.handleKeyCommand}
-          onChange={this.onChange}
-          blockStyleFn={myBlockStyleFn}
-        />
-        <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
       </div>
     )
   }
@@ -219,7 +237,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-		findRelationships: (text) => dispatch(findRelationships(text)),
+    findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -228,7 +246,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-
+  
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }

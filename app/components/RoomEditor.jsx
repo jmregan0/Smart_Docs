@@ -11,9 +11,8 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
-import {Link} from 'react-router';
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
@@ -29,7 +28,8 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      userUidToGetNotes:""
+      refRoute:null,
+      self: {uid:"", name:""}
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -95,51 +95,98 @@ class DraftjsScratchpad extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.clearTimer();
-    this.setTimer();
+    this.writeNoteToFirebase()
   }
 
+  componentWillReceiveProps(nextProps){
+    // console.log("roomeditor, somponent wil receive props", nextProps.users.selected)
+    if(nextProps.users.selected.name){
+      // console.log("roomeditor, component will receive props", this.props.fireRefRoom.child(nextProps.users.selected.name))
+      // this.fireRefPath = this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid)
+      var uid=nextProps.users.selected.uid?nextProps.users.selected.uid:this.state.self.uid
+      console.log("user loading from", uid)
+      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{
+        console.log("(child 1)", nextProps.users.selected.name, "(child 2)", this.state.self.uid)
+
+        this.loadNoteFromFirebase()
+      })
+      
+    }else{
+      // console.log("refroute set to null")
+      this.setState({refRoute:null})
+      this.setState({editorState: EditorState.createEmpty()})
+      
+    }
+    //load note
+  }
 
   componentWillUnmount(){
     this.clearTimer();
   }
   componentDidMount() {
     this.setTimer();
-
     // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
-        this.setState({userUidToGetNotes:null});
         this.setState({editorState: EditorState.createEmpty()});
       }
       else {
-        this.setState({userUidToGetNotes:user.uid});
-        console.log('new user, yes?',user.uid);
-        this.loadNoteFromFirebase(user.uid);
+        var name = user.email?user.email:"anon";
+        this.setState({self: {uid:user.uid, name:name}});
+        this.setState({refRoute:this.props.fireRefRoom.child(this.props.users.selected.name).child("users").child(user.uid).child("note")}, ()=>{
+
+          this.loadNoteFromFirebase(user.uid);
+        })
+
       }
     });
   }
 
   loadNoteFromFirebase(uid){
-    return this.props.fireRefNotes.child(uid).once(
-      'value',
-      snapshot => {
-        console.log("From loadNoteFromFirebase:",snapshot.val());
 
-        if(snapshot.val()){
-          const newEditorState =
-            rawContentToEditorState(this.state.editorState,snapshot.val());
+    if(this.state.refRoute&&this.props.users.selected.uid){
+      console.log("block 1")
+      return this.state.refRoute.once(
+        'value',
+        snapshot => {
+          // console.log("From loadNoteFromFirebase:",snapshot.val());
 
-          this.setState({editorState: newEditorState});
-        }
-    });
+          if(snapshot.val()){
+            const newEditorState =
+              rawContentToEditorState(this.state.editorState,snapshot.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      });
+    }else if(this.state.refRoute&&this.props.users.selected.name){
+        console.log("block 2")
+        
+        return this.state.refRoute.once(
+        'value',
+        snapshot => {
+          // console.log("From loadNoteFromFirebase:",snapshot.val());
+
+          if(snapshot.val()){
+            const newEditorState =
+              rawContentToEditorState(this.state.editorState,snapshot.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      });
+    }else{
+        this.setState({editorState: EditorState.createEmpty()});
+
+    }
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
+    
+    if(this.state.refRoute){
+      return this.state.refRoute.set(rawState)
+    }
   }
 
   handleKeyCommand = command => {
@@ -185,25 +232,26 @@ class DraftjsScratchpad extends React.Component {
     }
     return (
       <div>
-        <div>
-          <BlockStyleControls
+        <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
+        <h2>My Notes</h2>
+          <div>
+            <BlockStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleBlockType}
+            />
+            <InlineStyleControls
+              editorState={this.state.editorState}
+              onToggle={this.toggleInlineStyle}
+            />
+          </div>
+          <Editor
             editorState={this.state.editorState}
-            onToggle={this.toggleBlockType}
-          />
-          <InlineStyleControls
-            editorState={this.state.editorState}
-            onToggle={this.toggleInlineStyle}
+            handleKeyCommand={this.handleKeyCommand}
+            onChange={this.onChange}
+            blockStyleFn={myBlockStyleFn}
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
-          <Link to="/entity">EntityDetail</Link>
         </div>
-        <Editor
-          editorState={this.state.editorState}
-          handleKeyCommand={this.handleKeyCommand}
-          onChange={this.onChange}
-          blockStyleFn={myBlockStyleFn}
-        />
-        <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
       </div>
     )
   }
@@ -219,7 +267,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-		findRelationships: (text) => dispatch(findRelationships(text)),
+    findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -228,7 +276,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-
+  
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
