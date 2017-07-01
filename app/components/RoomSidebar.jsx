@@ -15,8 +15,11 @@ export default class RoomSidebar extends React.Component {
                     self:{uid:"", name:""},
                     value:'',
                     inRoom:false,
-                    refRoom:null                
-
+                    refRoom:null,
+                    submitDisabled:true,
+                    isValidationError:false,
+                    filter:'',
+                    filteredList:{}
                  }
 
         this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -27,17 +30,50 @@ export default class RoomSidebar extends React.Component {
         this.roomClickHandler = this.roomClickHandler.bind(this)
         this.backToRoomsClickHandler = this.backToRoomsClickHandler.bind(this)
         this.userClickHandler = this.userClickHandler.bind(this)
+        this.handleFilterChange = this.handleFilterChange.bind(this)
     }
 
 
     handleFormChange(event){
-        this.setState({value: event.target.value});
 
+        this.setState({value: event.target.value});
+        if(event.target.value.length<4){
+            this.setState({submitDisabled:true, isValidationError:"Room names cannot be less than 4 characters"})
+            document.getElementById("sub-btn").disabled=true
+        }else if(event.target.value.length>25){
+            this.setState({submitDisabled:true, isValidationError:"Room names cannot be greater than 25 characters"})
+            document.getElementById("sub-btn").disabled=true
+        }else{
+            this.setState({submitDisabled:false, isValidationError:false})
+            document.getElementById("sub-btn").enabled=true
+        }
+
+    }
+
+    handleFilterChange(event){
+        this.setState({filter: event.target.value})
+        this.filterList(event.target.value)
+
+    }
+
+    filterList(filter){
+        var obj={}
+        var arr = Object.keys(this.state.roomsList).filter((key)=>{
+            filter=filter.toLowerCase()
+            key=key.toLowerCase()
+
+            return (key.startsWith(filter))
+        })
+        
+        arr.forEach((key)=>{
+            obj[key]=this.state.roomsList[key]
+        })
+        this.setState({filteredList:obj})
     }
 
     roomClickHandler(event){
         var name = event.target.name;
-
+        this.setState({isValidationError:false}) 
 
         store.dispatch(setCurrentUser({uid:"", name:name}))       
         var userName=this.state.self.name
@@ -93,47 +129,63 @@ export default class RoomSidebar extends React.Component {
     }
 
     handleSubmit(event){
+
         event.preventDefault()
-
-            // User is signed in.
-
-        var userName=this.state.self.name?this.state.self.name:"anon"
-        var name = this.state.value;
-        store.dispatch(setCurrentUser({uid:"", name:name}))   
-
-        this.setState(
-            {setSelectedRoomFirebase:name}, ()=>{
-                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').onDisconnect().set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
-                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
-                    // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
-                    this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
-                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
-                });
-
-                this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').transaction((currentData)=>{
-                    if(currentData===null){
-                        return {userName:this.state.self.name, uid:this.state.self.uid, inRoom:true} 
-                    }else{
-                        console.log("room is already created", currentData)
-                        this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:true})
-                    }
-
-                })
+        //make it so cant add room that already exists
+        var duplicate=false;
+        Object.keys(this.state.roomsList).forEach((room)=>{
+            if(room===this.state.value){
+                this.setState({isValidationError:"Room name already exists"})
+                duplicate=true;
             }
-                    //place for transaction
-        )
+        })
 
-        this.setState({inRoom:true})
+
+        if(!duplicate){
+
+        
+
+                // User is signed in.
+
+            var userName=this.state.self.name?this.state.self.name:"anon"
+            var name = this.state.value;
+            store.dispatch(setCurrentUser({uid:"", name:name}))   
+
+            this.setState(
+                {setSelectedRoomFirebase:name}, ()=>{
+                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').onDisconnect().set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
+                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
+                        // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+                        this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                        this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
+                    });
+
+                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').transaction((currentData)=>{
+                        if(currentData===null){
+                            return {userName:this.state.self.name, uid:this.state.self.uid, inRoom:true} 
+                        }else{
+                            console.log("room is already created", currentData)
+                            this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:true})
+                        }
+
+                    })
+                }
+                        //place for transaction
+            )
+
+            this.setState({inRoom:true})
+        }
+    
 
     }
 
     componentDidMount(){
-
         //load all rooms,
         this.props.fireRefRoom.once('value', data=>{
 
             this.setState({roomsList:data.val()})
 
+            // console.log("roomsList", data.val())
         })
 
         this.props.fireRefRoom.on('value', data=>{
@@ -176,7 +228,12 @@ export default class RoomSidebar extends React.Component {
     render(){
         var bool=this.state.inRoom
 
-        // console.log(this.state.roomsSelected)
+        console.log(this.state.filter)
+        console.log(this.state.roomsList)
+        console.log(this.state.filteredList)
+
+        var roomsList = this.state.filter?this.state.filteredList:this.state.roomsList 
+
         return(
         <div>
         {
@@ -185,7 +242,7 @@ export default class RoomSidebar extends React.Component {
                 <div className="well">
                     <ul className="nav ">
                         <li onClick={this.backToRoomsClickHandler}><a href="#">Back to Topics</a></li>
-                        <li id="main-user-head" className="nav-header">Current Room - {this.state.roomsSelected.rid}</li>
+                        <li id="main-user-head" className="nav-header">Current Topic - {this.state.roomsSelected.rid}</li>
                         <li onClick={this.userClickHandler}>Browse Collab Notes By User</li>
                         {
                             Object.keys(this.state.roomsSelected.users).map((user)=>{
@@ -201,21 +258,26 @@ export default class RoomSidebar extends React.Component {
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
                 <form onSubmit={this.handleSubmit}>
-                  Create Room:<br/>
+                  <h5 className="nav-header">Create Topic:<br/></h5>
                   <input type="text" name="firstname" value={this.state.value} onChange={this.handleFormChange}/>
                   <br/>
-                  <input className="btn btn-primary" type="submit" value="Submit"/>
+                  <input id="sub-btn" className="btn btn-primary" type="submit" value="Submit" disabled={this.state.submitDisabled}/>
                 </form>
+                {this.state.isValidationError?<h5>{this.state.isValidationError}</h5>:null}
                 <ul className="nav ">
-                    <li className="nav-header">Contribute To These Rooms</li>
+                    <h5 className="nav-header">List of Topics<br/></h5>
                     {
-                        this.state.roomsList?Object.keys(this.state.roomsList).map((room)=>{
+                        roomsList?Object.keys(roomsList).map((room)=>{
                             return(
                                     <li onClick={this.roomClickHandler}><a name={room}>{room}</a></li>
                                 )
                         }):null
                     }
                 </ul>
+                <form>
+                     <h5 className="nav-header">Filter Topic:<br/></h5>
+                    <input type="text" name="filter" value={this.state.filter} onChange={this.handleFilterChange}/>
+                </form>
                 </div>
             </div>
 
