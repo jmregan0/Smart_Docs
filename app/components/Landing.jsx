@@ -38,7 +38,7 @@ const Landing = () => {
             <div className="col-lg-8 col-lg-offset-2">
               <h2>Try it now</h2>
               <p>Start writing a document to get a feel for how SmartDocs works.</p>
-              <a href="/demos/draftjsscratchpad/welcome" className="btn btn-default btn-lg">Start SmartDocs</a>
+              <a href="/edison/welcome" className="btn btn-default btn-lg">Start SmartDocs</a>
             </div>
           </div>
         </div>
