@@ -191,18 +191,18 @@ const Research = (props) => {
                                         <i className="fa fa-tasks fa-5x"></i>
                                     </div>
                                     <div className="col-xs-9 text-right">
-                                        <div className="huge">0</div>
-                                        <div><h5>Saved Resources</h5></div>
+                                        <div className="huge">{sentiment.length}</div>
+                                        <div><h5>Entities Found!</h5></div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="#">
+                            <Link to="/entity">
                                 <div className="panel-footer">
                                     <span className="pull-left">View Details</span>
                                     <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
                                     <div className="clearfix"></div>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="col-lg-6 col-md-6">
