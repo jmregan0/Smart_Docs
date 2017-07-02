@@ -39,11 +39,7 @@ class EntityContainer extends React.Component {
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
 
     return (
-      <div className="row">>
-        <div className="col-lg-8 col-md-8 col-sm-8">
-          <EntityDetail entities={entities} searchResults={this.state.searchResults} />
-        </div>
-      </div>
+      <EntityDetail entities={entities} searchResults={this.state.searchResults} />
     );
   }
 }
