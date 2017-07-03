@@ -185,7 +185,7 @@ class DraftjsScratchpad extends React.Component {
     }
     return (
       <div>
-      <h2>Home Notes</h2>
+      
         <div>
           <BlockStyleControls
             editorState={this.state.editorState}

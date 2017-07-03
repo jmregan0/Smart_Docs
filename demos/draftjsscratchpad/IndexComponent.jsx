@@ -29,46 +29,50 @@ class Index extends React.Component {
     }
   }
 
+  componentDidMount(){
+    console.log(this.props)
+    if(this.props.room){
+
+    }
+  }
+
   render(){
-    console.log("this.props", this.props)
+    console.log("this.props.room", this.props.room)
+    var room = this.state.inRoom?this.state.inRoom:"welcome"
+
     return(
     <div>
-      <h1>{this.props.room}</h1>
+      <h1>{room}</h1>
       {/* Here, we're passing in a Firebase reference to
           /scratchpads/$scratchpadTitle. This is where the scratchpad is
           stored in Firebase. Each scratchpad is just a string that the
           component will listen to, but it could be the root of a more complex
           data structure if we wanted. */}
-      <div className="col-sm-3">
-        <RoomSidebar fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
+      <div className="col-sm-2 col-xs-12">
+        <RoomSidebar room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
       </div>
-      <div className="col-sm-6">
+      <div className="col-sm-7 col-xs-12">
         {
           !this.state.inRoom?
           <div>
             <div className="col-sm-12">
               <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms').child(this.props.room)}/>
             </div>
-            <div className="col-sm-3">
-              <SentimentometerContainer />
-              <SidebarContainer/>
-            </div>
           </div>
           :
           <div>
-            <h1>{this.state.inRoom}</h1>
             <div className="col-sm-6">
               <RoomEditorContainer fireRefRoom={db.ref('rooms')} />
             </div>
             <div className="col-sm-6">
               <PeerContentsContainer fireRefRoom={db.ref('rooms')} />
             </div>
-            <div className="col-sm-3">
-              <SentimentometerContainer />
-              <SidebarContainer/>
-            </div>
           </div>
         }
+      </div>
+      <div className="col-sm-3">
+        <SentimentometerContainer />
+        <SidebarContainer/>
       </div>
     </div>
       )
