@@ -134,13 +134,14 @@ export default class RoomSidebar extends React.Component {
         event.preventDefault()
         //make it so cant add room that already exists
         var duplicate=false;
-        Object.keys(this.state.roomsList).forEach((room)=>{
-            if(room===this.state.value){
-                this.setState({isValidationError:"Room name already exists"})
-                duplicate=true;
-            }
-        })
-
+        if(this.state.roomsList){
+            Object.keys(this.state.roomsList).forEach((room)=>{
+                if(room===this.state.value){
+                    this.setState({isValidationError:"Room name already exists"})
+                    duplicate=true;
+                }
+            })
+        }
 
         if(!duplicate){
                 // User is signed in.
