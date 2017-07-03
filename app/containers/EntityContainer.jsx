@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import {Encoder} from 'node-html-encoder';
-import EntityDetail from '../components/EntityDetail';
+//import EntityDetail from '../components/EntityDetail';
+import ResearchTableEntity from '../components/ResearchTableEntity';
 
 var encoder = new Encoder('entity');
 
@@ -16,13 +17,14 @@ class EntityContainer extends React.Component {
 
   componentDidMount(){
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
+    const rows = this.props.rows || 3;
 
     entities.map(entity=>{
       wikiSearch(entity)
       .then(searchResults=>{
         //TRIM SEARCH RESULTS
         console.log('search results from wiki api', searchResults)
-        const trimmed = searchResults.search.slice(0,3);
+        const trimmed = searchResults.search.slice(0,rows);
 
         //update state with new object
         const oldResults = this.state.searchResults;
@@ -39,7 +41,7 @@ class EntityContainer extends React.Component {
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
 
     return (
-      <EntityDetail entities={entities} searchResults={this.state.searchResults} />
+      <ResearchTableEntity entities={entities} searchResults={this.state.searchResults} />
     );
   }
 }
