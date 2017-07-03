@@ -1,6 +1,6 @@
 'use strict'
 import React from 'react'
-import {Router, Route, Link, IndexRedirect, browserHistory} from 'react-router'
+import {Router, Route, Link, IndexRedirect, IndexRoute, browserHistory} from 'react-router'
 import {render} from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './store'
@@ -9,11 +9,12 @@ import Landing from './components/Landing'
 import NotFound from './components/NotFound'
 import firebase from 'APP/fire'
 import Editor from '../demos/draftjsscratchpad'
+import DashboardContainer from './containers/DashboardContainer'
 import ResearchContainer from './containers/ResearchContainer'
 import SentimentContainer from './containers/SentimentContainer'
-import CollectedResourceContainer from './containers/CollectedResourceContainer'
+import ResourceContainer from './containers/ResourceContainer'
 import EntityContainer from './containers/EntityContainer'
-import RelationshipsContainer from './containers/RelationshipsContainer'
+import RelationshipContainer from './containers/RelationshipContainer'
 import Demos from 'APP/demos'
 import DraftjsScratchpad from '../demos/draftjsscratchpad/index'
 
@@ -90,11 +91,13 @@ render(
        <Route path="/demos/:room" component={Editor}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
-       <Route path="/research" component={ResearchContainer} />
-       <Route path="/entity" component={EntityContainer} />
-       <Route path="/bulk-found-research" component={CollectedResourceContainer}/>
-       <Route path="/sentiment" component={SentimentContainer}/>
-       <Route path="/relationships" component={RelationshipsContainer}/>
+       <Route path="/research" component={ResearchContainer} >
+         <IndexRoute component={DashboardContainer} />
+         <Route path="entity" component={EntityContainer} />
+         <Route path="resource" component={ResourceContainer}/>
+         <Route path="sentiment" component={SentimentContainer}/>
+         <Route path="relationship" component={RelationshipContainer}/>
+       </Route>
      <Route path='*' component={NotFound}/>
    </Router>
  </Provider>,

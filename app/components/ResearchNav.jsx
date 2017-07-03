@@ -123,16 +123,19 @@ export default class ResearchNav extends React.Component {
           <div className="collapse navbar-collapse navbar-ex1-collapse">
               <ul className="nav navbar-nav side-nav">
                   <li>
-                      <Link to="/research"><i className="fa fa-fw fa-dashboard"></i> Dashboard</Link>
+                      <Link to="/research"><i className="fa fa-fw fa-dashboard"></i>Dashboard</Link>
                   </li>
                   <li>
-                      <Link to="/bulk-found-research"><i className="fa fa-fw fa-table"></i> Research</Link>
+                      <Link to="/research/resource"><i className="fa fa-fw fa-book"></i>Research</Link>
                   </li>
                   <li>
-                      <Link to="/relationships"><i className="fa fa-fw fa-connectdevelop"></i> Relationships</Link>
+                      <Link to="/research/entity"><i className="fa fa-fw fa-tasks"></i>Entity</Link>
                   </li>
                   <li>
-                      <Link to="/sentiment"><i className="fa fa-fw fa-smile-o"></i> Relationships</Link>
+                      <Link to="/research/relationship"><i className="fa fa-fw fa-connectdevelop"></i>Relationships</Link>
+                  </li>
+                  <li>
+                      <Link to="/research/sentiment"><i className="fa fa-fw fa-smile-o"></i>Sentiment</Link>
                   </li>
               </ul>
           </div>

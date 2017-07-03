@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Relationships from '../components/Relationships'
+import Relationship from '../components/Relationship'
 
 
 
@@ -16,4 +16,4 @@ const mapDispatch = (dispatch) => {
 }
 
 
-export default connect(mapState, mapDispatch)(Relationships)
+export default connect(mapState, mapDispatch)(Relationship)
