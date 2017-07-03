@@ -11,11 +11,13 @@ module.exports.entityStrategy = (contentBlock,callback,contentState) => {
 }
 
 module.exports.entitySpan = props => (
-  <span
-    data-offset-key={props.offsetKey}
-    className="entitySpan"
-  >{props.children}
-  </span>
+    <div
+      className="tooltipCustom entitySpan"
+      data-offset-key={props.offsetKey}
+    >
+      {props.children}
+      <span className="tooltiptextCustom">Tooltip text</span>
+    </div>
 )
 
 // name: findMatches
