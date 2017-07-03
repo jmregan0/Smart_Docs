@@ -15,7 +15,6 @@ export default class ResearchTableWriting extends React.Component {
       if(!sorted[item.type]) sorted[item.type] = [];
       sorted[item.type].push(item.normalized);
     });
-    console.log("sorted object:",sorted);
 
     const keys = Object.keys(sorted);
 
@@ -28,7 +27,7 @@ export default class ResearchTableWriting extends React.Component {
           <div className="panel-body">
             <div className="table-responsive">
               {keys.map( (type)=>
-                <EntityTable key={type} title={type} entities={sorted[type]} />
+                <EntityTable key={'ResearchTableWriting-'+type} title={type} entities={sorted[type]} />
               )}
             </div>
             <div className="text-right">
@@ -41,10 +40,7 @@ export default class ResearchTableWriting extends React.Component {
   }
 }
 
-const EntityTable = ({title,entities}) => {
-  console.log('EntityTable:',entities);
-
-  return (
+const EntityTable = ({title,entities}) => 
   <table className="table table-bordered table-hover table-striped">
     <thead>
       <tr>
@@ -53,11 +49,9 @@ const EntityTable = ({title,entities}) => {
     </thead>
     <tbody>
       {entities.map(entity=>
-        <tr>
+        <tr key={'ResearchTableWriting-'+entity}>
           <td>{entity}</td>
         </tr>
       )}
     </tbody>
   </table>
-  );
-}

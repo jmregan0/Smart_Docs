@@ -12,7 +12,7 @@ export default ({entities, searchResults}) =>
       </div>
       <div className="panel-body">
         {entities.map( entity=>
-          <EntityTable key={entity} entity={entity} results={searchResults[entity] || []} />
+          <EntityTable key={'ResearchTableEntity-'+entity} entity={entity} results={searchResults[entity] || []} />
         )}
         <div className="text-right">
           <Link to="/research/entity">View Entity Detail <i className="fa fa-arrow-circle-right"></i></Link>

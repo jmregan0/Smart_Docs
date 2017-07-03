@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 import ResearchNav from '../components/ResearchNav';
 
 const ResearchDetail = (props) => {
-  console.log('all props', props)
+  //console.log('all props', props)
 
   return (
     <div id="wrapper">

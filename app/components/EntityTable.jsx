@@ -17,7 +17,7 @@ export default ({entity,results}) =>
           <th>Timestamp</th>
         </tr>
         {results.map( (result,i)=>
-          <tr key={result.title}>
+          <tr key={'Entity-'+result.title}>
             <td>{i}</td>
             <td>{result.title}</td>
             <td><div>{ReactHtmlParser(result.snippet)}</div></td>

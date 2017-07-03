@@ -15,7 +15,7 @@ const Research = (props) => {
   const relationships = props.nlpRelationships;
   const entities = props.nlpSentiment.entities;
   const sentiment = props.nlpSentiment.document.confidence * 100;
-  console.log('all props', props)
+  //console.log('all props', props)
 
   return(
     <div>
