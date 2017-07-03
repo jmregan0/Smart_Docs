@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router';
 
 const Breadcrumb = (props) => {
-  console.log('Breadcrumb:',props);
   const selection = props.selection || 'resources';
   const title = props.title || '';
 

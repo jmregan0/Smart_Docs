@@ -7,9 +7,9 @@ import Breadcrumb from './Breadcrumb';
 import axios from 'axios'
 
 const CollectedResources = (props) => {
- console.log('research', props.researchResults.researchResults)
+  //console.log('research', props.researchResults.researchResults)
 
- $( ".ok" ).unbind().click(function() {
+  $( ".ok" ).unbind().click(function() {
     $( "div.success" ).fadeIn( 300 ).delay( 1500 ).fadeOut( 400 );
   });
 
