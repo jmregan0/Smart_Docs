@@ -43,15 +43,17 @@ class Index extends React.Component {
     return(
     <div>
       <h1>{room}</h1>
+      <div className="col-sm-3">
+        <SentimentometerContainer />
+        <SidebarContainer/>
+        <RoomSidebar room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
+      </div>
       {/* Here, we're passing in a Firebase reference to
           /scratchpads/$scratchpadTitle. This is where the scratchpad is
           stored in Firebase. Each scratchpad is just a string that the
           component will listen to, but it could be the root of a more complex
           data structure if we wanted. */}
-      <div className="col-sm-2 col-xs-12">
-        <RoomSidebar room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
-      </div>
-      <div className="col-sm-7 col-xs-12">
+      <div className="col-sm-9 col-xs-12">
         {
           !this.state.inRoom?
           <div>
@@ -69,10 +71,6 @@ class Index extends React.Component {
             </div>
           </div>
         }
-      </div>
-      <div className="col-sm-3">
-        <SentimentometerContainer />
-        <SidebarContainer/>
       </div>
     </div>
       )
