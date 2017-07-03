@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import {Encoder} from 'node-html-encoder';
-import EntityDetail from '../components/EntityDetail';
+//import EntityDetail from '../components/EntityDetail';
+import ResearchTableEntity from '../components/ResearchTableEntity';
 
 var encoder = new Encoder('entity');
 
@@ -39,7 +40,7 @@ class EntityContainer extends React.Component {
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
 
     return (
-      <EntityDetail entities={entities} searchResults={this.state.searchResults} />
+      <ResearchTableEntity entities={entities} searchResults={this.state.searchResults} />
     );
   }
 }
@@ -49,8 +50,8 @@ const mapState = ({nlpResults}) => ({nlpResults})
 export default connect(mapState)(EntityContainer)
 
 const wikiSearch = entity => {
-  const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
-  //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
+  //const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+  const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
   // encode non-ascii characters
   let query = encoder.htmlEncode(entity);

@@ -8,6 +8,7 @@ import ResearchNav from './ResearchNav';
 import ResearchDashboard from './ResearchDashboard';
 import ResearchTableWriting from './ResearchTableWriting';
 import ResearchTableResearch from './ResearchTableResearch';
+import EntityContainer from '../containers/EntityContainer';
 
 const Research = (props) => {
   const researchResults = props.researchResults;
@@ -45,6 +46,7 @@ const Research = (props) => {
             </div>*/}
             <ResearchTableWriting sentiment={sentiment} />
             <ResearchTableResearch research={researchResults.researchResults} />
+            <EntityContainer />
           </div>
 
         </div>
