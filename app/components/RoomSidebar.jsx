@@ -71,6 +71,25 @@ export default class RoomSidebar extends React.Component {
         this.setState({filteredList:obj})
     }
 
+
+    userClickHandler(event){
+        // console.log("this is rid", this)
+        store.dispatch(setCurrentUser({uid:event.target.name, name:this.state.roomsSelected.rid}))
+
+    }
+
+
+    backToRoomsClickHandler(event){
+        event.preventDefault()
+        store.dispatch(setCurrentUser({uid:"", name:""})) 
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false}) 
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()  
+
+
+        this.setState({inRoom:false})
+        this.setState({value:""})
+    }
+
     roomClickHandler(event){
         var name = event.target.name;
         this.setState({isValidationError:false}) 
@@ -110,24 +129,6 @@ export default class RoomSidebar extends React.Component {
 
     }
 
-    userClickHandler(event){
-        // console.log("this is rid", this)
-        store.dispatch(setCurrentUser({uid:event.target.name, name:this.state.roomsSelected.rid}))
-
-    }
-
-
-    backToRoomsClickHandler(event){
-        event.preventDefault()
-        store.dispatch(setCurrentUser({uid:"", name:""})) 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false}) 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()  
-
-
-        this.setState({inRoom:false})
-        this.setState({value:""})
-    }
-
     handleSubmit(event){
 
         event.preventDefault()
@@ -142,23 +143,26 @@ export default class RoomSidebar extends React.Component {
 
 
         if(!duplicate){
-
-        
-
                 // User is signed in.
 
             var userName=this.state.self.name?this.state.self.name:"anon"
             var name = this.state.value;
             store.dispatch(setCurrentUser({uid:"", name:name}))   
 
-            this.setState(
-                {setSelectedRoomFirebase:name}, ()=>{
+            this.setState({setSelectedRoomFirebase:name}, ()=>{
                     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').onDisconnect().set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
-                    this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
-                        // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+
+                    this.props.fireRefRoom.child(name).child('users').on('value', data=>{
+                        console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
                         this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
                         this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
                     });
+
+                    // this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
+                    //     console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
+                    //     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
+                    //     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
+                    // });
 
                     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').transaction((currentData)=>{
                         if(currentData===null){
@@ -181,10 +185,19 @@ export default class RoomSidebar extends React.Component {
 
     componentDidMount(){
         //load all rooms,
+        console.log(this.props.room)
+
+
         this.props.fireRefRoom.once('value', data=>{
 
             this.setState({roomsList:data.val()})
-
+            // if(this.props.room&&this.props.room!=="welcome"){
+            //     if(data.val()[this.props.room]){
+            //         console.log("iring in component did mount in roomsidebar",data.val()[this.props.room] )
+            //         this.setState({roomsSelected:{rid:this.props.room, name:this.props.room, users:data.val()[this.props.room].users}})
+            //     }
+            // }
+            
             // console.log("roomsList", data.val())
         })
 
@@ -228,14 +241,14 @@ export default class RoomSidebar extends React.Component {
     render(){
         var bool=this.state.inRoom
 
-        console.log(this.state.filter)
-        console.log(this.state.roomsList)
-        console.log(this.state.filteredList)
+        // console.log(this.state.filter)
+        // console.log(this.state.roomsList)
+        // console.log(this.state.filteredList)
 
         var roomsList = this.state.filter?this.state.filteredList:this.state.roomsList 
 
         return(
-        <div>
+        <div className="col-sm-12">
         {
             bool?
             <div className="sidebar-nav-fixed pull-left">
@@ -263,6 +276,10 @@ export default class RoomSidebar extends React.Component {
                   <br/>
                   <input id="sub-btn" className="btn btn-primary" type="submit" value="Submit" disabled={this.state.submitDisabled}/>
                 </form>
+                <form>
+                     <h5 className="nav-header">Filter Topic:<br/></h5>
+                    <input type="text" name="filter" value={this.state.filter} onChange={this.handleFilterChange}/>
+                </form>
                 {this.state.isValidationError?<h5>{this.state.isValidationError}</h5>:null}
                 <ul className="nav ">
                     <h5 className="nav-header">List of Topics<br/></h5>
@@ -274,10 +291,6 @@ export default class RoomSidebar extends React.Component {
                         }):null
                     }
                 </ul>
-                <form>
-                     <h5 className="nav-header">Filter Topic:<br/></h5>
-                    <input type="text" name="filter" value={this.state.filter} onChange={this.handleFilterChange}/>
-                </form>
                 </div>
             </div>
 
