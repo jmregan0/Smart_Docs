@@ -44,7 +44,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                 </div>
               </div>
-              <Link to="/bulk-found-research">
+              <Link to="/research/resource">
                 <div className="panel-footer">
                   <span className="pull-left">View Details</span>
                   <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
@@ -66,7 +66,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                 </div>
               </div>
-              <Link to="/entity">
+              <Link to="/research/entity">
                 <div className="panel-footer">
                   <span className="pull-left">View Details</span>
                   <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
@@ -88,7 +88,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                 </div>
               </div>
-              <Link to="/sentiment">
+              <Link to="/research/sentiment">
                 <div className="panel-footer">
                   <span className="pull-left">View Details</span>
                   <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>
@@ -110,7 +110,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                 </div>
               </div>
-              <Link to="/relationships">
+              <Link to="/research/relationship">
                 <div className="panel-footer">
                   <span className="pull-left">View Details</span>
                   <span className="pull-right"><i className="fa fa-arrow-circle-right"></i></span>

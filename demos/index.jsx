@@ -8,7 +8,7 @@ import DraftjsScratchpad from './draftjsscratchpad'
 import EditorContainer from './draftjsscratchpad/DraftjsScratchpad'
 import Scratchpad from './scratchpad'
 import Whiteboard from './whiteboard'
-import ResearchContainer from '../app/containers/ResearchContainer'
+import DashboardContainer from '../app/containers/DashboardContainer'
 import BookmarksContainer from '../app/containers/BookmarksContainer'
 import Chat from './chat'
 
@@ -59,7 +59,7 @@ export default <Route path="/demos" component={({children}) => children}>
   <Route path='draftjsscratchpad/:room' component={DraftjsScratchpad}>
     <IndexRoute component={EditorContainer}/>
     <Route path='editor' component={EditorContainer} />
-    <Route path='research' component={ResearchContainer}/>
+    <Route path='research' component={DashboardContainer}/>
     <Route path='bookmarks' component={BookmarksContainer}/>
   </Route>
 </Route>

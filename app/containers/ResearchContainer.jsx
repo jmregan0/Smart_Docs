@@ -1,24 +1,21 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import Research from '../components/Research'
-import { findResearchOnInput } from '../action-creators/research'
+import React from 'react';
+import {Link} from 'react-router';
 
+import ResearchNav from '../components/ResearchNav';
 
+const ResearchDetail = (props) => {
+  console.log('all props', props)
 
-const mapState = (state) => {
-	return {
-		researchResults: state.researchResults,
-		nlpRelationships: state.nlpResults.nlpRelationships.relationships,
-		nlpSentiment: state.nlpResults.nlpSentiment,
-	}
+  return (
+    <div id="wrapper">
+      <ResearchNav />
+
+      <div id="page-wrapper">
+        <div className="container-fluid">
+          {props.children}
+        </div>
+      </div>
+    </div>
+  )
 }
-
-const mapDispatch = (dispatch) => {
-  return {
-		findResearchOnInput(tags) {
-			dispatch(findResearchOnInput(tags))
-		}
-  }
-}
-
-export default connect(mapState, mapDispatch)(Research)
+export default ResearchDetail;

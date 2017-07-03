@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import CollectedResources from '../components/CollectedResources'
+import Resource from '../components/Resource'
 import { saveBookmark } from '../action-creators/research'
 
 const mapState = ({researchResults}) => ({researchResults})
@@ -11,4 +11,4 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(CollectedResources)
+export default connect(mapState, mapDispatch)(Resource)
