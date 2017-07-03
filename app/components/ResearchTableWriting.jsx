@@ -9,83 +9,55 @@ export default class ResearchTableWriting extends React.Component {
 
   render() {
     const sentiment = this.props.sentiment;
+    let sorted = {};
+
+    sentiment.forEach(item=>{
+      if(!sorted[item.type]) sorted[item.type] = [];
+      sorted[item.type].push(item.normalized);
+    });
+    console.log("sorted object:",sorted);
+
+    const keys = Object.keys(sorted);
 
     return (
       <div className="col-lg-6">
         <div className="panel panel-default">
           <div className="panel-heading">
-            <h3 className="panel-title"><i className="fa fa-linode fa-fw"></i> Breakdown of Writing </h3>
+            <h3 className="panel-title"><i className="fa fa-linode fa-fw"></i> Entity Categories </h3>
           </div>
           <div className="panel-body">
             <div className="table-responsive">
-              <table className="table table-bordered table-hover table-striped">
-                <thead>
-                  <tr>
-                    <th> People </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                  sentiment.length ? sentiment.map((item, index) => {
-                    if(item.type === 'PERSON'){
-                      return (
-                        <tr key={index}>
-                          <td>{item.normalized}</td>
-                        </tr>
-                      )
-                    }
-                  })
-                  : null
-                  }
-                <br/>
-                <thead>
-                  <tr>
-                    <th> Places </th>
-                  </tr>
-                </thead>
-
-                  {
-                    sentiment.length ? sentiment.map((item, index) => {
-                    if(item.type === 'LOCATION'){
-                      return (
-                        <tr key={index}>
-                          <td>{item.normalized}</td>
-                        </tr>
-                      )
-                    }
-                  })
-                  : null
-                  }
-                <br/>
-                <thead>
-                  <tr>
-                    <th> Organizations </th>
-                  </tr>
-                </thead>
-
-                  {
-                    sentiment.length ? sentiment.map((item, index) => {
-                    if(item.type === 'ORGANIZATION'){
-                      return (
-                        <tr key={index}>
-                          <td>{item.normalized}</td>
-                        </tr>
-                      )
-                    }
-                  })
-                  : null
-                  }
-
-                </tbody>
-
-              </table>
+              {keys.map( (type)=>
+                <EntityTable key={type} title={type} entities={sorted[type]} />
+              )}
             </div>
             <div className="text-right">
-              <Link to="bulk-found-research">View Research Detail <i className="fa fa-arrow-circle-right"></i></Link>
+              <Link to="/research/entity">View Research Detail <i className="fa fa-arrow-circle-right"></i></Link>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
+}
+
+const EntityTable = ({title,entities}) => {
+  console.log('EntityTable:',entities);
+
+  return (
+  <table className="table table-bordered table-hover table-striped">
+    <thead>
+      <tr>
+        <th>{title}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {entities.map(entity=>
+        <tr>
+          <td>{entity}</td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+  );
 }
