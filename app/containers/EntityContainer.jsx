@@ -49,8 +49,8 @@ const mapState = ({nlpResults}) => ({nlpResults})
 export default connect(mapState)(EntityContainer)
 
 const wikiSearch = entity => {
-  //const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
-  const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
+  const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+  //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
   // encode non-ascii characters
   let query = encoder.htmlEncode(entity);
