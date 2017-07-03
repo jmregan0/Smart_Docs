@@ -10,8 +10,9 @@ module.exports = require('express').Router()
 // looks for proper nouns and central focus of writing
 
 .post('/entity', (req, res, next) => {
-  console.log('hit the entity route')
-  console.log('here is the req.body', req.body)
+  // console.log('hit the entity route')
+  // console.log('here is the req.body', req.body)
+  console.log("whats this", secrets.rosetteApi)
   var instance = axios.create({
       headers: {
         'X-RosetteAPI-Key': secrets.rosetteApi,
@@ -38,7 +39,8 @@ module.exports = require('express').Router()
 // returns sample input along with either positive, negative, or neutral sentiment
 
 .post('/sentiment', (req, res, next) => {
-  console.log('hit sentiment route')
+  // console.log('hit sentiment route')
+    // console.log("whats this", secrets.rosetteApi)
   var instance = axios.create({
       headers: {
         'X-RosetteAPI-Key': secrets.rosetteApi,
@@ -61,7 +63,8 @@ module.exports = require('express').Router()
 })
 
 .post('/relationships', (req, res, next) => {
-  console.log('hit category route')
+  // console.log('hit category route')
+  // console.log("whats this", secrets.rosetteApi)
   var instance = axios.create({
       headers: {
         'X-RosetteAPI-Key': secrets.rosetteApi,
