@@ -1,8 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Sentiment from '../components/Sentiment'
+import Breadcrumb from '../components/Breadcrumb';
 import { findSentimentOnInput } from '../action-creators/research'
 
+const SentimentContainer = (props) => {
+  return (
+    <div>
+      <Breadcrumb title={'Sentiment'} selection={'sentiment'} />
+      <Sentiment sentimentResults={props.sentimentResults} />
+    </div>
+  );
+}
 
 const mapState = (state) => {
 	return {
@@ -10,12 +19,4 @@ const mapState = (state) => {
 	}
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-		// findResearchOnInput(tags) {
-		// 	dispatch(findSentimentOnInput(tags))
-		// }
-  }
-}
-
-export default connect(mapState, mapDispatch)(Sentiment)
+export default connect(mapState)(SentimentContainer)

@@ -31,7 +31,7 @@ export default class ResearchTableResearch extends React.Component {
                   {research.map((item, index) => {
                       var title = item.title[0].slice(0,50) + '...'
                       return (
-                        <tr key={title}>
+                        <tr key={'ResearchTableResearch='+title+index}>
                           <td>{index + 1}</td>
                           <td>{title}</td>
                           <td>{item.type}</td>

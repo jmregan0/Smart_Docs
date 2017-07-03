@@ -2,7 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import {Encoder} from 'node-html-encoder';
+
+import ResearchTableEntity from '../components/ResearchTableEntity';
 import EntityDetail from '../components/EntityDetail';
+import Breadcrumb from '../components/Breadcrumb';
 
 var encoder = new Encoder('entity');
 
@@ -16,20 +19,24 @@ class EntityContainer extends React.Component {
 
   componentDidMount(){
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
+    const rows = this.props.rows || 3;
 
     entities.map(entity=>{
       wikiSearch(entity)
       .then(searchResults=>{
         //TRIM SEARCH RESULTS
-        console.log('search results from wiki api', searchResults)
-        const trimmed = searchResults.search.slice(0,3);
+        //console.log('search results from wiki api', searchResults)
+        const trimmed = searchResults.search.slice(0,rows);
 
         //update state with new object
         const oldResults = this.state.searchResults;
         const newResults = Object.assign({},oldResults,{[entity]:trimmed});
+        this.setState({searchResults: newResults});
+        /*
         this.setState({searchResults: newResults},
           ()=>console.log('Promise returned for: ',entity,', new state: ',this.state.searchResults)
         );
+        */
       })
       .catch(error=>console.log('wikiSearch result error for entity: ',entity,', error: ',error));
     });
@@ -38,9 +45,18 @@ class EntityContainer extends React.Component {
   render() {
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
 
-    return (
-      <EntityDetail entities={entities} searchResults={this.state.searchResults} />
-    );
+    if(this.props.inDash) {
+      return (
+        <ResearchTableEntity entities={entities} searchResults={this.state.searchResults} />
+      );
+    } else {
+      return (
+        <div>
+          <Breadcrumb title={'Entity'} selection={'entity'} />
+          <EntityDetail entities={entities} searchResults={this.state.searchResults} />
+        </div>
+      );
+    }
   }
 }
 
