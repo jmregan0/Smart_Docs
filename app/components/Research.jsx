@@ -46,7 +46,7 @@ const Research = (props) => {
             </div>*/}
             <ResearchTableWriting sentiment={sentiment} />
             <ResearchTableResearch research={researchResults.researchResults} />
-            <EntityContainer />
+            <EntityContainer rows={1} />
           </div>
 
         </div>

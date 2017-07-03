@@ -12,9 +12,9 @@ export default ({entities, searchResults}) =>
         {entities.map( entity=>
           <EntityTable key={entity} entity={entity} results={searchResults[entity] || []} />
         )}
-      </div>
-      <div className="text-right">
-        <Link to="/entity">View Entity Detail <i className="fa fa-arrow-circle-right"></i></Link>
+        <div className="text-right">
+          <Link to="/entity">View Entity Detail <i className="fa fa-arrow-circle-right"></i></Link>
+        </div>
       </div>
     </div>
   </div>
