@@ -24,3 +24,6 @@ firebase-debug.log
 *.swp
 *.swo
 smartdocs-6fc47ee83de2.json
+
+# Compiled CSS
+public/css/style.css
