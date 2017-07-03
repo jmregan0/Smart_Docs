@@ -39,11 +39,7 @@ class EntityContainer extends React.Component {
     const entities = this.props.nlpResults.nlpEntity.entities.map(entity=>entity.normalized);
 
     return (
-      <div className="row">>
-        <div className="col-lg-8 col-md-8 col-sm-8">
-          <EntityDetail entities={entities} searchResults={this.state.searchResults} />
-        </div>
-      </div>
+      <EntityDetail entities={entities} searchResults={this.state.searchResults} />
     );
   }
 }
@@ -54,6 +50,7 @@ export default connect(mapState)(EntityContainer)
 
 const wikiSearch = entity => {
   const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+  //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
   // encode non-ascii characters
   let query = encoder.htmlEncode(entity);
