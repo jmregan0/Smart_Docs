@@ -13,15 +13,16 @@ import EntityContainer from '../containers/EntityContainer';
 const Research = (props) => {
   const researchResults = props.researchResults;
   const relationships = props.nlpRelationships;
-  const sentiment = props.nlpSentiment.entities;
+  const entities = props.nlpSentiment.entities;
+  const sentiment = props.nlpSentiment.document.confidence * 100;
   console.log('all props', props)
 
   return(
     <div>
       <ResearchDash
         resources={researchResults.researchResults.length}
-        entities={sentiment.length}
-        sentiment={sentiment.legth}
+        entities={entities.length}
+        sentiment={sentiment}
         relationships={relationships.length}
       />
 
@@ -39,7 +40,7 @@ const Research = (props) => {
             </div>
           </div>
         </div>*/}
-        <ResearchTableWriting sentiment={sentiment} />
+        <ResearchTableWriting sentiment={entities} />
         <ResearchTableResearch research={researchResults.researchResults} />
         <EntityContainer rows={1} inDash={true} />
       </div>

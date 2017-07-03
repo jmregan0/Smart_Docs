@@ -10,7 +10,7 @@ export default class ResearchDash extends React.Component {
   render() {
     const resources = this.props.resources || 0;
     const entities = this.props.entities || 0;
-    const sentiment = this.props.sentiment || 0;
+    const sentiment = parseInt(this.props.sentiment) || 0;
     const relationships = this.props.relationships || 0;
 
     return (
@@ -84,7 +84,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                   <div className="col-xs-9 text-right">
                     <div className="huge">{sentiment}</div>
-                    <div><h5>Sentiment Results</h5></div>
+                    <div><h5>Sentiment Confidence Rating</h5></div>
                   </div>
                 </div>
               </div>
