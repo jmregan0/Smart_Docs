@@ -111,6 +111,9 @@ button{
 	height:400px;
 }
 
+.DraftEditor-editorContainer div h1, div h2 {
+  color: black;
+}
 
 .superFancyBlockquote {
   color: #999;
@@ -171,10 +174,13 @@ button{
   user-select: none;
 }
 
+.RichEditor-controls .btn {
+  margin: 0 5px;
+  padding: 3px 15px;
+}
+
 .RichEditor-styleButton {
-  color: #999;
   cursor: pointer;
-  margin-right: 16px;
   padding: 2px 0;
   display: inline-block;
 }
