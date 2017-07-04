@@ -443,3 +443,8 @@ input {
 
 .peerNotesComments {
   color: #b2b2b3; }
+
+.filter-line {
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  margin-top: 0px; }
