@@ -37,7 +37,7 @@ export default class CreateTopic extends React.Component {
             this.setState({submitDisabled:false, isValidationError:false})
             document.getElementById("sub-btn").enabled=true
         }
-    }  
+    }
 
     handleSubmit(event){
         event.preventDefault()
@@ -53,7 +53,7 @@ export default class CreateTopic extends React.Component {
         if(!duplicate){
             var userName=this.state.self.name?this.state.self.name:"anon"
             var name = this.state.value;
-            store.dispatch(setCurrentUser({uid:"", name:name}))   
+            store.dispatch(setCurrentUser({uid:"", name:name}))
             this.props.fireRefRoom.child(name).child('users').on('value', data=>{
                 this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
             });
@@ -94,7 +94,7 @@ export default class CreateTopic extends React.Component {
                   <h5 className="nav-header">Create Topic:<br/></h5>
                   <input type="text" name="firstname" value={this.state.value} onChange={this.handleFormChange}/>
                   <br/>
-                  <input id="sub-btn" className="btn btn-primary" type="submit" value="Submit" disabled={this.state.submitDisabled}/>
+                  <input id="sub-btn" className="btn btn-primary width-50" type="submit" value="Submit" disabled={this.state.submitDisabled}/>
                 </form>
                 </div>
             </div>
