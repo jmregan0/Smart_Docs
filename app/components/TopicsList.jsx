@@ -40,23 +40,23 @@ export default class TopicsList extends React.Component {
                 obj[key]=this.state.roomsList[key]
             })
             this.setState({filteredList:obj})
-            
+
         }
     }
 
     backToRoomsClickHandler(event){
         event.preventDefault()
-        store.dispatch(setCurrentUser({uid:"", name:""})) 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false}) 
-        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()  
+        store.dispatch(setCurrentUser({uid:"", name:""}))
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').child(this.state.self.uid).child('userInfo').set({userName:this.state.self.name, uid:this.state.self.uid, inRoom:false})
+        this.props.fireRefRoom.child(this.state.roomsSelected.name).child('users').off()
         this.setState({inRoom:false})
         this.setState({value:""})
     }
 
     roomClickHandler(event){
         var name = event.target.name;
-        this.setState({isValidationError:false}) 
-        store.dispatch(setCurrentUser({uid:"", name:name}))       
+        this.setState({isValidationError:false})
+        store.dispatch(setCurrentUser({uid:"", name:name}))
         var userName=this.state.self.name
         var userUid = this.state.self.uid
         //set selected room
@@ -95,18 +95,20 @@ export default class TopicsList extends React.Component {
     }
 
     render(){
-        var roomsList = this.state.filter?this.state.filteredList:this.state.roomsList 
+        var roomsList = this.state.filter?this.state.filteredList:this.state.roomsList
         return(
         <div className="col-sm-12">
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
-                    <form>
-                         <h5 className="nav-header">Filter Topic:<br/></h5>
-                        <input type="text" name="filter" value={this.state.filter} onChange={this.handleFilterChange}/>
-                    </form>
+                    <div className="filter-line">
+                        <form>
+                            <h5 className="nav-header">Filter Topic:<br/></h5>
+                            <input type="text" name="filter" value={this.state.filter} onChange={this.handleFilterChange}/>
+                        </form>
+                    </div>
                     {this.state.isValidationError?<h5>{this.state.isValidationError}</h5>:null}
                     <ul className="nav ">
-                        <h5 className="nav-header">List of Topics<br/></h5>
+                        <h5 className="nav-header">List of Topics:<br/></h5>
                         {
                             roomsList?Object.keys(roomsList).map((room)=>{
                                 return(
