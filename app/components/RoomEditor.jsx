@@ -13,6 +13,7 @@ import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
 import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
+import { Link } from 'react-router'
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   emitChanges(){
+    //console.log('emitting changes');
     this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
@@ -84,8 +86,8 @@ class DraftjsScratchpad extends React.Component {
       .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
     }
     else if(currentTextLength < this.state.checkTextLength - 150){
-      // console.log('Text length: ',currentTextLength);
-      // console.log('decreasing limit to ',newLimit);
+      console.log('Text length: ',currentTextLength);
+      console.log('decreasing limit to ',newLimit);
       this.setState({checkTextLength: newLimit})
     }
     // ---------------
@@ -94,67 +96,51 @@ class DraftjsScratchpad extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.writeNoteToFirebase()
+    this.clearTimer();
+    this.setTimer();
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.users.selected.name&&this.state.self.uid){
-      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{  
-        this.loadNoteFromFirebase()
-      })
-    }else{
-      this.setState({refRoute:null})
-      this.setState({editorState: EditorState.createEmpty()})
-    }
-  }
 
   componentWillUnmount(){
     this.clearTimer();
   }
-  
-  componentDidMount(){
+  componentDidMount() {
     this.setTimer();
+
+    // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
+        this.setState({userUidToGetNotes:null});
         this.setState({editorState: EditorState.createEmpty()});
       }
       else {
-        var name = user.email?user.email:"anon";
-        this.setState({self: {uid:user.uid, name:name}});
-        if(this.props.room){
-          this.setState({refRoute:this.props.fireRefRoom.child(this.props.room).child("users").child(user.uid).child("note")}, ()=>{
-            this.loadNoteFromFirebase();
-          })
-          
-        }
-
+        this.setState({userUidToGetNotes:user.uid});
+        console.log('new user, yes?',user.uid);
+        this.loadNoteFromFirebase(user.uid);
       }
     });
   }
 
-  loadNoteFromFirebase(){
+  loadNoteFromFirebase(uid){
+    return this.props.fireRefNotes.child(uid).once(
+      'value',
+      snapshot => {
+        console.log("From loadNoteFromFirebase:",snapshot.val());
 
-    if(this.state.refRoute){
-      return this.state.refRoute.once(
-        'value',
-        snapshot => {
-          if(snapshot.val()){
-            const newEditorState =
-              rawContentToEditorState(this.state.editorState,snapshot.val());
+        if(snapshot.val()){
+          const newEditorState =
+            rawContentToEditorState(this.state.editorState,snapshot.val());
 
-            this.setState({editorState: newEditorState});
-          }
-      });
-    }
+          this.setState({editorState: newEditorState});
+        }
+    });
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    if(this.state.refRoute){
-      return this.state.refRoute.set(rawState)
-    }
+    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
   }
 
   handleKeyCommand = command => {
@@ -186,6 +172,9 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
     const { editorState } = this.state;
+    // console.log("---------will---", this.props.users.selected)
+    // console.log('this.state.checkTextLength', this.state.checkTextLength)
+
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -198,15 +187,12 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h1>My Notes</h1>
-          <div>
-            <BlockStyleControls
+          <h4 id="myNotes">My Notes</h4>
+          <div id="myNotesControls">
+            <StyleControls
               editorState={this.state.editorState}
-              onToggle={this.toggleBlockType}
-            />
-            <InlineStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleInlineStyle}
+              onToggleInline={this.toggleInlineStyle}
+              onToggleBlock={this.toggleBlockType}
             />
           </div>
           <Editor
@@ -216,6 +202,7 @@ class DraftjsScratchpad extends React.Component {
             blockStyleFn={myBlockStyleFn}
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
+          <Link to="/entity">EntityDetail</Link>
         </div>
       </div>
     )
@@ -232,7 +219,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-    findRelationships: (text) => dispatch(findRelationships(text)),
+		findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -241,82 +228,90 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
 }
 
+// const BlockStyleControls = (props) => {
+const StyleControls = (props) => {
+  const { editorState } = props
+  let currentStyle = editorState.getCurrentInlineStyle()
+  const selection = editorState.getSelection()
+  const blockType = ""
+  if(editorState.getCurrentContent().getBlockForKey(selection.getStartKey())){
+      const blockType = editorState
+          .getCurrentContent()
+          .getBlockForKey(selection.getStartKey())
+          .getType();
+  }
+  console.log('blockType', blockType)
+  return (
+    <div className = "RichEditor-controls" >
+      {INLINE_STYLES.map(type =>
+        <StyleButton
+          key={ type.label }
+          active={ currentStyle.has(type.style) }
+          label={ type.label }
+          onToggleInline={ props.onToggleInline }
+          style={ type.style }
+          btnClass={ type.btnClass }
+          inline={ type.inline }
+          src={ type.source }
+        />
+      )}
+      {BLOCK_TYPES.map(type =>
+        <StyleButton key = { type.label }
+        active = { type.style === blockType }
+        label = { type.label }
+        onToggleBlock = { props.onToggleBlock }
+        style = { type.style }
+        btnClass={ type.btnClass }
+        />
+      )}
+    </div>
+  )
+}
 
-const BlockStyleControls = (props) => {
-    const { editorState } = props;
-    const selection = editorState.getSelection();
+// const InlineStyleControls = (props) => {
 
-        const blockType=""
-    if(editorState.getCurrentContent().getBlockForKey(selection.getStartKey())){
-        const blockType = editorState
-            .getCurrentContent()
-            .getBlockForKey(selection.getStartKey())
-            .getType();
-
-    }
-
-    return ( < div className = "RichEditor-controls" > {
-        BLOCK_TYPES.map((type) =>
-            < StyleButton key = { type.label }
-            active = { type.style === blockType }
-            label = { type.label }
-            onToggle = { props.onToggle }
-            style = { type.style }
-            />
-        )
-    } < /div>);
-};
-
-const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
-
-    return (
-      <div className="RichEditor-controls">
-        {INLINE_STYLES.map(type =>
-          <StyleButton
-            key={type.label}
-            active={currentStyle.has(type.style)}
-            label={type.label}
-            onToggle={props.onToggle}
-            style={type.style}
-          />
-        )
-    } </div>);
-};
+//     return (
+//       <div className="RichEditor-controls">
+//      </div>);
+// };
 
 const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
-    { label: 'H4', style: 'header-four' },
-    { label: 'H5', style: 'header-five' },
-    { label: 'H6', style: 'header-six' },
-    { label: 'Blockquote', style: 'blockquote' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
-    { label: 'Code Block', style: 'code-block' },
+  { label: 'H1', style: 'header-one' },
+  { label: 'H2', style: 'header-two' },
+  { label: 'H3', style: 'header-three' },
+  { label: 'H4', style: 'header-four' },
+  // { label: 'H5', style: 'header-five' },
+  // { label: 'H6', style: 'header-six' },
+  { label: 'Blockquote', style: 'blockquote', btnClass: 'fa fa-quote-left' },
+  { label: 'Unordered List', style: 'unordered-list-item', btnClass: 'fa fa-list-ul' },
+  { label: 'Ordered List', style: 'ordered-list-item', btnClass: 'fa fa-list-ol' },
+  { label: 'Code Block', style: 'code-block', btnClass: 'fa fa-code' },
 ];
 
 
 var INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
-    { label: 'Monospace', style: 'CODE' },
+    { label: 'Bold', style: 'BOLD', btnClass: 'fa fa-bold', inline: true },
+    { label: 'Italic', style: 'ITALIC', btnClass: 'fa fa-italic', inline: true },
+    { label: 'Underline', style: 'UNDERLINE', btnClass: 'fa fa-underline', inline: true },
+    { label: 'Monospace', style: 'CODE', btnClass: 'icon icons8-Monospaced-Font', source: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAADFUlEQVRoQ+1Y4ZFOQRDsi8CJABEcESACRIAIEAEiQARcBO4iQASIABEgAqqvttXYb3d2Z+69OvV5++ur+t7Mbs90z+zsAfZkHewJDmxA/rVMbhnZMrJSBP5ban0EcL0E9ROAG4kA0wdXxpZ2TftIRghATnR+HoaAIutX+Tiyt/XftI84ewzgBYDj4vU+gCcAXkZQFOBHAG4DeB+0vQXgHYDPhhlnLiJATgDcAfCwbP4awCmAu8HD8PA3zwnkAwCC+rMiQL4DOARwrVh/AfADwOUgkDcAstm0rHiQASJ9fANwtTj4CuBKEW1EJ88APAXwHAB/R1bXdjYjrUhkI9uN6gSi7p6zQKw+6IyLqc3oRILd4fkEkK6+ZoGo5FEP1AUXKUadRIuGgGT6kPrYTsWbAdIteecopdle0rWbASKBvQJAftvFHvIoIdwLASJe3gNArdjFHvIWQJTvpFW0KXrMmGqILX0IDPsK+0tUJ5mm6BaJEbXcKBQAmehmSrdbtkdApIGWPpSVmW/qyuo1RWaZS9VRtm4jHQGx1/ZRmY+UUy+6omp99XGz6AGx/B+B0P+2z3g2Pb7bUaEeEVxdeUAiFcmrbC1AvaYomtKmpnO3GY4qTaRHeL2ml5lWL+FNwV5KddOmD7f3eBlxI1CdLnPtqA9mb9h0X9+sU0Ckj59lBpnRiNdvWvZ12bbVj9/zxiB6DdtALyOZm23rhuwFoBavaKVHCTKCMw/pNbwx94As3rAaiOweBMWD9wY3AtF7wV+Tofz2gNjozE5/4riiOKKjbXCksqUSbS3V2BzdqbIFRHNGRB86NDe8VOhAQN6yTZGPEdzX9g4bGF5K3Tm/BSSjDx04ohPxnuCZEUsr+dO7gL7pPiG1gGT0oY0j87iAyNabd/RNCEhGH9ooqhOVbNq3Xi3r181u32v9IXHrjXck2vr/iL16yc7LoXE6883UYBUFciHf24xk5+jZu9Sq/vcayNLUULCssJfc48y/zYjuPktuYl/rV/U/GnWXBLWqrw3IquFNON8ykgjaqiZbRlYNb8L53mTkN9WP9jPM8oi0AAAAAElFTkSuQmCC', inline: true },
 ];
 
 class StyleButton extends React.Component {
     constructor() {
         super();
-        this.onToggle = (e) => {
+        this.onToggleInline = (e) => {
             e.preventDefault();
-            this.props.onToggle(this.props.style);
+            this.props.onToggleInline(this.props.style);
+        };
+        this.onToggleBlock = (e) => {
+            e.preventDefault();
+            this.props.onToggleBlock(this.props.style);
         };
     }
 
@@ -326,8 +321,9 @@ class StyleButton extends React.Component {
             className += ' RichEditor-activeButton';
         }
         // console.log('in DRAFTJSSCRATCHPAD')
-        return ( < span className = { className }
-            onMouseDown = { this.onToggle } > { this.props.label } < /span>
+        return ( <button className='btn'><span className={ className }
+            onMouseDown = { this.props.inline ? this.onToggleInline : this.onToggleBlock } >
+            {this.props.src ? <img className={this.props.btnClass} src={this.props.src} height='18'/> : this.props.btnClass ? <span className={ this.props.btnClass }></span> : this.props.label }</span></button>
         );
     }
 }

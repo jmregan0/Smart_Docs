@@ -179,7 +179,7 @@ button{
 }
 
 .RichEditor-controls .btn {
-  margin: 0 5px;
+  margin: 3px 5px;
   padding: 3px 15px;
 }
 
@@ -616,4 +616,26 @@ input {
 
 .width-50 {
   width: 50%;
+}
+
+#myNotes, #peerNotes, #documentUsers {
+  color: white;
+}
+
+#myNotesControls .RichEditor-controls {
+  height: 75px;
+}
+
+.peerNotesComments {
+  height: 80px;
+}
+
+#myNotesControls .RichEditor-controls .btn {
+  margin: 3px 0px;
+  border-radius: 2px;
+  border: 1px solid #aaa;
+}
+
+.peerNotesComments {
+  color: $light-gray;
 }
