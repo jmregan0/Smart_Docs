@@ -14,7 +14,7 @@ import { findRelationships, findEntity, findSentiment, findResearchOnInput } fro
 import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
 
-class DraftjsScratchpad extends React.Component {
+class RoomEditor extends React.Component {
   constructor(props) {
     super(props);
 
@@ -53,7 +53,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   emitChanges(){
-    this.writeNoteToFirebase()
+    // this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
     // ---------------
@@ -140,9 +140,7 @@ class DraftjsScratchpad extends React.Component {
         'value',
         snapshot => {
           if(snapshot.val()){
-            const newEditorState =
-              rawContentToEditorState(this.state.editorState,snapshot.val());
-
+            const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
             this.setState({editorState: newEditorState});
           }
       });
@@ -236,7 +234,7 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(DraftjsScratchpad)
+export default connect(mapState, mapDispatch)(RoomEditor)
 
 
 function myBlockStyleFn(contentBlock) {
