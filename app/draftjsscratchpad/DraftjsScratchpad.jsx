@@ -171,9 +171,6 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
     const { editorState } = this.state;
-    // console.log("---------will---", this.props.users.selected)
-    // console.log('this.state.checkTextLength', this.state.checkTextLength)
-
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';

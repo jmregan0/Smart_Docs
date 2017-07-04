@@ -53,7 +53,6 @@ class DraftjsScratchpad extends React.Component {
   }
 
   emitChanges(){
-    //console.log('emitting changes');
     this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
@@ -85,8 +84,8 @@ class DraftjsScratchpad extends React.Component {
       .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
     }
     else if(currentTextLength < this.state.checkTextLength - 150){
-      console.log('Text length: ',currentTextLength);
-      console.log('decreasing limit to ',newLimit);
+      // console.log('Text length: ',currentTextLength);
+      // console.log('decreasing limit to ',newLimit);
       this.setState({checkTextLength: newLimit})
     }
     // ---------------
@@ -99,21 +98,14 @@ class DraftjsScratchpad extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log("roomeditor, somponent wil receive props", nextProps.users.selected)
-    if(nextProps.users.selected.name){
-      
+    if(nextProps.users.selected.name&&this.state.self.uid){
       this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{  
         this.loadNoteFromFirebase()
-
       })
-      
     }else{
-      // console.log("refroute set to null")
       this.setState({refRoute:null})
       this.setState({editorState: EditorState.createEmpty()})
-      
     }
-    //load note
   }
 
   componentWillUnmount(){
@@ -122,7 +114,6 @@ class DraftjsScratchpad extends React.Component {
   
   componentDidMount(){
     this.setTimer();
-    // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
@@ -131,24 +122,24 @@ class DraftjsScratchpad extends React.Component {
       else {
         var name = user.email?user.email:"anon";
         this.setState({self: {uid:user.uid, name:name}});
-        this.setState({refRoute:this.props.fireRefRoom.child(this.props.users.selected.name).child("users").child(user.uid).child("note")}, ()=>{
-
-          this.loadNoteFromFirebase(user.uid);
-        })
+        if(this.props.room){
+          this.setState({refRoute:this.props.fireRefRoom.child(this.props.room).child("users").child(user.uid).child("note")}, ()=>{
+            this.loadNoteFromFirebase();
+          })
+          
+        }
 
       }
     });
   }
 
-  loadNoteFromFirebase(uid){
+  loadNoteFromFirebase(){
 
-    if(this.state.refRoute&&this.props.users.selected.uid){
+    if(this.state.refRoute){
       console.log("block 1")
       return this.state.refRoute.once(
         'value',
         snapshot => {
-          // console.log("From loadNoteFromFirebase:",snapshot.val());
-
           if(snapshot.val()){
             const newEditorState =
               rawContentToEditorState(this.state.editorState,snapshot.val());
@@ -156,31 +147,12 @@ class DraftjsScratchpad extends React.Component {
             this.setState({editorState: newEditorState});
           }
       });
-    }else if(this.state.refRoute&&this.props.users.selected.name){
-        console.log("block 2")
-        
-        return this.state.refRoute.once(
-        'value',
-        snapshot => {
-          // console.log("From loadNoteFromFirebase:",snapshot.val());
-
-          if(snapshot.val()){
-            const newEditorState =
-              rawContentToEditorState(this.state.editorState,snapshot.val());
-
-            this.setState({editorState: newEditorState});
-          }
-      });
-    }else{
-        this.setState({editorState: EditorState.createEmpty()});
-
     }
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    
     if(this.state.refRoute){
       return this.state.refRoute.set(rawState)
     }
@@ -215,9 +187,6 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
     const { editorState } = this.state;
-    // console.log("---------will---", this.props.users.selected)
-    // console.log('this.state.checkTextLength', this.state.checkTextLength)
-
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
@@ -230,7 +199,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h2>My Notes</h2>
+        <h1>My Notes</h1>
           <div>
             <BlockStyleControls
               editorState={this.state.editorState}

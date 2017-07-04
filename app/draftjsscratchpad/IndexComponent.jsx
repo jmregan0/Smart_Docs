@@ -21,9 +21,7 @@ class Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    
-    console.log("-------------nextProps.users in index.jsx", nextProps.users.selected.name)
-    if(nextProps.users.selected.name){
+        if(nextProps.users.selected.name){
       this.setState({inRoom: nextProps.users.selected.name})
     }else{
       this.setState({inRoom:false})
@@ -31,14 +29,12 @@ class Index extends React.Component {
   }
 
   componentDidMount(){
-    console.log("new index", this.props)
     if(this.props.room){
      this.setState({inRoom:this.props.room}) 
     }
   }
 
   render(){
-    console.log("this.props.room", this.props.room)
     var room = this.state.inRoom?this.state.inRoom:null
 
     return(
@@ -49,7 +45,7 @@ class Index extends React.Component {
       <div className="col-sm-9 col-xs-12">
           <div>
             <div className="col-sm-6">
-              <RoomEditorContainer fireRefRoom={db.ref('rooms')} />
+              <RoomEditorContainer room={this.props.room} fireRefRoom={db.ref('rooms')} />
             </div>
             <div className="col-sm-6">
               <PeerContentsContainer fireRefRoom={db.ref('rooms')} />
@@ -65,11 +61,6 @@ class Index extends React.Component {
       )
   }
 }
-
-
-
-//notes/userid-->notecontent
-//rooms/roomid/userid
 
 const mapState = ({users, nlpResults}) => ({
     nlpResults,
