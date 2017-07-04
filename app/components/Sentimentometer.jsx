@@ -52,7 +52,7 @@ export default class Sentimentbar extends React.Component {
 
   render(){
     let temp = this.props.sentiment.nlpSentiment ? Math.round(this.props.sentiment.nlpSentiment.document.confidence*100) : 0;
-    console.log("temp",temp);
+    // console.log("temp",temp);
 
     return(
 

@@ -10,11 +10,11 @@ import {
   CompositeDecorator,
 } from 'draft-js'
 import firebase from 'APP/fire'
-import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
+import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../action-creators/research'
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
 
-class DraftjsScratchpad extends React.Component {
+class PeerContents extends React.Component {
   constructor(props) {
     super(props);
 
@@ -40,64 +40,60 @@ class DraftjsScratchpad extends React.Component {
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
     this.loadNoteFromFirebase = this.loadNoteFromFirebase.bind(this);
-    this.emitChanges = this.emitChanges.bind(this);
+    // this.emitChanges = this.emitChanges.bind(this);
   }
 
-  setTimer(){
-    return this.unSetTimer = setInterval(this.emitChanges,2000);
-  }
+  // setTimer(){
+  //   return this.unSetTimer = setInterval(this.emitChanges,2000);
+  // }
 
-  clearTimer(){
-    return clearInterval(this.unSetTimer);
-  }
+  // clearTimer(){
+  //   return clearInterval(this.unSetTimer);
+  // }
 
-  emitChanges(){
-    //console.log('emitting changes');
-    // this.writeNoteToFirebase()
+  // emitChanges(){
+  //   // BEGIN NLP BLOCK
+  //   // ---------------
+  //   let currentText = this.state.editorState.getCurrentContent().getPlainText();
+  //   let currentTextLength = currentText.split(' ').length;
+  //   let newLimit = Math.floor(currentTextLength/150)*150+150;
 
-    // BEGIN NLP BLOCK
-    // ---------------
-    let currentText = this.state.editorState.getCurrentContent().getPlainText();
-    let currentTextLength = currentText.split(' ').length;
-    let newLimit = Math.floor(currentTextLength/150)*150+150;
-
-    if(currentTextLength > this.state.checkTextLength){
-      console.log('Text length: ',currentTextLength);
-      console.log('Increasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
-      Promise.all([
-        this.findSentiment(currentText),
-        this.findEntity(currentText),
-        this.findRelationships(currentText),
-      ])
-      .then(()=>{
-        console.log('this.props:',this.props);
-        // BEGIN ENTITY BLOCK
-        // ------------------
-        let entities = this.props.nlpResults.nlpEntity.entities;
-        console.log('Promise resolved.  State: ',entities);
-        let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
-        this.setState({editorState: newEditorState});
-        // ------------------
-        // END   ENTITY BLOCK
-      })
-      .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
-    }
-    else if(currentTextLength < this.state.checkTextLength - 150){
-      console.log('Text length: ',currentTextLength);
-      console.log('decreasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
-    }
-    // ---------------
-    // END   NLP BLOCK
-  }
+  //   if(currentTextLength > this.state.checkTextLength){
+  //     console.log('Text length: ',currentTextLength);
+  //     console.log('Increasing limit to ',newLimit);
+  //     this.setState({checkTextLength: newLimit})
+  //     Promise.all([
+  //       this.findSentiment(currentText),
+  //       this.findEntity(currentText),
+  //       this.findRelationships(currentText),
+  //     ])
+  //     .then(()=>{
+  //       console.log('this.props:',this.props);
+  //       // BEGIN ENTITY BLOCK
+  //       // ------------------
+  //       let entities = this.props.nlpResults.nlpEntity.entities;
+  //       console.log('Promise resolved.  State: ',entities);
+  //       let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
+  //       this.setState({editorState: newEditorState});
+  //       // ------------------
+  //       // END   ENTITY BLOCK
+  //     })
+  //     .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
+  //   }
+  //   else if(currentTextLength < this.state.checkTextLength - 150){
+  //     // console.log('Text length: ',currentTextLength);
+  //     // console.log('decreasing limit to ',newLimit);
+  //     this.setState({checkTextLength: newLimit})
+  //   }
+  //   // ---------------
+  //   // END   NLP BLOCK
+  // }
 
   onChange = (editorState) => {
     this.setState({editorState})
     this.clearTimer();
     this.setTimer();
   }
-
 
   componentWillReceiveProps(nextProps){
     if(this.state.refRoute){
@@ -113,11 +109,10 @@ class DraftjsScratchpad extends React.Component {
   }
 
   componentWillUnmount(){
-    this.clearTimer();
+    // this.clearTimer();
   }
   componentDidMount() {
-    this.setTimer();
-
+    // this.setTimer();
     // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
@@ -127,46 +122,41 @@ class DraftjsScratchpad extends React.Component {
       }
       else {
         this.setState({userUidToGetNotes:user.uid});
-        console.log('new user, yes?',user.uid);
         this.loadNoteFromFirebase(user.uid);
       }
     });
   }
 
-  loadNoteFromFirebase(uid){
-    this.state.refRoute.once(
-      'value',
-      snapshot => {
-        console.log("From loadNoteFromFirebase:",snapshot.val());
-
-        if(snapshot.val()){
-          const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
-
-          this.setState({editorState: newEditorState});
-        }
-    });
-
-    this.state.refRoute.on('value', (data)=>{
-      if(data.val()){
-          const newEditorState = rawContentToEditorState(this.state.editorState,data.val());
-
-          this.setState({editorState: newEditorState});
-        }
-    })
-
-                // this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').on('value', data=>{
-                //     // console.log({roomsSelected: {rid:name, name:name, users:data.val()}})
-                //     this.setState({roomsSelected: {rid:name, name:name, users:data.val()}})
-                //     this.props.fireRefRoom.child(name).child('users').child(this.state.self.uid).child('userInfo').off()
-                // });
-
+  componentWillUnmount(){
+    if(this.state.refRoute){
+      this.state.refRoute.off()
+    }
   }
 
-  // writeNoteToFirebase = () => {
-  //   const currentContent = this.state.editorState.getCurrentContent()
-  //   const rawState = convertToRaw(currentContent)
-  //   return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
-  // }
+  loadNoteFromFirebase(uid){
+    if(this.state.refRoute){
+      this.state.refRoute.once(
+        'value',
+        snapshot => {
+          console.log("From loadNoteFromFirebase:",snapshot.val());
+
+          if(snapshot.val()){
+            const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      });
+
+      this.state.refRoute.on('value', (data)=>{
+        console.log("TRYING TO LOAD FROM PEER CONTENTS")
+        if(data.val()){
+            const newEditorState = rawContentToEditorState(this.state.editorState,data.val());
+
+            this.setState({editorState: newEditorState});
+          }
+      })
+    }
+  }
 
   handleKeyCommand = command => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
@@ -197,8 +187,6 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
     const { editorState } = this.state;
-    // console.log("---------will---", this.props.users.selected)
-    // console.log('this.state.checkTextLength', this.state.checkTextLength)
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -212,7 +200,7 @@ class DraftjsScratchpad extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h2>Peer Notes</h2>
+        <h1>Peer Notes</h1>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
@@ -227,11 +215,9 @@ class DraftjsScratchpad extends React.Component {
   }
 }
 
-
 const mapState = ({users, nlpResults}) => ({
     nlpResults
 });
-
 
 const mapDispatch = (dispatch) => {
   return {
@@ -241,7 +227,7 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(DraftjsScratchpad)
+export default connect(mapState, mapDispatch)(PeerContents)
 
 
 function myBlockStyleFn(contentBlock) {
@@ -251,7 +237,6 @@ function myBlockStyleFn(contentBlock) {
     return 'superFancyBlockquote';
   }
 }
-
 
 const BlockStyleControls = (props) => {
     const { editorState } = props;

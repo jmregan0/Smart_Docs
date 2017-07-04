@@ -4,7 +4,7 @@ import SidebarContainer from '../../app/containers/SidebarContainer'
 import SentimentometerContainer from '../../app/containers/SentimentometerContainer'
 import RoomEditorContainer from '../../app/containers/RoomEditorContainer'
 import PeerContentsContainer from '../../app/containers/PeerContentsContainer'
-import DraftjsScratchpad from './DraftjsScratchpad'
+import DraftjsScratchpad from '../../demos/draftjsscratchpad/DraftjsScratchpad'
 import RoomSidebar from '../../app/components/RoomSidebar'
 import UserSidebar from '../../app/components/UserSidebar'
 import store from '../../app/store'
@@ -12,65 +12,46 @@ import { connect } from 'react-redux'
 const db = firebase.database()
     , auth = firebase.auth()
 
-class Index extends React.Component {
+class PersonalEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state={inRoom:false}
+    this.state={self:{uid:null, name:"name not set"}}
 
-  }
-
-  componentWillReceiveProps(nextProps){
-    
-    console.log("-------------nextProps.users in index.jsx", nextProps.users.selected.name)
-    if(nextProps.users.selected.name){
-      this.setState({inRoom: nextProps.users.selected.name})
-    }else{
-      this.setState({inRoom:false})
-    }
   }
 
   componentDidMount(){
-    console.log(this.props)
-    if(this.props.room){
+    firebase.auth().onAuthStateChanged((user)=> {
+            if(user){
 
-    }
+                var name = user.email?user.email:"anon"
+                this.setState({self: {uid:user.uid, name:name}})
+            }else{
+              console.log("there is no user")
+            }
+        })
   }
 
   render(){
-    console.log("this.props.room", this.props.room)
-    var room = this.state.inRoom?this.state.inRoom:"welcome"
+
 
     return(
     <div>
-      <h1>{room}</h1>
+      <h1>Hello, {this.state.self.name}</h1>
       {/* Here, we're passing in a Firebase reference to
           /scratchpads/$scratchpadTitle. This is where the scratchpad is
           stored in Firebase. Each scratchpad is just a string that the
           component will listen to, but it could be the root of a more complex
           data structure if we wanted. */}
-      <div className="col-sm-2 col-xs-12">
-        <RoomSidebar room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
-      </div>
-      <div className="col-sm-7 col-xs-12">
-        {
-          !this.state.inRoom?
+      <div className="col-sm-9 col-xs-9">
+       
           <div>
             <div className="col-sm-12">
-              <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms').child(this.props.room)}/>
+              <DraftjsScratchpad fireRefNotes={db.ref('users(notes)')}/>
             </div>
           </div>
-          :
-          <div>
-            <div className="col-sm-6">
-              <RoomEditorContainer fireRefRoom={db.ref('rooms')} />
-            </div>
-            <div className="col-sm-6">
-              <PeerContentsContainer fireRefRoom={db.ref('rooms')} />
-            </div>
-          </div>
-        }
+
       </div>
-      <div className="col-sm-3">
+      <div className="col-sm-3 col-xs-3">
         <SentimentometerContainer />
         <SidebarContainer/>
       </div>
@@ -78,7 +59,6 @@ class Index extends React.Component {
       )
   }
 }
-
 
 
 //notes/userid-->notecontent
@@ -98,4 +78,4 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Index)
+export default connect(mapState, mapDispatch)(PersonalEditor)

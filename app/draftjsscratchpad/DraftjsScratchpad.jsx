@@ -11,8 +11,9 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
 import Promise from 'bluebird';
+import {Link} from 'react-router';
 
 class DraftjsScratchpad extends React.Component {
   constructor(props) {
@@ -28,8 +29,7 @@ class DraftjsScratchpad extends React.Component {
     this.state = {
       editorState: EditorState.createEmpty(decorator),
       checkTextLength: 200,
-      refRoute:null,
-      self: {uid:"", name:""}
+      userUidToGetNotes:""
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -53,6 +53,7 @@ class DraftjsScratchpad extends React.Component {
   }
 
   emitChanges(){
+    //console.log('emitting changes');
     this.writeNoteToFirebase()
 
     // BEGIN NLP BLOCK
@@ -84,8 +85,8 @@ class DraftjsScratchpad extends React.Component {
       .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
     }
     else if(currentTextLength < this.state.checkTextLength - 150){
-      // console.log('Text length: ',currentTextLength);
-      // console.log('decreasing limit to ',newLimit);
+      console.log('Text length: ',currentTextLength);
+      console.log('decreasing limit to ',newLimit);
       this.setState({checkTextLength: newLimit})
     }
     // ---------------
@@ -94,67 +95,51 @@ class DraftjsScratchpad extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
-    this.writeNoteToFirebase()
+    this.clearTimer();
+    this.setTimer();
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.users.selected.name&&this.state.self.uid){
-      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{  
-        this.loadNoteFromFirebase()
-      })
-    }else{
-      this.setState({refRoute:null})
-      this.setState({editorState: EditorState.createEmpty()})
-    }
-  }
 
   componentWillUnmount(){
     this.clearTimer();
   }
-  
-  componentDidMount(){
+  componentDidMount() {
     this.setTimer();
+
+    // register auth listener
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
+        this.setState({userUidToGetNotes:null});
         this.setState({editorState: EditorState.createEmpty()});
       }
       else {
-        var name = user.email?user.email:"anon";
-        this.setState({self: {uid:user.uid, name:name}});
-        if(this.props.room){
-          this.setState({refRoute:this.props.fireRefRoom.child(this.props.room).child("users").child(user.uid).child("note")}, ()=>{
-            this.loadNoteFromFirebase();
-          })
-          
-        }
-
+        this.setState({userUidToGetNotes:user.uid});
+        console.log('new user, yes?',user.uid);
+        this.loadNoteFromFirebase(user.uid);
       }
     });
   }
 
-  loadNoteFromFirebase(){
+  loadNoteFromFirebase(uid){
+    return this.props.fireRefNotes.child(uid).once(
+      'value',
+      snapshot => {
+        console.log("From loadNoteFromFirebase:",snapshot.val());
 
-    if(this.state.refRoute){
-      return this.state.refRoute.once(
-        'value',
-        snapshot => {
-          if(snapshot.val()){
-            const newEditorState =
-              rawContentToEditorState(this.state.editorState,snapshot.val());
+        if(snapshot.val()){
+          const newEditorState =
+            rawContentToEditorState(this.state.editorState,snapshot.val());
 
-            this.setState({editorState: newEditorState});
-          }
-      });
-    }
+          this.setState({editorState: newEditorState});
+        }
+    });
   }
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    if(this.state.refRoute){
-      return this.state.refRoute.set(rawState)
-    }
+    return this.props.fireRefNotes.child(this.state.userUidToGetNotes).set(rawState)
   }
 
   handleKeyCommand = command => {
@@ -197,26 +182,26 @@ class DraftjsScratchpad extends React.Component {
     }
     return (
       <div>
-        <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h1>My Notes</h1>
-          <div>
-            <BlockStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleBlockType}
-            />
-            <InlineStyleControls
-              editorState={this.state.editorState}
-              onToggle={this.toggleInlineStyle}
-            />
-          </div>
-          <Editor
+      
+        <div>
+          <BlockStyleControls
             editorState={this.state.editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.onChange}
-            blockStyleFn={myBlockStyleFn}
+            onToggle={this.toggleBlockType}
+          />
+          <InlineStyleControls
+            editorState={this.state.editorState}
+            onToggle={this.toggleInlineStyle}
           />
           <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
+          <Link to="/entity">EntityDetail</Link>
         </div>
+        <Editor
+          editorState={this.state.editorState}
+          handleKeyCommand={this.handleKeyCommand}
+          onChange={this.onChange}
+          blockStyleFn={myBlockStyleFn}
+        />
+        <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
       </div>
     )
   }
@@ -232,7 +217,7 @@ const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-    findRelationships: (text) => dispatch(findRelationships(text)),
+		findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
@@ -241,7 +226,7 @@ export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }

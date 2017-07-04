@@ -16,8 +16,9 @@ import ResourceContainer from './containers/ResourceContainer'
 import EntityContainer from './containers/EntityContainer'
 import RelationshipContainer from './containers/RelationshipContainer'
 import Demos from 'APP/demos'
-import DraftjsScratchpad from '../demos/draftjsscratchpad/index'
-
+import DraftjsScratchpad from './draftjsscratchpad/index'
+import SelectionScreen from './components/SelectionScreen'
+import PersonalEditor from './components/PersonalEditor'
 // Get the auth API from Firebase.
 const auth = firebase.auth()
 
@@ -55,7 +56,7 @@ const App = ({children}) =>
            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                Menu <i className="fa fa-bars"></i>
            </button>
-           <Link to='/edison/welcome' className="navbar-brand page-scroll">
+           <Link to='/edison' className="navbar-brand page-scroll">
                <i className="fa fa-play-circle"></i> <span className="light">Start</span> SmartDocs
            </Link>
            <Link to='/about' className="navbar-custom page-scroll">About</Link>
@@ -87,7 +88,10 @@ render(
      <Route path="/" component={App}>
        <IndexRedirect to="/landing" />
        <Route path="/landing" component={Landing}/>
+       <Route path="/edison" component={SelectionScreen}/>
        <Route path="/edison/:room" component={DraftjsScratchpad}/>
+       <Route path="/myeditor" component={PersonalEditor}/>
+
        <Route path="/demos/:room" component={Editor}/>
          {Demos /* Put all the demos and a description page at /demos */}
        </Route>
