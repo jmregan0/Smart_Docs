@@ -13,6 +13,9 @@ div h1, div h2, div h2 p, #about p, #contact p, footer p {
   color: white;
   padding-left: 10px; }
 
+#about h2, #download h2, #contact h2 {
+  color: white; }
+
 a {
   color: #2f79b9; }
 
