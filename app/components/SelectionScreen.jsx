@@ -24,7 +24,7 @@ const SelectionScreen = () => {
         <h1>Create A New Topic</h1>
           <CreateTopic fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
         <h1>or just write...</h1>
-        <button className="btn btn-primary col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3" onClick={()=>{browserHistory.push("myeditor")}}>Start blank note</button>
+        <button className="btn btn-primary" onClick={()=>{browserHistory.push("myeditor")}}>Start blank note</button>
       </div>
     </div>
   )
