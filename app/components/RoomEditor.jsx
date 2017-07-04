@@ -136,7 +136,6 @@ class DraftjsScratchpad extends React.Component {
   loadNoteFromFirebase(){
 
     if(this.state.refRoute){
-      console.log("block 1")
       return this.state.refRoute.once(
         'value',
         snapshot => {

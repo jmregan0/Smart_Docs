@@ -24,7 +24,6 @@ class PersonalEditor extends React.Component {
             if(user){
 
                 var name = user.email?user.email:"anon"
-                console.log("there is a user its name is", name)
                 this.setState({self: {uid:user.uid, name:name}})
             }else{
               console.log("there is no user")
