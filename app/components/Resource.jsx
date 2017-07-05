@@ -23,7 +23,6 @@ const CollectedResources = (props) => {
               <th>Save?</th>
               <th>Data Type</th>
               <th>Title</th>
-              <th>Author</th>
               <th>Publisher</th>
               {/*<th>ISBN</th>*/}
               {/*<th>Publication Date</th>*/}
@@ -90,7 +89,6 @@ const CollectedResources = (props) => {
                   <td>{data.type}</td>
                   <td>{data.title}</td>
                   {/*<td>{data.abstract || 'NA'}</td>*/}
-                  <td>{data.author || 'Not Found'}</td>
                   <td>{data.publisher || 'Not Found'}</td>
                   {/*<td>{data.ISBN[0] || data.ISBN || 'NA'}</td>*/}
                   <td><a href={data.url}>{data.url}</a></td>
