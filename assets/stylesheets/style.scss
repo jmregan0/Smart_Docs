@@ -628,3 +628,9 @@ input {
   margin-top: 10px;
   font-family: $font;
 }
+
+@media (min-width: 768px) {
+  .navbar-form .input-group>.form-control {
+      width: 18.5vw;
+  }
+}

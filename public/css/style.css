@@ -435,3 +435,7 @@ input {
 .searchHeader {
   margin-top: 10px;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+@media (min-width: 768px) {
+  .navbar-form .input-group > .form-control {
+    width: 18.5vw; } }

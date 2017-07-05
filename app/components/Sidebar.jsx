@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router'
+import { addTag } from '../action-creators/research'
 
 class Sidebar extends React.Component {
 // const topEntities = props.entities && [props.entities[0].mention, props.entities[1].mention, props.entities[2].mention]
@@ -15,9 +16,19 @@ class Sidebar extends React.Component {
 
     handleSubmit(evt) {
         evt.preventDefault()
-        let tags = this.state.searchTags.join(', ').split(', ')
-        this.props.findResearchOnInput(tags)
+        let tags
+        if (this.state.searchTags.indexOf(', ') > 0) {
+            tags = this.state.searchTags.join(', ').split(', ')
+        } else if (this.state.searchTags.indexOf(',') > 0) {
+            tags = this.state.searchTags.join(',').split(', ')
+        } else {
+            tags = this.state.searchTags
+        }
         console.log('tags', tags)
+        this.props.addTag(tags)
+        let searchBox = document.getElementById("srch-term")
+        searchBox.value = ''
+        // newEntities = Object.assign({}, tags, selectedEntities)
     }
 
     render() {

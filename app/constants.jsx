@@ -12,3 +12,5 @@ export const REMOVE_ENTITY = 'REMOVE_ENTITY'
 export const SAVE_BOOKMARK = 'SAVE_BOOKMARK'
 
 export const SEND_SENTIMENT = 'SEND_SENTIMENT'
+
+export const ADD_TAG = 'ADD_TAG'
