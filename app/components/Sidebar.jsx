@@ -26,11 +26,12 @@ class Sidebar extends React.Component {
             <div className="col-sm-12 sidebar-nav-fixed pull-right">
                 <div className="well">
                     <div className="search">
+                        <div className="searchHeader">Add custom tags to research</div>
                         <form className="navbar-form" role="search" onSubmit={this.handleSubmit}>
                         <div className="input-group add-on">
-                            <input className="form-control" placeholder="Enter tags to research" name="srch-term" id="srch-term" type="text" onChange={evt => this.setState({ searchTags: [evt.target.value] })}/>
+                            <input className="form-control" placeholder="Enter tags" name="srch-term" id="srch-term" type="text" onChange={evt => this.setState({ searchTags: [evt.target.value] })}/>
                             <div className="input-group-btn">
-                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-search" onClick={this.handleSubmit}></i></button>
+                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-plus" onClick={this.handleSubmit}></i></button>
                             </div>
                         </div>
                         </form>

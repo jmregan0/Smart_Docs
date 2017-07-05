@@ -431,3 +431,7 @@ input {
   padding-bottom: 10px;
   margin-bottom: 20px;
   margin-top: 0px; }
+
+.searchHeader {
+  margin-top: 10px;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif; }
