@@ -209,7 +209,8 @@ class DraftjsScratchpad extends React.Component {
 
 
 const mapState = ({users, nlpResults}) => ({
-    nlpResults
+  users,
+  nlpResults
 });
 
 

@@ -51,7 +51,7 @@ export default class UsersPane extends React.Component {
     render(){
         return(
         <div className="col-sm-12">
-        <h1>this is the users pane</h1>
+        <h4 id="documentUsers">Document users</h4>
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
                     <ul className="nav ">
