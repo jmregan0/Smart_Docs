@@ -42,6 +42,8 @@ class RoomEditor extends React.Component {
     this.findRelationships = props.findRelationships;
     this.loadNoteFromFirebase = this.loadNoteFromFirebase.bind(this);
     this.emitChanges = this.emitChanges.bind(this);
+    this.writeNoteToFirebase = this.writeNoteToFirebase.bind(this);
+    this.decorator = decorator;
   }
 
   setTimer(){
@@ -77,7 +79,12 @@ class RoomEditor extends React.Component {
         let entities = this.props.nlpResults.nlpEntity.entities;
         console.log('Promise resolved.  State: ',entities);
         let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
-        this.setState({editorState: newEditorState});
+        this.setState({editorState: newEditorState},
+          ()=>{
+            console.log('writing decorations to firebase...');
+            this.writeNoteToFirebase();
+          }
+        );
         // ------------------
         // END   ENTITY BLOCK
       })
@@ -93,7 +100,7 @@ class RoomEditor extends React.Component {
   }
 
   onChange = (editorState) => {
-    this.setState({editorState}, this.writeNoteToFirebase)
+    this.setState({editorState});
     this.clearTimer();
     this.setTimer();
   }
@@ -105,7 +112,7 @@ class RoomEditor extends React.Component {
       })
     }else{
       this.setState({refRoute:null})
-      //this.setState({editorState: EditorState.createEmpty(decorator)})
+      this.setState({editorState: EditorState.createEmpty(this.decorator)})
     }
   }
 
@@ -118,7 +125,7 @@ class RoomEditor extends React.Component {
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
-        //this.setState({editorState: EditorState.createEmpty(decorator)});
+        this.setState({editorState: EditorState.createEmpty(this.decorator)});
       }
       else {
         var name = user.email?user.email:"anon";
@@ -151,6 +158,7 @@ class RoomEditor extends React.Component {
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
+    console.log('writeNoteToFirebase, content:',rawState);
     if(this.state.refRoute){
       return this.state.refRoute.set(rawState)
     }

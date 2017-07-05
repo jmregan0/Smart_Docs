@@ -91,8 +91,10 @@ class PeerContents extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState})
+    /*
     this.clearTimer();
     this.setTimer();
+    */
   }
 
   componentWillReceiveProps(nextProps){
@@ -118,7 +120,7 @@ class PeerContents extends React.Component {
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
         this.setState({userUidToGetNotes:null});
-        this.setState({editorState: EditorState.createEmpty()});
+        //this.setState({editorState: EditorState.createEmpty()});
       }
       else {
         this.setState({userUidToGetNotes:user.uid});
