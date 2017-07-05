@@ -11,10 +11,10 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from './draftDecorator';
 import Promise from 'bluebird';
 
-class RoomEditor extends React.Component {
+class DraftjsScratchpad extends React.Component {
   constructor(props) {
     super(props);
 
@@ -27,136 +27,153 @@ class RoomEditor extends React.Component {
 
     this.state = {
       editorState: EditorState.createEmpty(decorator),
-      checkTextLength: 200,
-      refRoute:null,
-      self: {uid:"", name:""}
+      loadingFromFirebase: false,
+      checkTextLength: 200
     }
 
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
-    this.selectedUser=""
-
     this.findSentiment = props.findSentiment;
     this.findEntity = props.findEntity;
     this.findRelationships = props.findRelationships;
-    this.loadNoteFromFirebase = this.loadNoteFromFirebase.bind(this);
-    this.emitChanges = this.emitChanges.bind(this);
   }
 
-  setTimer(){
-    return this.unSetTimer = setInterval(this.emitChanges,2000);
-  }
-
-  clearTimer(){
-    return clearInterval(this.unSetTimer);
-  }
-
-  emitChanges(){
-    // this.writeNoteToFirebase()
-
-    // BEGIN NLP BLOCK
-    // ---------------
-    let currentText = this.state.editorState.getCurrentContent().getPlainText();
-    let currentTextLength = currentText.split(' ').length;
-    let newLimit = Math.floor(currentTextLength/150)*150+150;
-
-    if(currentTextLength > this.state.checkTextLength){
-      console.log('Text length: ',currentTextLength);
-      console.log('Increasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
+  onChange = (editorState) => {
+    this.setState({editorState})
+    this.writeNoteToFirebase()
+    let currentText = editorState.getCurrentContent().getPlainText();
+    if(currentText.split(' ').length > this.state.checkTextLength){
+<<<<<<< HEAD
+      // this.findSentiment(currentText)
+      console.log('editor change?!?????????????????')
+      this.findEntity(currentText)
+      // this.findRelationships(currentText)
+=======
+>>>>>>> master
+      console.log('we have hit our limit')
+      this.setState({checkTextLength: this.state.checkTextLength + 150})
       Promise.all([
         this.findSentiment(currentText),
         this.findEntity(currentText),
         this.findRelationships(currentText),
       ])
       .then(()=>{
-        console.log('this.props:',this.props);
         // BEGIN ENTITY BLOCK
         // ------------------
-        let entities = this.props.nlpResults.nlpEntity.entities;
+        let entities = this.props.nlpEntity.entities;
         console.log('Promise resolved.  State: ',entities);
         let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
         this.setState({editorState: newEditorState});
         // ------------------
         // END   ENTITY BLOCK
       })
-      .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
-    }
-    else if(currentTextLength < this.state.checkTextLength - 150){
-      // console.log('Text length: ',currentTextLength);
-      // console.log('decreasing limit to ',newLimit);
-      this.setState({checkTextLength: newLimit})
-    }
-    // ---------------
-    // END   NLP BLOCK
-  }
-
-  onChange = (editorState) => {
-    this.setState({editorState}, this.writeNoteToFirebase)
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.users.selected.name&&this.state.self.uid){
-      this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(this.state.self.uid).child("note")}, ()=>{  
-        this.loadNoteFromFirebase()
-      })
-    }else{
-      this.setState({refRoute:null})
-      this.setState({editorState: EditorState.createEmpty()})
+      .catch(error=>console.error);
     }
   }
 
-  componentWillUnmount(){
-    this.clearTimer();
-  }
-  
-  componentDidMount(){
-    this.setTimer();
-    firebase.auth().onAuthStateChanged((user)=>{
-      if(!user) {
-        console.error("Firebase AUTH: No user detected. user: ",user);
-        this.setState({editorState: EditorState.createEmpty()});
-      }
-      else {
-        var name = user.email?user.email:"anon";
-        this.setState({self: {uid:user.uid, name:name}});
-        if(this.props.room){
-          this.setState({refRoute:this.props.fireRefRoom.child(this.props.room).child("users").child(user.uid).child("note")}, ()=>{
-            this.loadNoteFromFirebase();
-          })
-          
-        }
 
+  componentDidMount() {
+
+    this.loadNoteFromFirebase()
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user&&this.props) {
+        // User is signed in.
+        // register database listener
+        this.props.fireRefNotes.child(user.uid).on('value',snapshot => {
+          this.setState({loadingFromFirebase: true},() => {
+            const rawContentState = snapshot.val();
+            rawContentState.entityMap = {};
+
+            const contentStateConvertedFromRaw = convertFromRaw(rawContentState);
+            let newEditorState = EditorState.push(
+              this.state.editorState,
+              contentStateConvertedFromRaw
+            );
+
+            newEditorState = EditorState.forceSelection(newEditorState,
+              this.state.editorState.getSelection()
+            );
+
+            this.setState({editorState: newEditorState},()=>{
+              this.setState({loadingFromFirebase: false});
+            });
+          });
+        });
+      } else {
+        // No user is signed in.
+        console.log("nothing loaded because a user is not signed in")
       }
     });
   }
 
-  loadNoteFromFirebase(){
+  loadNoteFromFirebase = () => {
+    this.setState({loadingFromFirebase: true})
 
-    if(this.state.refRoute){
-      return this.state.refRoute.once(
-        'value',
-        snapshot => {
-          if(snapshot.val()){
-            const newEditorState = rawContentToEditorState(this.state.editorState,snapshot.val());
-            this.setState({editorState: newEditorState});
-          }
-      });
-    }
+    firebase.auth().onAuthStateChanged((user)=> {
+      if (user) {
+        // User is signed in.
+        return this.props.fireRefNotes.child(user.uid).once('value', snapshot => {
+          const rawContentState = snapshot.val()
+          if(!rawContentState.entityMap) rawContentState.entityMap = {}
+          const contentStateConvertedFromRaw = convertFromRaw(rawContentState)
+          let newEditorState = EditorState.push(
+            this.state.editorState,
+            contentStateConvertedFromRaw
+          )
+          newEditorState = EditorState.forceSelection(
+            newEditorState,
+            this.state.editorState.getSelection()
+          )
+
+          this.setState({editorState: newEditorState})
+        })
+        .then((resp) => {
+          this.setState({loadingFromFirebase: false})
+          return resp
+        })
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
+    });
+
   }
+
+  addUserToRoom = (user)=>{
+    return this.props.fireRefRoom.set({user:user.uid, exists:true})
+  }
+
+  deleteUserFromRoom = ()=>{
+     return this.props.fireRefRoom.set({user:user.uid, exists:false})
+  }
+
+  loadRoomsFromFirebase = ()=>{
+    return this.props.fireRefRoom.once('value', snapshot => {console.log("snapshot")})
+  }
+
 
   writeNoteToFirebase = () => {
     const currentContent = this.state.editorState.getCurrentContent()
     const rawState = convertToRaw(currentContent)
-    if(this.state.refRoute){
-      return this.state.refRoute.set(rawState)
-    }
+
+    firebase.auth().onAuthStateChanged((user)=> {
+      if (user) {
+        // User is signed in.
+
+        return this.props.fireRefNotes.child(user.uid).set(rawState)
+      } else {
+        // No user is signed in.
+        console.log("please sign in")
+      }
+    });
+
   }
 
   handleKeyCommand = command => {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
     if (newState) {
+      console.log("heey!!!!!!!!!!!!!!!")
       this.onChange(newState)
       return 'handled'
     }
@@ -182,20 +199,25 @@ class RoomEditor extends React.Component {
   }
 
   render() {
-    const { editorState } = this.state;
-    // If the user changes block type before entering any text, we can
-    // either style the placeholder or hide it. Let's just hide it now.
-    let className = 'RichEditor-editor';
-    var contentState = editorState.getCurrentContent();
-    if (!contentState.hasText()) {
-        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-            className += ' RichEditor-hidePlaceholder';
+        const { editorState } = this.state;
+
+        console.log('this.state.checkTextLength', this.state.checkTextLength)
+
+        // If the user changes block type before entering any text, we can
+        // either style the placeholder or hide it. Let's just hide it now.
+        let className = 'RichEditor-editor';
+        var contentState = editorState.getCurrentContent();
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                className += ' RichEditor-hidePlaceholder';
+            }
         }
-    }
+
+        // <button onClick={this.writeNoteToFirebase}>write to firebase</button>
+        // <button onClick={this.loadNoteFromFirebase}>load from firebase</button>
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h1>My Notes</h1>
           <div>
             <BlockStyleControls
               editorState={this.state.editorState}
@@ -219,26 +241,24 @@ class RoomEditor extends React.Component {
   }
 }
 
-
-const mapState = ({users, nlpResults}) => ({
-    nlpResults
-});
-
+const mapState = ({nlpResults}) => {
+	return nlpResults;
+}
 
 const mapDispatch = (dispatch) => {
   return {
     findSentiment: (text) => dispatch(findSentiment(text)),
     findEntity: (text) => dispatch(findEntity(text)),
-    findRelationships: (text) => dispatch(findRelationships(text)),
+		findRelationships: (text) => dispatch(findRelationships(text)),
   }
 }
 
-export default connect(mapState, mapDispatch)(RoomEditor)
+export default connect(mapState, mapDispatch)(DraftjsScratchpad)
 
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
@@ -271,20 +291,18 @@ const BlockStyleControls = (props) => {
 };
 
 const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
 
-    return (
-      <div className="RichEditor-controls">
-        {INLINE_STYLES.map(type =>
-          <StyleButton
-            key={type.label}
-            active={currentStyle.has(type.style)}
-            label={type.label}
-            onToggle={props.onToggle}
-            style={type.style}
-          />
+    var currentStyle = props.editorState.getCurrentInlineStyle();
+    return ( < div className = "RichEditor-controls" > {
+        INLINE_STYLES.map(type =>
+            < StyleButton key = { type.label }
+            active = { currentStyle.has(type.style) }
+            label = { type.label }
+            onToggle = { props.onToggle }
+            style = { type.style }
+            />
         )
-    } </div>);
+    } < /div>);
 };
 
 const BLOCK_TYPES = [
@@ -329,21 +347,3 @@ class StyleButton extends React.Component {
     }
 }
 
-const rawContentToEditorState = (editorState,rawContent) => {
-  if(!rawContent.entityMap) rawContent.entityMap = {}
-
-  const contentStateConvertedFromRaw = convertFromRaw(rawContent)
-
-  let newEditorState = EditorState.push(
-    editorState,
-    contentStateConvertedFromRaw
-  )
-  return newEditorState;
-
-  /*
-  return EditorState.forceSelection(
-    newEditorState,
-    editorState.getSelection()
-  )
-  */
-}

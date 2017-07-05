@@ -13,6 +13,9 @@ div h1, div h2, div h2 p, #about p, #contact p, footer p {
   color: white;
   padding-left: 10px; }
 
+#about h2, #download h2, #contact h2 {
+  color: white; }
+
 a {
   color: #2f79b9; }
 
@@ -400,3 +403,31 @@ input {
 
 .navbar-form {
   padding: 0px; }
+
+#sub-btn {
+  margin-top: 15px; }
+
+.well {
+  padding: 0 19px 19px 19px; }
+
+.buffer {
+  margin: 1.5em 0.8em; }
+
+.back-line {
+  line-height: 6;
+  text-align: center; }
+
+.back-line > span {
+  background: #fff;
+  color: #999;
+  padding: 0.5em;
+  border: 1px dotted #999;
+  border-radius: 50%; }
+
+.width-50 {
+  width: 50%; }
+
+.filter-line {
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  margin-top: 0px; }
