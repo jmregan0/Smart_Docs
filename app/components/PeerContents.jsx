@@ -103,7 +103,7 @@ class PeerContents extends React.Component {
     if(nextProps.users.selected.uid){
       this.setState({refRoute:this.props.fireRefRoom.child(nextProps.users.selected.name).child("users").child(nextProps.users.selected.uid).child("note")}, ()=>{
         this.loadNoteFromFirebase();
-        
+
       })
     }
   }
@@ -200,7 +200,8 @@ class PeerContents extends React.Component {
     return (
       <div>
         <div style={{borderStyle: 'solid', borderWidth: 1, padding: 20}}>
-        <h1>Peer Notes</h1>
+        <h4 id="peerNotes">Peer Notes</h4>
+          <div className="peerNotesComments"><em>This window is read-only.<br/>You can still do entity analysis of your peer's notes.</em></div>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
@@ -232,7 +233,7 @@ export default connect(mapState, mapDispatch)(PeerContents)
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
-  
+
   if (type === 'atomic') {
     return 'superFancyBlockquote';
   }
