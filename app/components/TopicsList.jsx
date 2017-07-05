@@ -112,7 +112,7 @@ export default class TopicsList extends React.Component {
                         {
                             roomsList?Object.keys(roomsList).map((room)=>{
                                 return(
-                                        <li key={room} onClick={this.roomClickHandler}><a name={room}>{room}</a></li>
+                                        <li key={room}><a name={room} onClick={this.roomClickHandler}>{room}</a></li>
                                     )
                             }):null
                         }
