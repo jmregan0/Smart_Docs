@@ -55,14 +55,18 @@ class Sidebar extends React.Component {
                                 </a>
                                 </li>
                             {this.props.entities ? this.props.entities.entities.map((entity, i) => {
-                                return (
-                                    <li key={`${i}`}><Link to="#">{`${entity.normalized}`}</Link>
-                                    {i !== 0 ? <span className="move"><span className="glyphicon glyphicon-arrow-up" aria-label="Click to move this entity up the list" onClick={() => this.props.moveEntityUp(i)}></span></span> : null}
-                                    {i !== this.props.entities.entities.length-1 ? <span className="move"><span className="glyphicon glyphicon-arrow-down" aria-label="Click to move this entity down the list" onClick={() => this.props.moveEntityDown(i)}></span></span> : null}
-                                    <span className="remove"><span className="glyphicon glyphicon-remove" aria-label="Click to remove this entity from cross-referenced research" onClick={() => this.props.removeEntity(i)}></span></span>
+                                var count = 0;
+                                if(count < 14 && entity.normalized.substring(0,4) !== 'http'){
+                                    count ++
+                                    return (
+                                        <li key={`${i}`}><Link to="#">{`${entity.normalized}`}</Link>
+                                        {i !== 0 ? <span className="move"><span className="glyphicon glyphicon-arrow-up" aria-label="Click to move this entity up the list" onClick={() => this.props.moveEntityUp(i)}></span></span> : null}
+                                        {i !== this.props.entities.entities.length-1 ? <span className="move"><span className="glyphicon glyphicon-arrow-down" aria-label="Click to move this entity down the list" onClick={() => this.props.moveEntityDown(i)}></span></span> : null}
+                                        <span className="remove"><span className="glyphicon glyphicon-remove" aria-label="Click to remove this entity from cross-referenced research" onClick={() => this.props.removeEntity(i)}></span></span>
 
-                                    </li>
-                                )
+                                        </li>
+                                    )
+                                }
                             }) : null}
                         </ul>
                         : <div>No entities yet. Compose your document for entity analysis.</div>
