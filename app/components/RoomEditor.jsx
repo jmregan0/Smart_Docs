@@ -11,7 +11,7 @@ import {
 } from 'draft-js'
 import firebase from 'APP/fire'
 import { findRelationships, findEntity, findSentiment, findResearchOnInput } from '../../app/action-creators/research'
-import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../../demos/draftjsscratchpad/draftDecorator';
+import {entityStrategy, entitySpan,addEntitiesToEditorState} from '../draftjsscratchpad/draftDecorator';
 import Promise from 'bluebird';
 
 class RoomEditor extends React.Component {
@@ -94,6 +94,8 @@ class RoomEditor extends React.Component {
 
   onChange = (editorState) => {
     this.setState({editorState}, this.writeNoteToFirebase)
+    this.clearTimer();
+    this.setTimer();
   }
 
   componentWillReceiveProps(nextProps){
@@ -103,7 +105,7 @@ class RoomEditor extends React.Component {
       })
     }else{
       this.setState({refRoute:null})
-      this.setState({editorState: EditorState.createEmpty()})
+      //this.setState({editorState: EditorState.createEmpty(decorator)})
     }
   }
 
@@ -116,7 +118,7 @@ class RoomEditor extends React.Component {
     firebase.auth().onAuthStateChanged((user)=>{
       if(!user) {
         console.error("Firebase AUTH: No user detected. user: ",user);
-        this.setState({editorState: EditorState.createEmpty()});
+        //this.setState({editorState: EditorState.createEmpty(decorator)});
       }
       else {
         var name = user.email?user.email:"anon";
