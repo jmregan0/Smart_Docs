@@ -51,12 +51,10 @@ export default class UsersPane extends React.Component {
     render(){
         return(
         <div className="col-sm-12">
-        <h1>this is the users pane</h1>
             <div className="sidebar-nav-fixed pull-left">
                 <div className="well">
                     <ul className="nav ">
-                        <li id="main-user-head" className="nav-header">Current Topic - {this.state.roomsSelected.rid}</li>
-                        <li onClick={this.userClickHandler}>Browse Collab Notes By User</li>
+                        <li onClick={this.userClickHandler}>Browse Notes By User On Subject - {this.state.roomsSelected.rid}</li>
                         {
                             Object.keys(this.state.roomsSelected.users).map((user)=>{
                                 return (

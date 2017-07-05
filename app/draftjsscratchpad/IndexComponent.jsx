@@ -53,9 +53,13 @@ class Index extends React.Component {
           </div>
       </div>
       <div className="col-sm-3">
-        <SentimentometerContainer />
+        <div className="col-sm-12">
+          <UsersPane room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
+        </div>
+        <div className="col-sm-12">
+          <SentimentometerContainer />
+        </div>
         <SidebarContainer/>
-        <UsersPane room={this.props.room} fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
       </div>
     </div>
       )

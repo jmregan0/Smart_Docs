@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router'
+import { addTag } from '../action-creators/research'
 
 class Sidebar extends React.Component {
 // const topEntities = props.entities && [props.entities[0].mention, props.entities[1].mention, props.entities[2].mention]
@@ -15,9 +16,19 @@ class Sidebar extends React.Component {
 
     handleSubmit(evt) {
         evt.preventDefault()
-        let tags = this.state.searchTags.join(', ').split(', ')
-        this.props.findResearchOnInput(tags)
+        let tags
+        if (this.state.searchTags.indexOf(', ') > 0) {
+            tags = this.state.searchTags.join(', ').split(', ')
+        } else if (this.state.searchTags.indexOf(',') > 0) {
+            tags = this.state.searchTags.join(',').split(', ')
+        } else {
+            tags = this.state.searchTags
+        }
         console.log('tags', tags)
+        this.props.addTag(tags)
+        let searchBox = document.getElementById("srch-term")
+        searchBox.value = ''
+        // newEntities = Object.assign({}, tags, selectedEntities)
     }
 
     render() {
@@ -26,11 +37,12 @@ class Sidebar extends React.Component {
             <div className="col-sm-12 sidebar-nav-fixed pull-right">
                 <div className="well">
                     <div className="search">
+                        <div className="searchHeader">Add custom tags to research</div>
                         <form className="navbar-form" role="search" onSubmit={this.handleSubmit}>
                         <div className="input-group add-on">
-                            <input className="form-control" placeholder="Enter tags to research" name="srch-term" id="srch-term" type="text" onChange={evt => this.setState({ searchTags: [evt.target.value] })}/>
+                            <input className="form-control" placeholder="Enter tags" name="srch-term" id="srch-term" type="text" onChange={evt => this.setState({ searchTags: [evt.target.value] })}/>
                             <div className="input-group-btn">
-                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-search" onClick={this.handleSubmit}></i></button>
+                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-plus" onClick={this.handleSubmit}></i></button>
                             </div>
                         </div>
                         </form>
@@ -54,14 +66,18 @@ class Sidebar extends React.Component {
                                 </a>
                                 </li>
                             {this.props.entities ? this.props.entities.entities.map((entity, i) => {
-                                return (
-                                    <li key={`${i}`}><Link to="#">{`${entity.normalized}`}</Link>
-                                    {i !== 0 ? <span className="move"><span className="glyphicon glyphicon-arrow-up" aria-label="Click to move this entity up the list" onClick={() => this.props.moveEntityUp(i)}></span></span> : null}
-                                    {i !== this.props.entities.entities.length-1 ? <span className="move"><span className="glyphicon glyphicon-arrow-down" aria-label="Click to move this entity down the list" onClick={() => this.props.moveEntityDown(i)}></span></span> : null}
-                                    <span className="remove"><span className="glyphicon glyphicon-remove" aria-label="Click to remove this entity from cross-referenced research" onClick={() => this.props.removeEntity(i)}></span></span>
+                                var count = 0;
+                                if(count < 14 && entity.normalized.substring(0,4) !== 'http'){
+                                    count ++
+                                    return (
+                                        <li key={`${i}`}><Link to="#">{`${entity.normalized}`}</Link>
+                                        {i !== 0 ? <span className="move"><span className="glyphicon glyphicon-arrow-up" aria-label="Click to move this entity up the list" onClick={() => this.props.moveEntityUp(i)}></span></span> : null}
+                                        {i !== this.props.entities.entities.length-1 ? <span className="move"><span className="glyphicon glyphicon-arrow-down" aria-label="Click to move this entity down the list" onClick={() => this.props.moveEntityDown(i)}></span></span> : null}
+                                        <span className="remove"><span className="glyphicon glyphicon-remove" aria-label="Click to remove this entity from cross-referenced research" onClick={() => this.props.removeEntity(i)}></span></span>
 
-                                    </li>
-                                )
+                                        </li>
+                                    )
+                                }
                             }) : null}
                         </ul>
                         : <div>No entities yet. Compose your document for entity analysis.</div>
