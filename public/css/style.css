@@ -405,7 +405,8 @@ input {
   padding: 0px; }
 
 #dash-nav li > a {
-  border-right: 0px; }
+  border-right: 0px;
+  padding-left: 10px; }
 
 #sub-btn {
   margin-top: 15px; }
