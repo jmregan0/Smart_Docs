@@ -40,7 +40,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                   <div className="col-xs-9 text-right">
                     <div className="huge">{resources}</div>
-                    <div><h5>Resources Found!</h5></div>
+                    <div><h5>Resources Found</h5></div>
                   </div>
                 </div>
               </div>
@@ -62,7 +62,7 @@ export default class ResearchDash extends React.Component {
                   </div>
                   <div className="col-xs-9 text-right">
                     <div className="huge">{entities}</div>
-                    <div><h5>Entities Found!</h5></div>
+                    <div><h5>Entities Found</h5></div>
                   </div>
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default class ResearchDash extends React.Component {
               </Link>
             </div>
           </div>
-          
+
         </div>
       </div>
     )

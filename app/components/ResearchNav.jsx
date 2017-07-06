@@ -18,7 +18,7 @@ export default class ResearchNav extends React.Component {
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
               </button>
-              <Link to="research" className="navbar-brand">Dashboard</Link>
+              <Link to="myeditor" className="navbar-brand"><span className="glyphicon glyphicon-arrow-left"></span> Back to Editor</Link>
           </div>
           <ul className="nav navbar-right top-nav">
               <li className="dropdown">
@@ -121,7 +121,7 @@ export default class ResearchNav extends React.Component {
               </li>
           </ul>
           <div className="collapse navbar-collapse navbar-ex1-collapse">
-              <ul className="nav navbar-nav side-nav">
+              <ul id="dash-nav" className="nav navbar-nav side-nav">
                   <li>
                       <Link to="/research"><i className="fa fa-fw fa-dashboard"></i>Dashboard</Link>
                   </li>
@@ -136,6 +136,9 @@ export default class ResearchNav extends React.Component {
                   </li>
                   <li>
                       <Link to="/research/sentiment"><i className="fa fa-fw fa-smile-o"></i>Sentiment</Link>
+                  </li>
+                  <li>
+                      <Link to="/bookmarks"><i className="glyphicon glyphicon-bookmark"></i> Bookmarks</Link>
                   </li>
               </ul>
           </div>
