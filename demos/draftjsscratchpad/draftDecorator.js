@@ -1,9 +1,5 @@
 import React from 'react';
-import {Encoder} from 'node-html-encoder';
-import axios from 'axios';
-import ReactHtmlParser from 'react-html-parser';
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
-
 
 module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   const filterFn = characterMetadata => {
@@ -14,7 +10,6 @@ module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   contentBlock.findEntityRanges(filterFn,callback);
 }
 
-/*
 module.exports.entitySpan = props => (
     <div
       className="tooltipCustom entitySpan"
@@ -24,58 +19,6 @@ module.exports.entitySpan = props => (
       <span className="tooltiptextCustom">Tooltip text</span>
     </div>
 )
-*/
-
-class entitySpan extends React.Component {
-  constructor(){
-    super();
-    this.state = {
-      tooltipText: 'Loading...',
-    };
-
-    this.wikiSearch = this.wikiSearch.bind(this);
-  }
-
-  wikiSearch(entity){
-    let encoder = new Encoder('entity');
-    const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
-    //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
-
-    // encode non-ascii characters
-    let query = encoder.htmlEncode(entity);
-    // replace whitespace with '%20'
-    query = query.replace(/\s/,'%20');
-
-    return axios.post(SEARCHURL,{tag:query})
-    .then(res => res.data)
-  }
-
-  componentDidMount(){
-    this.wikiSearch(this.props.decoratedText)
-    .then(searchResults=>{
-      //console.log('wikisearch results:',searchResults);
-      let parsed = ReactHtmlParser(searchResults.search[0].snippet);
-      this.setState({tooltipText: parsed});
-    })
-    .catch(error=>console.error('wikisearch error:',error));
-  }
-
-  render(){
-    //console.log('entitySpan entity:',this.props.decoratedText);
-
-    return (
-      <div
-        className="tooltipCustom entitySpan"
-        data-offset-key={this.props.offsetKey}
-      >
-        {this.props.children}
-        <span className="tooltiptextCustom">{this.state.tooltipText}</span>
-      </div>
-    );
-  }
-}
-
-module.exports.entitySpan = entitySpan;
 
 // name: findMatches
 // description:
