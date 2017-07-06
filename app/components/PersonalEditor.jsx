@@ -23,7 +23,8 @@ class PersonalEditor extends React.Component {
     firebase.auth().onAuthStateChanged((user)=> {
             if(user){
 
-                var name = user.email?user.email:"anon"
+                var name = user.displayName?user.displayName:"anon"
+                console.log("ussseeeeer", user)
                 this.setState({self: {uid:user.uid, name:name}})
             }else{
               console.log("there is no user")
