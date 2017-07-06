@@ -458,8 +458,14 @@ input {
 
 @media (min-width: 768px) {
   .navbar-form .input-group > .form-control {
-    width: 18.5vw; } }
+    width: 17vw; } }
 
 @media (min-width: 768px) {
   #page-wrapper {
     height: 100%; } }
+
+.padding-10 {
+  padding: 10px; }
+
+.right {
+  float: right; }
