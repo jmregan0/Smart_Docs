@@ -589,6 +589,10 @@ input {
   padding: 0px;
 }
 
+#dash-nav li > a {
+  border-right: 0px;
+}
+
 #sub-btn {
   margin-top: 15px;
 }
@@ -654,5 +658,11 @@ input {
 @media (min-width: 768px) {
   .navbar-form .input-group>.form-control {
       width: 18.5vw;
+  }
+}
+
+@media (min-width: 768px) {
+  #page-wrapper {
+    height: 100%;
   }
 }

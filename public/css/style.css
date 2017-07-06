@@ -91,7 +91,7 @@ button {
   color: black; }
 
 .DraftEditor-editorContainer, .DraftEditor-root, .public-DraftEditor-content {
-  height: 600px; }
+  height: 400px; }
 
 .DraftEditor-editorContainer div h1, div h2 {
   color: black; }
@@ -404,6 +404,9 @@ input {
 .navbar-form {
   padding: 0px; }
 
+#dash-nav li > a {
+  border-right: 0px; }
+
 #sub-btn {
   margin-top: 15px; }
 
@@ -456,3 +459,7 @@ input {
 @media (min-width: 768px) {
   .navbar-form .input-group > .form-control {
     width: 18.5vw; } }
+
+@media (min-width: 768px) {
+  #page-wrapper {
+    height: 100%; } }

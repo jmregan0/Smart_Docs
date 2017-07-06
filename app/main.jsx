@@ -11,6 +11,7 @@ import firebase from 'APP/fire'
 import Editor from '../demos/draftjsscratchpad'
 import DashboardContainer from './containers/DashboardContainer'
 import ResearchContainer from './containers/ResearchContainer'
+import BookmarksContainer from './containers/BookmarksContainer'
 import SentimentContainer from './containers/SentimentContainer'
 import ResourceContainer from './containers/ResourceContainer'
 import EntityContainer from './containers/EntityContainer'
@@ -101,6 +102,7 @@ render(
          <Route path="resource" component={ResourceContainer}/>
          <Route path="sentiment" component={SentimentContainer}/>
          <Route path="relationship" component={RelationshipContainer}/>
+         <Route path="/bookmarks" component={BookmarksContainer}/>
        </Route>
      <Route path='*' component={NotFound}/>
    </Router>

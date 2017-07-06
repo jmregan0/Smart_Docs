@@ -50,6 +50,12 @@ const Crumb = (props) => {
           <i className="fa fa-book"></i> Resources
         </li>
       )
+    case 'bookmark':
+      return (
+        <li className="active">
+          <i className="glyphicon glyphicon-bookmark"></i> Bookmarks
+        </li>
+      )
     default:
       return null;
   }
