@@ -1,5 +1,7 @@
 import React from 'react';
+import {Encoder} from 'node-html-encoder';
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
+
 
 module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   const filterFn = characterMetadata => {
@@ -10,6 +12,7 @@ module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   contentBlock.findEntityRanges(filterFn,callback);
 }
 
+/*
 module.exports.entitySpan = props => (
     <div
       className="tooltipCustom entitySpan"
@@ -19,7 +22,30 @@ module.exports.entitySpan = props => (
       <span className="tooltiptextCustom">Tooltip text</span>
     </div>
 )
+*/
 
+class entitySpan extends React.Component {
+  constructor(){
+    super();
+    this.state = {};
+  }
+
+  render(){
+    console.log('entitySpan entity:',this.props.decoratedText);
+
+    return (
+      <div
+        className="tooltipCustom entitySpan"
+        data-offset-key={this.props.offsetKey}
+      >
+        {this.props.children}
+        <span className="tooltiptextCustom">Tooltip text</span>
+      </div>
+    );
+  }
+}
+
+module.exports.entitySpan = entitySpan;
 
 // name: findMatches
 // description:
