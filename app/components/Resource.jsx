@@ -16,6 +16,7 @@ const CollectedResources = (props) => {
   return(
     <div>
       <Breadcrumb title={'Resources'} selection={'resource'} />
+      <div className="alert-box success"><span className="glyphicon glyphicon-ok"></span>  Saved to your Bookmarks</div>
       <div className="table-responsive">
         <table className="table table-bordered table-hover">
           <thead>
