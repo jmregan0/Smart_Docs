@@ -38,8 +38,8 @@ class entitySpan extends React.Component {
 
   wikiSearch(entity){
     let encoder = new Encoder('entity');
-    //const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
-    const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
+    const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+    //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
     // encode non-ascii characters
     let query = encoder.htmlEncode(entity);
@@ -53,7 +53,7 @@ class entitySpan extends React.Component {
   componentDidMount(){
     this.wikiSearch(this.props.decoratedText)
     .then(searchResults=>{
-      console.log('wikisearch results:',searchResults);
+      //console.log('wikisearch results:',searchResults);
       let parsed = ReactHtmlParser(searchResults.search[0].snippet);
       this.setState({tooltipText: parsed});
     })
@@ -61,7 +61,7 @@ class entitySpan extends React.Component {
   }
 
   render(){
-    console.log('entitySpan entity:',this.props.decoratedText);
+    //console.log('entitySpan entity:',this.props.decoratedText);
 
     return (
       <div
