@@ -15,12 +15,12 @@ const SelectionScreen = () => {
         <h1>Pick An Existing Topic</h1>
         <TopicsList fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
       </div>
-      <div className="col-md-1 col-lg-1">
-          <div className="back-line here">
+      <div className="col-xs-12 col-md-1 col-lg-1">
+          <div className="col-xs-12 back-line here">
             <span>OR</span>
           </div>
         </div>
-      <div className="col-md-5 col-lg-5">
+      <div className="col-xs-12 col-md-5 col-lg-5">
         <h1>Create A New Topic</h1>
           <CreateTopic fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
         <h1>or just write...</h1>
