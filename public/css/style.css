@@ -405,7 +405,8 @@ input {
   padding: 0px; }
 
 #dash-nav li > a {
-  border-right: 0px; }
+  border-right: 0px;
+  padding-left: 10px; }
 
 #sub-btn {
   margin-top: 15px; }
@@ -458,8 +459,14 @@ input {
 
 @media (min-width: 768px) {
   .navbar-form .input-group > .form-control {
-    width: 18.5vw; } }
+    width: 17vw; } }
 
 @media (min-width: 768px) {
   #page-wrapper {
     height: 100%; } }
+
+.padding-10 {
+  padding: 10px; }
+
+.right {
+  float: right; }
