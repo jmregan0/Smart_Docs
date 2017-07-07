@@ -101,7 +101,7 @@ class RoomEditor extends React.Component {
   }
 
   onChange = (editorState) => {
-    this.setState({editorState});
+    this.setState({editorState},this.writeNoteToFirebase);
     this.clearTimer();
     this.setTimer();
   }
