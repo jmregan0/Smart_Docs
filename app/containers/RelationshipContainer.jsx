@@ -1,8 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Relationship from '../components/Relationship'
+import Breadcrumb from '../components/Breadcrumb';
 
+class RelationshipContainer extends React.Component {
 
+  render(){
+    return (
+      <div>
+        <Breadcrumb title={'Relationship'} selection={'relationship'} />
+        <Relationship nlpRelationships={this.props.nlpRelationships} />
+      </div>
+    );
+  }
+}
 
 const mapState = (state) => {
 	return {
@@ -10,10 +21,4 @@ const mapState = (state) => {
 	}
 }
 
-const mapDispatch = (dispatch) => {
-  return {}
-
-}
-
-
-export default connect(mapState, mapDispatch)(Relationship)
+export default connect(mapState)(RelationshipContainer)
