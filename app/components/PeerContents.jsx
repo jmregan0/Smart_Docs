@@ -211,7 +211,6 @@ class PeerContents extends React.Component {
             blockStyleFn={myBlockStyleFn}
             readOnly="true"
           />
-          <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
         </div>
       </div>
     )
