@@ -1,134 +1,63 @@
-# Hi, I'm 🔥🔥firebones🔥🔥
+# 🤔🤔 SmartDocs 🤔🤔
 
-I'm a happy little skeleton who is totally on [fire(base)](https://firebase.google.com)!
+An intelligent note-taking app that finds research as you go.
 
-You can clone me to use as a starter on your projects. I have React and Firebase,
-and some examples of how to put them together.
+## About SmartDocs
 
-## I need node >= 7.0.0
+SmartDocs analyzes your writing in the background and finds important subjects (i.e., entities) in your writing for further discovery. It saves these entities in a sidebar so you can keep working on your document distraction-free. Whenever you're ready, SmartDocs will find research results relevant to the entities in your writing and return them for you right within the app, which you can sae for future use.
 
-If you don't have it, I'll complain and tell you how to install it.
+You can also see what others are writing in real-time, side-by-side your own document.
 
-## 1. Make me into something!
+It's the future of writing...available for you to use today.
 
-We recommend that you **clone**, not fork, this repo – unless your intention is
-to develop Firebones proper instead of using Firebones as the starting point for your
-own application.
+Written with React, Redux and DraftJS for the front-end, Firebase for the back-end, and utilizing Rosette & Crossref APIs.
 
-Start by doing either of the following:
 
-* Create a GitHub repo and clone it, or
-* `git init` in an empty directory on your machine.
+## 1. Install me
 
-After you have a repo on your machine:
+Clone this repo into an empty directory on your machine.
 
 ```sh
-git remote add bones https://github.com/FullstackAcademy/firebones.git
-git fetch bones
-git merge bones/master
+git clone https://github.com/jmregan0/Smart_Docs
 ```
 
-And then you'll have me! If I change – which I probably will – you can get the most recent
-version by doing this again:
+[fire(base)](https://firebase.google.com)
+
+
+## 2. Run me
+
+You'll need to run two separate commands:
 
 ```sh
-git fetch bones
-git merge bones/master
-```
-
-## 2. Install the Firebase command line tools
-
-You'll want this globally:
-
-```sh
-npm install -g firebase-tools
-```
-
-If you just installed them, you'll need to log in:
-
-```sh
-firebase login
-```
-
-## 2. Start my dusty heart
-
-Short and sweet:
-
-```sh
-npm install
 npm run dev
+npm run nlp
 ```
 
-The `dev` script runs webpack, `firebase serve`, the linter, and the tests. You can run these
-in separate terminals if you prefer:
+## 3. Launch me
+
+To fire up SmartDocs, point your browser to:
 
 ```sh
-npm run build-watch   # webpack
+http://localhost:5000
 ```
 
-```sh
-firebase serve        # Serve the app on port 5000
-```
+## 4. Use me
 
-```sh
-npm run test-watch    # Watch tests
-```
+Click the `Start SmartDocs` link in the upper-left.
 
-```sh
-npm run lint-watch    # Watch lint
-```
+If you're working solo, click the `Start Blank Note` button.
 
-## 3. Tell me about your Firebase
+If you want to share notes with others, create a new topic or click an existing topic.
 
-By default, I'm pointed at the firebones firebase. That might be nice for exploring,
-but soon you'll want to create your own.
+Once you start composing your document, SmartDocs will return your note's entities after you've written 200 words and after every 150 additional words.
 
-Go to [the Firebase console](https://console.firebase.google.com/) and create
-a project. Go to Overview in that project's console, and click "Add Firebase to your web app".
+Entities higher in the list are prioritized when SmartDocs finds research for you, so move your preferred entities up and your less important entities down using the arrow buttons next to each entity. If you want to exclude entities from being researched, click the delete button next to each entity to remove.
 
-Copy and paste the config from there into [fire/index.js](fire/index.js). You don't have to
-copy the call to `initializeApp`, I've already got that.
+Whenever you're ready, click the `Show Research` button and SmartDocs will analyze your document. You'll be presented with the Dashboard, which gives a digest view of research results and primary entities as well as access to more detailed analysis.
 
-Then, in your code, you can import firebase like so:
+Detailed results include the actual research results, entity detail, sentiment detail and relationship detail. `Research results` are in the big blue box on the Dashboard. `Entity detail` is in the big green box, listing all the important entities in your document and possible definitions. `Relationship detail` is in the big red box and shows if the subjects in your writing are connected and how. This is very useful in discovering relationships to further research that you may not have forseen. And `Sentiment detail` in the big orange box reveals whether your emotion towards the subejcts in your writing are positive, negative or neutral, and how confident it is in its analysis of your emotion towards the subjects.
 
-```javascript
-import firebase from 'APP/fire'
-```
 
-## 4. Deploy
+## License
 
-The first time you deploy, you'll need to tell firebase which project to use:
-
-```sh
-firebase use --add
-```
-
-Then, and every time thereafter, just say,
-
-```sh
-firebase deploy
-```
-
-And I'll be deployed to Firebase hosting.
-
-## My anatomy
-
-`/app` has the React setup. `main.jsx` is the entry point.
-
-`/fire` has the Firebase config.
-
-`/functions` is where your [cloud functions](https://firebase.google.com/preview/functions/write-firebase-functions) live.
-
-`/demos` has some demos (currently just a little scratchpad).
-
-`/bin` has scripts. (Right now it has *one* script that creates a useful symlink.)
-
-## Conventions
-
-I use `require` and `module.exports` in `.js` files.
-
-I use `import` and `export` in `.jsx` files, unless `require` makes for cleaner code.
-
-I use two spaces, no semi-colons, and generally prefer a less strict version of
-[NPM's funny coding style](https://docs.npmjs.com/misc/coding-style). My lint config is
-in [eslintrc.js](eslintrc.js).
+This software is protected under the standard MIT License.
