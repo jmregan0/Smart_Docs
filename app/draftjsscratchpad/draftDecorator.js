@@ -123,8 +123,8 @@ const findMatches = (str,word,entityKey) => {
   return buffer;
 }
 
-//DEV ONLY
-//module.exports.findMatches = findMatches;
+//DEV/TEST ONLY
+module.exports.findMatches = findMatches;
 
 module.exports.addEntitiesToEditorState = (editorState,entities) => {
   const rawContent = convertToRaw(editorState.getCurrentContent());
