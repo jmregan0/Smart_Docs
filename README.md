@@ -14,9 +14,9 @@ Written with React, Redux and DraftJS for the front-end, Firebase for the back-e
 
 ## Screenshots
 
-![alt text](https://github.com/jmregan0/Smart_Docs/screenshots/smartdocs1.png?raw=true)
-![alt text](https://github.com/jmregan0/Smart_Docs/screenshots/smartdocs2.png?raw=true)
-![alt text](https://github.com/jmregan0/Smart_Docs/screenshots/smartdocs3.png?raw=true)
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs1.png?raw=true)
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs2.png?raw=true)
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs3.png?raw=true)
 
 ## Contributors
 
