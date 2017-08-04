@@ -21,7 +21,7 @@ Written with React, Redux and DraftJS for the front-end, Firebase for the back-e
 ## Contributors
 
 * [Bryan Kao](https://www.linkedin.com/in/bryanwkao/)
-* [Will McCracken](https://www.linkedin.com/in/wade-gong-64562222/)
+* [Will McCracken](https://www.linkedin.com/in/will-mccracken/)
 * [Jacob Regan](https://www.linkedin.com/in/jacob-regan-b2b76013a/)
 * [Rob Tong](https://www.linkedin.com/in/rob-tong-86531a1/)
 
