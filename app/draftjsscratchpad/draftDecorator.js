@@ -171,7 +171,7 @@ module.exports.addEntitiesToEditorState = (editorState,entities) => {
   const newContentState = convertFromRaw(rawContent);
   //const newEditorState = EditorState.createWithContent(newContentState);
   const newEditorState = EditorState.push(editorState,newContentState);
-  console.log('entityDecorate result:',convertToRaw(newEditorState.getCurrentContent()));
+  //console.log('entityDecorate result:',convertToRaw(newEditorState.getCurrentContent()));
 
   return newEditorState;
 }
