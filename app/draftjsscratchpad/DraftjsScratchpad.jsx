@@ -171,8 +171,6 @@ class DraftjsScratchpad extends React.Component {
 
   render() {
     const { editorState } = this.state;
-    // console.log("---------will---", this.props.users.selected)
-    // console.log('this.state.checkTextLength', this.state.checkTextLength)
 
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
@@ -183,6 +181,7 @@ class DraftjsScratchpad extends React.Component {
             className += ' RichEditor-hidePlaceholder';
         }
     }
+    
     return (
       <div>
 
@@ -192,8 +191,7 @@ class DraftjsScratchpad extends React.Component {
             onToggleInline={this.toggleInlineStyle}
             onToggleBlock={this.toggleBlockType}
           />
-          <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
-          <Link to="/entity">EntityDetail</Link>
+
         </div>
         <Editor
           editorState={this.state.editorState}
@@ -201,7 +199,7 @@ class DraftjsScratchpad extends React.Component {
           onChange={this.onChange}
           blockStyleFn={myBlockStyleFn}
         />
-        <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
+
       </div>
     )
   }
@@ -319,7 +317,7 @@ class StyleButton extends React.Component {
         if (this.props.active) {
             className += ' RichEditor-activeButton';
         }
-        // console.log('in DRAFTJSSCRATCHPAD')
+       
         return ( <button className='btn'><span className={ className }
             onMouseDown = { this.props.inline ? this.onToggleInline : this.onToggleBlock } >
             {this.props.src ? <img className={this.props.btnClass} src={this.props.src} height='18'/> : this.props.btnClass ? <span className={ this.props.btnClass }></span> : this.props.label }</span></button>

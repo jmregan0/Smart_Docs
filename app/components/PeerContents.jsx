@@ -43,51 +43,7 @@ class PeerContents extends React.Component {
     // this.emitChanges = this.emitChanges.bind(this);
   }
 
-  // setTimer(){
-  //   return this.unSetTimer = setInterval(this.emitChanges,2000);
-  // }
 
-  // clearTimer(){
-  //   return clearInterval(this.unSetTimer);
-  // }
-
-  // emitChanges(){
-  //   // BEGIN NLP BLOCK
-  //   // ---------------
-  //   let currentText = this.state.editorState.getCurrentContent().getPlainText();
-  //   let currentTextLength = currentText.split(' ').length;
-  //   let newLimit = Math.floor(currentTextLength/150)*150+150;
-
-  //   if(currentTextLength > this.state.checkTextLength){
-  //     console.log('Text length: ',currentTextLength);
-  //     console.log('Increasing limit to ',newLimit);
-  //     this.setState({checkTextLength: newLimit})
-  //     Promise.all([
-  //       this.findSentiment(currentText),
-  //       this.findEntity(currentText),
-  //       this.findRelationships(currentText),
-  //     ])
-  //     .then(()=>{
-  //       console.log('this.props:',this.props);
-  //       // BEGIN ENTITY BLOCK
-  //       // ------------------
-  //       let entities = this.props.nlpResults.nlpEntity.entities;
-  //       console.log('Promise resolved.  State: ',entities);
-  //       let newEditorState = addEntitiesToEditorState(this.state.editorState,entities);
-  //       this.setState({editorState: newEditorState});
-  //       // ------------------
-  //       // END   ENTITY BLOCK
-  //     })
-  //     .catch(error=>console.error("NLP PROMISE.ALL FAILED:",error));
-  //   }
-  //   else if(currentTextLength < this.state.checkTextLength - 150){
-  //     // console.log('Text length: ',currentTextLength);
-  //     // console.log('decreasing limit to ',newLimit);
-  //     this.setState({checkTextLength: newLimit})
-  //   }
-  //   // ---------------
-  //   // END   NLP BLOCK
-  // }
 
   onChange = (editorState) => {
     this.setState({editorState})
@@ -211,7 +167,7 @@ class PeerContents extends React.Component {
             blockStyleFn={myBlockStyleFn}
             readOnly="true"
           />
-          <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
+          
         </div>
       </div>
     )
