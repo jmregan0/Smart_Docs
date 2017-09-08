@@ -10,7 +10,7 @@ const db = firebase.database()
 
 const SelectionScreen = () => {
   return (
-    <div className="cool col-xs-12 col-sm-12">
+    <div className="col-xs-12 col-sm-12">
       <div className="col-md-6 col-lg-6">
         <h1>Pick An Existing Topic</h1>
         <TopicsList fireRefNotes={db.ref('users(notes)')} fireRefRoom={db.ref('rooms')}/>
