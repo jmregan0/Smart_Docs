@@ -1,6 +1,6 @@
 # 🤔🤔 SmartDocs 🤔🤔
 
-An intelligent note-taking app that finds research as you go.
+An intelligent note-taking app that finds research as you go. Built as a Capstone project at [Fullstack Academy](https://www.fullstackacademy.com/) in Chicago.
 
 ## About SmartDocs
 
@@ -11,6 +11,19 @@ You can also see what others are writing in real-time, side-by-side your own doc
 It's the future of writing...available for you to use today.
 
 Written with React, Redux and DraftJS for the front-end, Firebase for the back-end, and utilizing Rosette & Crossref APIs.
+
+## Screenshots
+
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs1.png?raw=true)
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs2.png?raw=true)
+![alt text](https://github.com/jmregan0/Smart_Docs/blob/master/screenshots/smartdocs3.png?raw=true)
+
+## Contributors
+
+* [Bryan Kao](https://www.linkedin.com/in/bryanwkao/)
+* [Will McCracken](https://www.linkedin.com/in/will-mccracken/)
+* [Jacob Regan](https://www.linkedin.com/in/jacob-regan-b2b76013a/)
+* [Rob Tong](https://www.linkedin.com/in/rob-tong-86531a1/)
 
 
 ## 1. Install me
