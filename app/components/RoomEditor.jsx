@@ -221,8 +221,6 @@ class RoomEditor extends React.Component {
             onChange={this.onChange}
             blockStyleFn={myBlockStyleFn}
           />
-          <button onClick={()=>console.log(convertToRaw(this.state.editorState.getCurrentContent()))}>Log State</button>
-          <Link to="/entity">EntityDetail</Link>
         </div>
       </div>
     )
