@@ -470,3 +470,24 @@ input {
 
 .right {
   float: right; }
+
+
+@media (max-width: 768px) {
+  .nav-links-big-screen{
+    display: none;
+  }
+}
+
+@media (min-width: 768px){
+  .nav-links-small-screen{
+    display: none;
+  }  
+}
+
+.navbar-collapse{
+  text-align: center;
+}
+
+.navbar-custom{
+  display:float;
+}

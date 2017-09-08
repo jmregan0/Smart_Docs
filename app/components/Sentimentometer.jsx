@@ -58,7 +58,7 @@ export default class Sentimentbar extends React.Component {
 
       <div className="skills">
         {this.props.sentiment.nlpSentiment ? <div data-label="Sentiment" data-level={temp} className="chart"><span></span><p>{temp}</p></div> :
-      <div className="sentimeter">No document sentiment yet. Compose your document for a sentiment analysis.</div>}
+        <div className="sentimeter">Insufficient material for document sentiment. Write 250 words for a sentiment analysis.</div>}
       </div>
 
     )

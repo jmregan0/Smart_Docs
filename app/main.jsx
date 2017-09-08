@@ -60,21 +60,26 @@ const App = ({children}) =>
            <Link to='/edison' className="navbar-brand page-scroll">
                <i className="fa fa-play-circle"></i> <span className="light">Start</span> SmartDocs
            </Link>
-           <Link to='/about' className="navbar-custom page-scroll">About</Link>
-           <Link to='/contact' className="navbar-custom page-scroll">Contact</Link>
+             <a href='/landing#about' className="nav-links-big-screen">About</a>
+             <a href='/landing#contact' className="nav-links-big-screen">Contact</a>
          </div>
 
          <div className="collapse navbar-collapse navbar-right navbar-main-collapse">
            <ul className="nav navbar-nav">
-             <li className="hidden">
-                 <a href="#page-top"></a>
-             </li>
              <li>
                {/* WhoAmI takes a firebase auth API and renders either a
                    greeting and a logout button, or sign in buttons, depending
                    on if anyone's logged in */}
                <WhoAmI auth={auth}/>
              </li>
+             <div className="nav-links-small-screen">
+               <li>
+                 <a href='/landing#about'>About</a>
+               </li>
+               <li>
+                 <a href='/landing#contact'>Contact</a>
+               </li>
+             </div>
            </ul>
          </div>
        </div>
