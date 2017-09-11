@@ -38,7 +38,7 @@ class entitySpan extends React.Component {
 
   wikiSearch(entity){
     let encoder = new Encoder('entity');
-    const SEARCHURL = 'http://'+IPADDR+'/api/wikipedia/search';
+    const SEARCHURL = 'https://'+IPADDR+'/api/wikipedia/search';
     //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
     // encode non-ascii characters

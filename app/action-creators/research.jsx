@@ -67,7 +67,7 @@ export const addTag = (tag) => ({
 
 export const findSentiment = text => {
   return dispatch =>
-    axios.post('http://' + IPADDR + '/api/analyze/sentiment', {
+    axios.post('https://' + IPADDR + '/api/analyze/sentiment', {
         text: text})
     .then(res => res.data)
     .then(sentimentResults => {
@@ -81,7 +81,7 @@ export const findSentiment = text => {
 
 export const findEntity = text => {
   return dispatch =>
-    axios.post('http://' + IPADDR + '/api/analyze/entity', {
+    axios.post('https://' + IPADDR + '/api/analyze/entity', {
         text: text})
     .then(res => res.data)
     .then(entityResults => {
@@ -97,7 +97,7 @@ export const findRelationships = text => {
   return dispatch =>
     axios({
         method: 'post',
-        url: 'http://' + IPADDR + '/api/analyze/relationships',
+        url: 'https://' + IPADDR + '/api/analyze/relationships',
         data:{
           text: text
         }
@@ -116,7 +116,7 @@ export const findResearchOnInput = (tags) => {
   return dispatch =>
     axios({
       method: 'post',
-      url: 'http://' + IPADDR + '/api/research',
+      url: 'https://' + IPADDR + '/api/research',
       data: {
         tags: tags
       }
