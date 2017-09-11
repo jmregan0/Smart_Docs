@@ -6,7 +6,7 @@ import {Encoder} from 'node-html-encoder';
 import ResearchTableEntity from '../components/ResearchTableEntity';
 import EntityDetail from '../components/EntityDetail';
 import Breadcrumb from '../components/Breadcrumb';
-
+const IPADDR = require('../../secrets.js').ipaddr
 var encoder = new Encoder('entity');
 
 class EntityContainer extends React.Component {
@@ -65,7 +65,7 @@ const mapState = ({nlpResults}) => ({nlpResults})
 export default connect(mapState)(EntityContainer)
 
 const wikiSearch = entity => {
-  const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+  const SEARCHURL = 'http://'+IPADDR+'/api/wikipedia/search';
   //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
   // encode non-ascii characters

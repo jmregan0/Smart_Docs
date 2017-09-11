@@ -34,11 +34,11 @@ const CollectedResources = (props) => {
           {
             props.researchResults ? props.researchResults.researchResults.map((item, index) => {
               let data = {}
-
+              console.log("material in question", item)
               if(item.type === 'book'){
                 data.type = 'Book';
-                data.title = item.title[0];
-                data.author = item.author[0].given +' '+ item.author[0].family
+                data.title = item.title?item.title[0]:null;
+                data.author = item.author?item.author[0].given +' '+ item.author[0].family:null
                 data.abstract = item.abstract;
                 data.publisher = item.publisher;
                 {/*data.publicationDate = item.published-print;*/}
@@ -46,7 +46,7 @@ const CollectedResources = (props) => {
 
               } else if(item.type === 'journal-article'){
                 data.type = 'Journal Article';
-                data.title = item.title[0];
+                data.title = item.title?item.title[0]:null;
                 {/*data.author = item.author[0].given +' '+ item.author[0].family*/}
                 data.publisher = item.publisher;
                 {/*data.publicationDate = item.published-print;*/}
@@ -54,7 +54,7 @@ const CollectedResources = (props) => {
 
               } else if(item.type === 'book-chapter'){
                 data.type = 'Book Chapter';
-                data.title = item.title[0];
+                data.title = item.title?item.title[0]:null;
                 data.location = item.page;
                 data.ISBN = item.ISBN;
                 data.publisher = item.publisher;
@@ -63,22 +63,22 @@ const CollectedResources = (props) => {
 
               } else if(item.type === 'reference-entry'){
                 data.type = 'Reference Entry';
-                data.title = item.title[0];
+                data.title = item.title?item.title[0]:null;
                 data.publisher = item.publisher;
                 {/*data.publicationDate = item.issued.date-parts[0];*/}
                 data.url = item.URL;
 
               } else if(item.type === 'dataset'){
                 data.type = 'Dataset';
-                data.title = item.title[0];
+                data.title = item.title?item.title[0]:null;
                 data.publisher = item.publisher;
                 {/*data.publicationDate = item.issued.date-parts[0];*/}
                 data.url = item.URL;
 
               } else if(item.type === 'dissertation'){
                 data.type = 'Dissertation';
-                data.title = item.title[0];
-                data.author = item.author[0].given + ' ' + item.author[0].family
+                data.title = item.title?item.title[0]:null;
+                data.author = item.author?item.author[0].given + ' ' + item.author[0].family:null;
                 data.publisher = item.publisher;
                 {/*data.publicationDate = item.issued.date-parts[0];*/}
                 data.url = item.URL;

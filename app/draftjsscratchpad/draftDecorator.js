@@ -3,7 +3,7 @@ import {Encoder} from 'node-html-encoder';
 import axios from 'axios';
 import ReactHtmlParser from 'react-html-parser';
 const {EditorState,convertToRaw,convertFromRaw} = require('draft-js');
-
+const IPADDR = require('../../secrets.js').ipaddr
 
 module.exports.entityStrategy = (contentBlock,callback,contentState) => {
   const filterFn = characterMetadata => {
@@ -38,7 +38,7 @@ class entitySpan extends React.Component {
 
   wikiSearch(entity){
     let encoder = new Encoder('entity');
-    const SEARCHURL = 'http://localhost:3000/api/wikipedia/search';
+    const SEARCHURL = 'http://'+IPADDR+'/api/wikipedia/search';
     //const SEARCHURL = 'http://web02.com:3000/api/wikipedia/search';
 
     // encode non-ascii characters

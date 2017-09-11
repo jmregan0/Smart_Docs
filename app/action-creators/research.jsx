@@ -4,7 +4,8 @@ import { browserHistory } from 'react-router'
 
 //START CONFIGURE IP ADDRESS OF NLP SERVER
 //----------------------------------------
-const IPADDR = 'localhost:3000';
+const IPADDR = require('../../secrets.js').ipaddr
+//const IPADDR = 'localhost:3000';
 //const IPADDR = 'web02.com:3000';
 //----------------------------------------
 //  END CONFIGURE IP ADDRESS OF NLP SERVER
